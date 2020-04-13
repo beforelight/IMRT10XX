@@ -9,9 +9,7 @@
 #define SC_KEYPAD_H_
 
 #include "sc_gpio.h"
-#include "FreeRTOSConfig.h"
-#include "FreeRTOS.h"
-#include "task.h"
+
 
 #define KEYPAD_MALLOC pvPortMalloc
 

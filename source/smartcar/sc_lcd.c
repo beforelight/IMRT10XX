@@ -5,6 +5,11 @@
  *      Author: 17616
  */
 #include "sc_lcd.h"
+#include "stdint.h"
+#include "stdlib.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "board.h"
 uint16_t BACK_COLOR;   //背景色
 /******************************************************************************
 	  函数说明：LCD并行数据写入函数
@@ -518,60 +523,60 @@ void LCD_ShowNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t color
 }
 
 
-/******************************************************************************
-	  函数说明：显示40x40图片
-	  入口数据：x,y    起点坐标
-	  返回值：  无
-******************************************************************************/
-void LCD_ShowPicture(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
-{
-	int i;
-	LCD_Address_Set(x1, y1, x2, y2);
-	for (i = 0; i < 1600; i++)
-	{
-		LCD_WR_DATA8(image[i * 2 + 1]);
-		LCD_WR_DATA8(image[i * 2]);
-	}
-}
-
-void LCD_Test(void)
-{
-	uint8_t i, m;
-//	float t = 0;
-	Lcd_Init();			//初始化OLED  
-	LCD_Clear(WHITE);
-	BACK_COLOR = WHITE;
-	while (1)
-	{
-		LCD_Clear(WHITE);
-		LCD_ShowChinese(10, 0, 0, 32, RED);   //中
-		LCD_ShowChinese(45, 0, 1, 32, RED);   //景
-		LCD_ShowChinese(80, 0, 2, 32, RED);   //园
-		LCD_ShowChinese(115, 0, 3, 32, RED);  //电
-		LCD_ShowChinese(150, 0, 4, 32, RED);  //子
-
-		LCD_ShowChinese(10, 75, 0, 16, RED);   //中
-		LCD_ShowChinese(45, 75, 1, 16, RED);   //景
-		LCD_ShowChinese(80, 75, 2, 16, RED);   //园
-		LCD_ShowChinese(115, 75, 3, 16, RED);  //电
-		LCD_ShowChinese(150, 75, 4, 16, RED);  //子
-		LCD_ShowString(10, 35, "2.4 TFT SPI 240*320", RED);
-		LCD_ShowString(10, 55, "LCD_W:", RED);	LCD_ShowNum(70, 55, LCD_W, 3, RED);
-		LCD_ShowString(110, 55, "LCD_H:", RED); LCD_ShowNum(160, 55, LCD_H, 3, RED);
-		for (i = 0; i < 5; i++)
-		{
-			for (m = 0; m < 6; m++)
-			{
-				LCD_ShowPicture(0 + m * 40, 120 + i * 40, 39 + m * 40, 159 + i * 40);
-			}
-		}
-		//while (1)
-		//{
-		//	LCD_ShowNum1(80, 95, t, 5, RED);
-		//	t += 0.01;
-		//}
-	}
-}
+///******************************************************************************
+//	  函数说明：显示40x40图片
+//	  入口数据：x,y    起点坐标
+//	  返回值：  无
+//******************************************************************************/
+//void LCD_ShowPicture(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
+//{
+//	int i;
+//	LCD_Address_Set(x1, y1, x2, y2);
+//	for (i = 0; i < 1600; i++)
+//	{
+//		LCD_WR_DATA8(image[i * 2 + 1]);
+//		LCD_WR_DATA8(image[i * 2]);
+//	}
+//}
+//
+//void LCD_Test(void)
+//{
+//	uint8_t i, m;
+////	float t = 0;
+//	Lcd_Init();			//初始化OLED
+//	LCD_Clear(WHITE);
+//	BACK_COLOR = WHITE;
+//	while (1)
+//	{
+//		LCD_Clear(WHITE);
+//		LCD_ShowChinese(10, 0, 0, 32, RED);   //中
+//		LCD_ShowChinese(45, 0, 1, 32, RED);   //景
+//		LCD_ShowChinese(80, 0, 2, 32, RED);   //园
+//		LCD_ShowChinese(115, 0, 3, 32, RED);  //电
+//		LCD_ShowChinese(150, 0, 4, 32, RED);  //子
+//
+//		LCD_ShowChinese(10, 75, 0, 16, RED);   //中
+//		LCD_ShowChinese(45, 75, 1, 16, RED);   //景
+//		LCD_ShowChinese(80, 75, 2, 16, RED);   //园
+//		LCD_ShowChinese(115, 75, 3, 16, RED);  //电
+//		LCD_ShowChinese(150, 75, 4, 16, RED);  //子
+//		LCD_ShowString(10, 35, "2.4 TFT SPI 240*320", RED);
+//		LCD_ShowString(10, 55, "LCD_W:", RED);	LCD_ShowNum(70, 55, LCD_W, 3, RED);
+//		LCD_ShowString(110, 55, "LCD_H:", RED); LCD_ShowNum(160, 55, LCD_H, 3, RED);
+//		for (i = 0; i < 5; i++)
+//		{
+//			for (m = 0; m < 6; m++)
+//			{
+//				LCD_ShowPicture(0 + m * 40, 120 + i * 40, 39 + m * 40, 159 + i * 40);
+//			}
+//		}
+//		//while (1)
+//		//{
+//		//	LCD_ShowNum1(80, 95, t, 5, RED);
+//		//	t += 0.01;
+//		//}
+//	}
+//}
 
 void LCD_Test2(void)
 {

@@ -1,5 +1,7 @@
 #include "sc_keypad.h"
-
+#include "FreeRTOSConfig.h"
+#include "FreeRTOS.h"
+#include "task.h"
 /*
  * sc_keypad.c
  *

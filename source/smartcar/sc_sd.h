@@ -11,13 +11,32 @@
 extern "C" {
 #endif /* __cplusplus */
 
-
+/**
+ * @brief   SD卡检测
+ * @param  {void} undefined : 
+ * @return {status_t}       : kStatus_Success为检测到
+ */
 status_t SD_CardDetect(void);
 
+/**
+ * @brief   初始化sd卡
+ * @param  {void} undefined : 
+ * @return {status_t}       : kStatus_Success为成功初始化
+ */
 status_t SD_Init2(void);
 
+/**
+ * @brief   初始化sd卡并挂载fatfs
+ * @param  {void} undefined : 
+ * @return {status_t}       : kStatus_Success表示成功
+ */
 status_t SD_Mount(void);
 
+/**
+ * @brief   初始化sd卡并变身读卡器，通过usb连接电脑
+ * @param  {void} undefined : 
+ * @return {status_t}       : kStatus_Success表示成功
+ */
 status_t SD_MscInit(void);
 #if defined(__cplusplus)
 }

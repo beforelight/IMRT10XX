@@ -4,22 +4,22 @@
 
 #include "sc_i2c.h"
 
-int I2C_Init(LPI2C_Type *base, uint32_t baudRate_Bps, uint32_t sourceClock_Hz) {
+status_t I2C_Init(LPI2C_Type *base, uint32_t baudRate_Bps, uint32_t sourceClock_Hz) {
     lpi2c_master_config_t masterConfig;
     LPI2C_MasterGetDefaultConfig(&masterConfig);
     /* Change the default baudrate configuration */
     masterConfig.baudRate_Hz = baudRate_Bps;
     /* Initialize the LPI2C master peripheral */
     LPI2C_MasterInit(base, &masterConfig, sourceClock_Hz);
-    return 0;
+    return kStatus_Success;
 }
 
-int I2C_SetBaudRate(LPI2C_Type *base, uint32_t baudRate_Hz, uint32_t sourceClock_Hz) {
+status_t I2C_SetBaudRate(LPI2C_Type *base, uint32_t baudRate_Hz, uint32_t sourceClock_Hz) {
     LPI2C_MasterSetBaudRate(base, sourceClock_Hz, baudRate_Hz);
-    return 0;
+    return kStatus_Success;
 }
 
-int I2C_Read(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *data, uint32_t size) {
+status_t I2C_Read(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *data, uint32_t size) {
     lpi2c_master_transfer_t xfer;
 
     xfer.flags = kLPI2C_TransferDefaultFlag;
@@ -33,7 +33,7 @@ int I2C_Read(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *d
     return LPI2C_MasterTransferBlocking(base, &xfer);
 }
 
-int I2C_Write(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *data, uint32_t size) {
+status_t I2C_Write(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *data, uint32_t size) {
     lpi2c_master_transfer_t xfer;
 
     xfer.flags = kLPI2C_TransferDefaultFlag;
@@ -48,7 +48,7 @@ int I2C_Write(LPI2C_Type *base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t *
 }
 
 
-int I2C_Send(LPI2C_Type *base,
+status_t I2C_Send(LPI2C_Type *base,
              uint8_t deviceAddress,
              uint32_t subAddress,
              uint8_t subAddressSize,
@@ -67,7 +67,7 @@ int I2C_Send(LPI2C_Type *base,
     return LPI2C_MasterTransferBlocking(base, &xfer);
 }
 
-int I2C_Receive(LPI2C_Type *base,
+status_t I2C_Receive(LPI2C_Type *base,
                 uint8_t deviceAddress,
                 uint32_t subAddress,
                 uint8_t subAddressSize,
@@ -86,7 +86,7 @@ int I2C_Receive(LPI2C_Type *base,
     return LPI2C_MasterTransferBlocking(base, &xfer);
 }
 
-int I2C_SendSCCB(LPI2C_Type *base,
+status_t I2C_SendSCCB(LPI2C_Type *base,
                  uint8_t deviceAddress,
                  uint32_t subAddress,
                  uint8_t subAddressSize,
@@ -105,7 +105,7 @@ int I2C_SendSCCB(LPI2C_Type *base,
     return LPI2C_MasterTransferBlocking(base, &xfer);
 }
 
-int I2C_ReceiveSCCB(LPI2C_Type *base,
+status_t I2C_ReceiveSCCB(LPI2C_Type *base,
                     uint8_t deviceAddress,
                     uint32_t subAddress,
                     uint8_t subAddressSize,

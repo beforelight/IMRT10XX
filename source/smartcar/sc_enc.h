@@ -1,10 +1,3 @@
-/*
- * sc_enc.h
- *
- *  Created on: 2020年1月28日
- *      Author: 17616
- */
-
 #ifndef SC_ENC_H_
 #define SC_ENC_H_
 

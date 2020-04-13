@@ -23,12 +23,12 @@ typedef struct _pwm {
 
 /**
  * @brief 初始化pwm模块并立即生效
- * @param  {pwm_t* []} pwmList : pwm_t指针数组，最后一项必须为NULL
+ * @param  {pwm_t* []} pwmList : pwm_t指针数组，最后一项必须为NULL以确定有多少组pwm被初始化
  */
 void PWM_Init2(pwm_t *pwmList[]);
 
 /**
- * @brief 修改pwm A/B通道占空比
+ * @brief 修改pwm A/B通道占空比（将结构体中的占空比同步给外设）
  * @param  {pwm_t*} p :
  */
 void PWM_Change(pwm_t *p);

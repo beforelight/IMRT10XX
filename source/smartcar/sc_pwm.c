@@ -23,10 +23,7 @@ pwm_module_control_t PWM_Module2Module(pwm_submodule_t x) {
     }
 }
 
-/**
- * @brief 初始化pwm模块并立即生效
- * @param  {pwm_t* []} pwmList : pwm_t指针数组，最后一项必须为NULL
- */
+
 void PWM_Init2(pwm_t *pwmList[]) {
     uint32_t pwmSourceClockInHz;
     pwm_signal_param_t pwmSignal[2];        //pwm属性
@@ -169,10 +166,7 @@ PWM_UpdatePwmDutycycle2(PWM_Type *base, pwm_submodule_t subModule, pwm_channels_
     }
 }
 
-/**
- * @brief 修改pwm A/B通道占空比
- * @param  {pwm_t*} p :
- */
+
 void PWM_Change(pwm_t *p) {
     if (p->dutyA > 100) { p->dutyA = 100; }
     else if (p->dutyA < 0) { p->dutyA = 0; }

@@ -17,7 +17,7 @@ extern "C" {
 typedef struct _gpio_class {
     GPIO_Type *base;
     uint32_t pin;
-    gpio_pin_direction_t direction;
+    gpio_pin_direction_t direction;//记录引脚的输入输出状态
 } gpio_t;
 
 typedef struct __led {
@@ -34,8 +34,16 @@ typedef struct __bee {
  */
 void GPIO_Init(gpio_t *s);
 
+/**
+ * @brief  修改为输出
+ * @param  {gpio_t*} s : 
+ */
 void GPIO_Out(gpio_t *s);
 
+/**
+ * @brief  修改为输入
+ * @param  {gpio_t*} s : 
+ */
 void GPIO_In(gpio_t *s);
 
 /**
@@ -46,19 +54,19 @@ void GPIO_In(gpio_t *s);
 void GPIO_Write(gpio_t *s, uint8_t output);
 
 /**
- * @brief  置1
+ * @brief  置1，输入引脚会被重新初始化为输出脚
  * @param  {gpio_class_t*} s : 
  */
 void GPIO_Set(gpio_t *s);
 
 /**
- * @brief  清0
+ * @brief  清0，输入引脚会被重新初始化为输出脚
  * @param  {gpio_class_t*} s : 
  */
 void GPIO_Clear(gpio_t *s);
 
 /**
- * @brief  翻转
+ * @brief  翻转，输入引脚会被重新初始化为输出脚
  * @param  {gpio_class_t*} s : 
  */
 void GPIO_Toggle(gpio_t *s);
@@ -70,20 +78,41 @@ void GPIO_Toggle(gpio_t *s);
  */
 uint32_t GPIO_Read(gpio_t *s);
 
-
+/**
+ * @brief  初始化LED
+ * @param  {led_t*} s : 
+ */
 void LED_Init(led_t *s);
 
+/**
+ * @brief   点亮（低电平点亮）
+ * @param  {led_t*} s : 
+ */
 void LED_ON(led_t *s);
 
+/**
+ * @brief   熄灭（高电平熄灭）
+ * @param  {led_t*} s : 
+ */
 void LED_OFF(led_t *s);
 
+/**
+ * @brief   初始化蜂鸣器
+ * @param  {bee_t*} s : 
+ */
 void BEE_Init(bee_t *s);
 
+/**
+ * @brief   响（高电平响）
+ * @param  {bee_t*} s : 
+ */
 void BEE_ON(bee_t *s);
 
+/**
+ * @brief   灭（低电平灭）
+ * @param  {bee_t*} s : 
+ */
 void BEE_OFF(bee_t *s);
-
-
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

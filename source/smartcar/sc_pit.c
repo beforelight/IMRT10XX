@@ -1,9 +1,3 @@
-/*
- * sc_pit.h
- *
- *  Created on: 2020年1月29日
- *      Author: 17616
- */
 #include "sc_pit.h"
 
 /**

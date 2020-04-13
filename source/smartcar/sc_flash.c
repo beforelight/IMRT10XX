@@ -4,10 +4,8 @@
  *  Created on: 2020年1月16日
  *      Author: 17616
  */
-
+#include "fsl_debug_console.h"
 #include "sc_flash.h"
-//#include "board.h"
-#include "fsl_common.h"
 #include "fsl_flexspi.h"
 //#define RAMFUNC /*__attribute__((section(".ramfunc.$SDRAM_NOCACHE")))*/
 #define RAMFUNC __attribute__((section(".ramfunc.$SRAM_OC")))
@@ -241,9 +239,9 @@ status_t RAMFUNC flexspi_nor_get_vendor_id(FLEXSPI_Type *base, uint8_t *vendorId
 /**
  * @brief  初始化
  * @param  {void} undefined :
- * @return {int}            :
+ * @return {status_t}       : 错误代码，0表示正常
  */
-RAMFUNC int FLASH_Init(void) {
+RAMFUNC status_t FLASH_Init(void) {
     FLASH_EnterCritical();
 
     //    /* Update LUT table. */
@@ -252,7 +250,7 @@ RAMFUNC int FLASH_Init(void) {
                       &customLUT[NOR_CMD_LUT_SEQ_IDX_READID1 * 4], 64);
     //    /* Get vendor ID. */
     uint8_t vendorID;
-    int status = flexspi_nor_get_vendor_id(EXAMPLE_FLEXSPI, &vendorID);
+    status_t status = flexspi_nor_get_vendor_id(EXAMPLE_FLEXSPI, &vendorID);
     FLASH_ExitCritical();
     if (status != kStatus_Success) {
         PRINTF("Get Vendor ID Failure!");
@@ -261,57 +259,61 @@ RAMFUNC int FLASH_Init(void) {
     PRINTF("Vendor ID: 0x%x\r\n", vendorID);
     return status;
 }
+
 /**
  * @brief  flash读
  * @param  {uint32_t} address : Flash地址，flash存储的第一个字节的地址为0x0，第二个字节的地址为0x1，以此类推
  * @param  {uint8_t*} buffer  : 缓存地址
  * @param  {uint32_t} length  : 读出的长度，单位字节
- * @return {int}              : 错误代码
+ * @return {status_t}         : 错误代码，0表示正常
  */
-RAMFUNC int FLASH_Read(uint32_t address, uint8_t *buffer, uint32_t length) {
+RAMFUNC status_t FLASH_Read(uint32_t address, uint8_t *buffer, uint32_t length) {
     FLASH_DEBUG_PRINTF("read addr0x%x,buff0x%x,len0x%x\r\n",address,(int)buffer,length);
     FLASH_EnterCritical();
-    int status = flexspi_nor_flash_read_sector(EXAMPLE_FLEXSPI, address,(uint32_t *) buffer, length);
+    status_t status = flexspi_nor_flash_read_sector(EXAMPLE_FLEXSPI, address,(uint32_t *) buffer, length);
     FLASH_ExitCritical();
     return status;
 }
+
 /**
  * @brief  对flash的一页编程，页大小为FLASH_PAGE_SIZE
  * @param  {uint32_t} address : Flash地址，flash存储的第一个字节的地址为0x0，第二个字节的地址为0x1，以此类推
  *                              必须为FLASH_PAGE_SIZE的整数倍
  * @param  {uint8_t*} buffer  : 缓存地址
- * @return {int}              : 错误代码
+ * @return {status_t}         : 错误代码，0表示正常
  */
-RAMFUNC int FLASH_Prog(uint32_t address, uint8_t *buffer) {
+RAMFUNC status_t FLASH_Prog(uint32_t address, uint8_t *buffer) {
     FLASH_DEBUG_PRINTF("prog addr0x%x,buff0x%x\r\n",address,(int)buffer);
     assert(0 == address % FLASH_PAGE_SIZE);
     FLASH_EnterCritical();
-    int status = flexspi_nor_flash_page_program(EXAMPLE_FLEXSPI, address, (const uint32_t *)buffer);
+    status_t status = flexspi_nor_flash_page_program(EXAMPLE_FLEXSPI, address, (const uint32_t *)buffer);
     FLASH_ExitCritical();
     return status;
 }
+
 /**
  * @brief  擦除flash的一个扇区，扇区大小为FLASH_SECTOR_SIZE
  * @param  {uint32_t} address : Flash地址，flash存储的第一个字节的地址为0x0，第二个字节的地址为0x1，以此类推
  *                              必须为FLASH_SECTOR_SIZE的整数倍
- * @return {int}              : 错误代码
+ * @return {status_t}         : 错误代码，0表示正常
  */
-RAMFUNC int FLASH_Erase(uint32_t address) {
+RAMFUNC status_t FLASH_Erase(uint32_t address) {
     FLASH_DEBUG_PRINTF("erase addr0x%x\r\n",address);
     assert(0 == address % FLASH_SECTOR_SIZE);
     FLASH_EnterCritical();
-    int status = flexspi_nor_flash_erase_sector(EXAMPLE_FLEXSPI, address);
+    status_t status = flexspi_nor_flash_erase_sector(EXAMPLE_FLEXSPI, address);
     FLASH_ExitCritical();
     return status;
 }
+
 /**
  * @brief  同步缓存
  * @param  {void} undefined :
- * @return {int}            :
+ * @return {status_t}       : 错误代码，0表示正常
  */
-RAMFUNC int FLASH_Sync(void) {
+RAMFUNC status_t FLASH_Sync(void) {
     FLASH_EnterCritical();
-    int status = 0;
+    status_t status = 0;
     FLASH_ExitCritical();
     return status;
 }

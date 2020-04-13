@@ -1,9 +1,3 @@
-/*
- * sc_enc.c
- *
- *  Created on: 2020年1月28日
- *      Author: 17616
- */
 #include "sc_enc.h"
 /*
  * brief ENC初始化

@@ -6,10 +6,7 @@
  */
 #include "sc_gpio.h"
 
-/**
- * @brief  初始化io
- * @param  {gpio_class_t*} s :
- */
+
 void GPIO_Init(gpio_t *s) {
     gpio_pin_config_t pinConfig;
     s->direction = kGPIO_DigitalInput;
@@ -19,11 +16,7 @@ void GPIO_Init(gpio_t *s) {
     GPIO_PinInit(s->base, s->pin, &pinConfig);
 }
 
-/**
- * @brief  从引脚输出电平，输入引脚会被重新初始化为输出脚
- * @param  {gpio_class_t*} s :
- * @param  {uint8_t} output  : 1为高电平，0为低电平
- */
+
 void GPIO_Write(gpio_t *s, uint8_t output) {
     if (output) {
         GPIO_Set(s);
@@ -32,38 +25,25 @@ void GPIO_Write(gpio_t *s, uint8_t output) {
     }
 }
 
-/**
- * @brief  置1
- * @param  {gpio_class_t*} s :
- */
+
 void GPIO_Set(gpio_t *s) {
     GPIO_PortSet(s->base, 1 << s->pin);
     GPIO_Out(s);
 }
 
-/**
- * @brief  清0
- * @param  {gpio_class_t*} s :
- */
+
 void GPIO_Clear(gpio_t *s) {
     GPIO_PortClear(s->base, 1 << s->pin);
     GPIO_Out(s);
 }
 
-/**
- * @brief  翻转
- * @param  {gpio_class_t*} s :
- */
+
 void GPIO_Toggle(gpio_t *s) {
     GPIO_PortToggle(s->base, 1 << s->pin);
     GPIO_Out(s);
 }
 
-/**
- * @brief  返回引脚电平，输出脚会重新初始化为输入脚
- * @param  {gpio_class_t*} s :
- * @return {uint32_t}        : 1为高电平，0为低电平
- */
+
 uint32_t GPIO_Read(gpio_t *s) {
     GPIO_In(s);
     return GPIO_PinRead(s->base, s->pin);

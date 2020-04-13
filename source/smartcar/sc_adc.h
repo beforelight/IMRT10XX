@@ -8,7 +8,6 @@
 #ifndef SC_ADC_H_
 #define SC_ADC_H_
 
-#include "fsl_debug_console.h"
 #include "fsl_adc.h"
 
 /**

@@ -1,10 +1,3 @@
-/*
- * sc_pit.h
- *
- *  Created on: 2020年1月29日
- *      Author: 17616
- */
-
 #ifndef SC_PIT_H_
 #define SC_PIT_H_
 
@@ -12,8 +5,8 @@
 
 /**
  * @brief 初始化pit并立即生效，注意各个通道共用同一个中断服务函数
- * 启用PIT_EnableInterrupts
- * 关闭PIT_DisableInterrupts
+ * 启用函数：PIT_EnableInterrupts
+ * 关闭函数：PIT_DisableInterrupts
  * @param  {pit_chnl_t} channel : 通道
  * @param  {uint64_t} us        : 定时中断时间
  */
