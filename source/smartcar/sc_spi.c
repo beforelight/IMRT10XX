@@ -4,7 +4,7 @@
 
 #include "sc_spi.h"
 
-int SPI_Init(LPSPI_Type *base, uint32_t which_pcs, uint32_t baudRate_Bps, uint32_t srcClock_Hz) {
+status_t SPI_Init(LPSPI_Type *base, uint32_t which_pcs, uint32_t baudRate_Bps, uint32_t srcClock_Hz) {
     lpspi_master_config_t masterConfig;
 
     /*Master config*/
@@ -25,10 +25,10 @@ int SPI_Init(LPSPI_Type *base, uint32_t which_pcs, uint32_t baudRate_Bps, uint32
     masterConfig.dataOutConfig = kLpspiDataOutRetained;
 
     LPSPI_MasterInit(base, &masterConfig, srcClock_Hz);
-    return 0;
+    return kStatus_Success;
 }
 
-int SPI_Transfer(LPSPI_Type *base, uint32_t whichpcs, uint8_t *rxbuf, uint8_t *txbuf, uint32_t len) {
+status_t SPI_Transfer(LPSPI_Type *base, uint32_t whichpcs, uint8_t *rxbuf, uint8_t *txbuf, uint32_t len) {
     lpspi_transfer_t xfer;
     xfer.txData = txbuf;
     xfer.rxData = rxbuf;

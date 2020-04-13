@@ -8,19 +8,22 @@
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char* pcTaskName)
 {
-	PRINTF("task %s over flow!!\r\n", pcTaskName);
-
 	vTaskEndScheduler();
 	__disable_irq();
-	while (1) { PRINTF("task %s over flow!!\r\n", pcTaskName); }
+	PRINTF("task %s stack over flow!!\r\n", pcTaskName);
+	PRINTF("task %s stack over flow!!\r\n", pcTaskName);
+	PRINTF("task %s stack over flow!!\r\n", pcTaskName);
+	assert(0);
 }
 
 void vApplicationMallocFailedHook(void)
 {
-	PRINTF("malloc fail!!\r\n");
 	vTaskEndScheduler();
 	__disable_irq();
-	while (1) { PRINTF("malloc fail!!\r\n"); }
+	PRINTF("malloc fail!!\r\n");
+	PRINTF("malloc fail!!\r\n");
+	PRINTF("malloc fail!!\r\n");
+	assert(0);
 }
 
 void TaskStatusPrint(void)

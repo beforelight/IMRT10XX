@@ -4,7 +4,7 @@
 
 #include "sc_uart.h"
 
-int UART_Init(LPUART_Type *base, uint32_t baudRate_Bps_, uint32_t srcClock_Hz) {
+status_t UART_Init(LPUART_Type *base, uint32_t baudRate_Bps_, uint32_t srcClock_Hz) {
     lpuart_config_t config;
     /*
  * config.baudRate_Bps = 115200U;
