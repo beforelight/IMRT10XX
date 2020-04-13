@@ -26,6 +26,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>doc/sdmmc/ChangeLogKSDK.txt</name>
+			<type>1</type>
+			<locationURI>SDK_2_x_MIMXRT1052xxxxB/middleware/sdmmc/ChangeLogKSDK.txt</locationURI>
+		</link>
+		<link>
 			<name>doc/amazon-freertos/freertos_kernel/portable/readme.txt</name>
 			<type>1</type>
 			<locationURI>SDK_2_x_MIMXRT1052xxxxB/rtos/amazon-freertos/freertos_kernel/portable/readme.txt</locationURI>
