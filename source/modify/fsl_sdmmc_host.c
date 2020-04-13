@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#include "fsl_sdmmc_event.h"
+#include <modify/fsl_sdmmc_event.h>
 #include "fsl_sdmmc_host.h"
 
 /*******************************************************************************

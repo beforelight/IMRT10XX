@@ -5,7 +5,7 @@
  *
  * SPDX-License-Identifier: BSD-3-Clause
  */
-#include "fsl_sdmmc_event.h"
+#include <modify/fsl_sdmmc_event.h>
 
 /*******************************************************************************
  * Definitions
@@ -36,30 +36,31 @@ volatile uint32_t g_eventTimeMilliseconds;
 /*******************************************************************************
  * Code
  ******************************************************************************/
-void SysTick_Handler(void)
-{
-#ifdef __CA7_REV
-    SystemClearSystickFlag();
-#endif
-    g_eventTimeMilliseconds++;
-}
+//void SysTick_Handler(void)
+//{
+//#ifdef __CA7_REV
+//    SystemClearSystickFlag();
+//#endif
+////    g_eventTimeMilliseconds++;
+//    //将在freertos中的中断处理中处理这个变量
+//}
 
 void SDMMCEVENT_InitTimer(void)
 {
-#ifdef __CA7_REV
-    /* special for i.mx6ul */
-    SystemSetupSystick(1000U, (void *)SysTick_Handler, 32U);
-    SystemClearSystickFlag();
-#elif defined MIMXRT1176_cm7_SERIES || MIMXRT1176_cm4_SERIES
-#if __CORTEX_M == 7
-    SysTick_Config(CLOCK_GetM7Freq() / 1000); // CLOCK_GetRootClockFreq(kCLOCK_Root_M7_Systick) / 1000U);
-#else
-    SysTick_Config(CLOCK_GetM4Freq() / 1000U);
-#endif
-#else
-    /* Set systick reload value to generate 1ms interrupt */
-    SysTick_Config(CLOCK_GetFreq(kCLOCK_CoreSysClk) / 1000U);
-#endif
+//#ifdef __CA7_REV
+//    /* special for i.mx6ul */
+//    SystemSetupSystick(1000U, (void *)SysTick_Handler, 32U);
+//    SystemClearSystickFlag();
+//#elif defined MIMXRT1176_cm7_SERIES || MIMXRT1176_cm4_SERIES
+//#if __CORTEX_M == 7
+//    SysTick_Config(CLOCK_GetM7Freq() / 1000); // CLOCK_GetRootClockFreq(kCLOCK_Root_M7_Systick) / 1000U);
+//#else
+//    SysTick_Config(CLOCK_GetM4Freq() / 1000U);
+//#endif
+//#else
+//    /* Set systick reload value to generate 1ms interrupt */
+//    SysTick_Config(CLOCK_GetFreq(kCLOCK_CoreSysClk) / 1000U);
+//#endif
 }
 
 static volatile uint32_t *SDMMCEVENT_GetInstance(sdmmc_event_t eventType)
