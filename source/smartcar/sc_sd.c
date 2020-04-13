@@ -5,7 +5,9 @@
 #include "sc_sd.h"
 #include "board.h"
 #include "clock_config.h"
-
+#if !defined(BOARD_SD_SUPPORT_180V) || BOARD_SD_SUPPORT_180V
+#error 在board.h中定义“ #define BOARD_SD_SUPPORT_180V 0U#define BOARD_SD_SUPPORT_180V 0U”飞凌核心板不支持1.8v模式
+#endif
 static FATFS g_fileSystem; /* File system object */
 status_t SD_CardDetect(void) {
     BOARD_USDHC_CD_GPIO_INIT();

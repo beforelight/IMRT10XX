@@ -105,10 +105,6 @@ typedef struct _boot_data_ {
   uint32_t placeholder;		/* placehoder to make even 0x10 size */
 }BOOT_DATA_T;
 
-#ifndef BOARD_FLASH_SIZE
-#define BOARD_FLASH_SIZE 4*1024*1024
-#endif /*BOARD_FLASH_SIZE*/
-
 #if defined(BOARD_FLASH_SIZE)
 #define FLASH_SIZE            BOARD_FLASH_SIZE
 #else

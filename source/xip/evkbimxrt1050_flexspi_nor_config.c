@@ -11,9 +11,7 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.xip_board"
 #endif
-#ifndef XIP_BOOT_HEADER_ENABLE
-#define XIP_BOOT_HEADER_ENABLE 1U
-#endif /*XIP_BOOT_HEADER_ENABLE*/
+
 /*******************************************************************************
  * Code
  ******************************************************************************/

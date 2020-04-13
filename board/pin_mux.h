@@ -133,8 +133,9 @@ void WAKEUP(void);
 #define SD_CARD_D3_CHANNEL                                                    3U   /*!< USDHC1 usdhc_data channel: 3 */
 
 /* GPIO_B1_12 (coord D13), CD */
-#define SD_CARD_CD_PERIPHERAL                                             USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_CD_SIGNAL                                             usdhc_cd_b   /*!< USDHC1 signal: usdhc_cd_b */
+#define SD_CARD_CD_GPIO                                                    GPIO2   /*!< GPIO device name: GPIO2 */
+#define SD_CARD_CD_PORT                                                    GPIO2   /*!< PORT device name: GPIO2 */
+#define SD_CARD_CD_PIN                                                       28U   /*!< GPIO2 pin index: 28 */
 
 
 /*!

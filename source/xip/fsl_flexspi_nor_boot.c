@@ -11,9 +11,7 @@
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.xip_device"
 #endif
-#ifndef XIP_BOOT_HEADER_ENABLE
-#define XIP_BOOT_HEADER_ENABLE 1U
-#endif /*XIP_BOOT_HEADER_ENABLE*/
+
 #if defined(XIP_BOOT_HEADER_ENABLE) && (XIP_BOOT_HEADER_ENABLE == 1)
 #if defined(__CC_ARM) || defined(__ARMCC_VERSION) || defined(__GNUC__)
     __attribute__((section(".boot_hdr.ivt")))
