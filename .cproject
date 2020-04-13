@@ -90,6 +90,7 @@
 								<option id="gnu.c.compiler.option.preprocessor.undef.symbol.726473289" name="Undefined symbols (-U)" superClass="gnu.c.compiler.option.preprocessor.undef.symbol" useByScannerDiscovery="false"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.1862556458" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/board}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/usb_msc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/modify}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
@@ -106,7 +107,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_ram_disk}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/port}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/class}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source}&quot;"/>
@@ -156,8 +156,10 @@
 								<option id="com.crt.advproject.gas.thumb.387177643" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" value="true" valueType="boolean"/>
 								<option id="com.crt.advproject.gas.arch.1471265983" name="Architecture" superClass="com.crt.advproject.gas.arch" value="com.crt.advproject.gas.target.cm7" valueType="enumerated"/>
 								<option id="gnu.both.asm.option.flags.crt.1926445988" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" useByScannerDiscovery="false" value="-c -x assembler-with-cpp -D__NEWLIB__" valueType="string"/>
-								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.2103635922" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.2103635922" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/board}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/usb_msc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/modify}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/amazon-freertos/freertos_kernel/include}&quot;"/>
@@ -173,7 +175,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_ram_disk}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/port}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/class}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source}&quot;"/>
@@ -328,20 +329,71 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<folderInfo id="com.crt.advproject.config.exe.debug.2087238426.933879255" name="/" resourcePath="source">
+						<toolChain id="com.crt.advproject.toolchain.exe.debug.687769517" name="NXP MCU Tools" superClass="com.crt.advproject.toolchain.exe.debug" unusedChildren="">
+							<targetPlatform binaryParser="org.eclipse.cdt.core.ELF;org.eclipse.cdt.core.GNU_ELF" id="com.crt.advproject.platform.exe.debug" name="ARM-based MCU (Debug)" superClass="com.crt.advproject.platform.exe.debug"/>
+							<tool id="com.crt.advproject.cpp.exe.debug.1685784701" name="MCU C++ Compiler" superClass="com.crt.advproject.cpp.exe.debug.1266838087"/>
+							<tool id="com.crt.advproject.gcc.exe.debug.765289086" name="MCU C Compiler" superClass="com.crt.advproject.gcc.exe.debug.211565960">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.534362576" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/board}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/littlefs}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/usb_msc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/smartcar}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/modify}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/amazon-freertos/freertos_kernel/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/amazon-freertos/freertos_kernel/portable/GCC/ARM_CM4F}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/drivers}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/device}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/CMSIS}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/utilities}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/component/serial_manager}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/component/lists}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/component/uart}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_sd_disk}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_ram_disk}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/class}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source/ehci}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source/khci}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source/lpcip3511}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/phy}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/component/osa}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/generated}&quot;"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.files.1766756665" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" useByScannerDiscovery="false" valueType="includeFiles">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/usb_msc/usb_device_config.h}&quot;"/>
+								</option>
+								<inputType id="com.crt.advproject.compiler.input.189287681" superClass="com.crt.advproject.compiler.input"/>
+							</tool>
+							<tool id="com.crt.advproject.gas.exe.debug.142492406" name="MCU Assembler" superClass="com.crt.advproject.gas.exe.debug.1381217250">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2075433224" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+								<inputType id="com.crt.advproject.assembler.input.605384523" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
+							</tool>
+							<tool id="com.crt.advproject.link.cpp.exe.debug.587366256" name="MCU C++ Linker" superClass="com.crt.advproject.link.cpp.exe.debug.618162634"/>
+							<tool id="com.crt.advproject.link.exe.debug.174566522" name="MCU Linker" superClass="com.crt.advproject.link.exe.debug.1232665854"/>
+							<tool id="com.crt.advproject.tool.debug.debug.1917300639" name="MCU Debugger" superClass="com.crt.advproject.tool.debug.debug.1080986640"/>
+						</toolChain>
+					</folderInfo>
 					<sourceEntries>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
-						<entry excluding="freertos_kernel/portable/MemMang/heap_1.c|freertos_kernel/portable/MemMang/heap_2.c|freertos_kernel/portable/MemMang/heap_3.c|freertos_kernel/portable/MemMang/heap_5.c|freertos_kernel/portable/MemMang/heap_useNewlib.c" flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="amazon-freertos"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="CMSIS"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="fatfs"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="sdmmc"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="component"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="device"/>
+						<entry excluding="freertos_kernel/portable/MemMang/heap_1.c|freertos_kernel/portable/MemMang/heap_2.c|freertos_kernel/portable/MemMang/heap_3.c|freertos_kernel/portable/MemMang/heap_5.c|freertos_kernel/portable/MemMang/heap_useNewlib.c" flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="amazon-freertos"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="board"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="component"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="device"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="fatfs"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="sdmmc"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -434,6 +486,7 @@
 								<option id="gnu.c.compiler.option.preprocessor.undef.symbol.1691950382" name="Undefined symbols (-U)" superClass="gnu.c.compiler.option.preprocessor.undef.symbol" useByScannerDiscovery="false"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.c.compiler.option.include.paths.1898921876" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/board}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/modify}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/amazon-freertos/freertos_kernel/include}&quot;"/>
@@ -449,7 +502,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_ram_disk}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/port}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/class}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source}&quot;"/>
@@ -499,6 +551,7 @@
 								<option id="gnu.both.asm.option.flags.crt.2126682094" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" value="-c -x assembler-with-cpp -D__NEWLIB__" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="gnu.both.asm.option.include.paths.1239702164" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/board}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source/modify}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/amazon-freertos/freertos_kernel/include}&quot;"/>
@@ -514,7 +567,6 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/inc}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/fatfs/source/fsl_ram_disk}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/sdmmc/port}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/class}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/usb/device/source}&quot;"/>
@@ -668,19 +720,19 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
-						<entry excluding="freertos_kernel/portable/MemMang/heap_1.c|freertos_kernel/portable/MemMang/heap_2.c|freertos_kernel/portable/MemMang/heap_3.c|freertos_kernel/portable/MemMang/heap_5.c|freertos_kernel/portable/MemMang/heap_useNewlib.c" flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="amazon-freertos"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="CMSIS"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="fatfs"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="sdmmc"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="component"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
-						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="device"/>
+						<entry excluding="freertos_kernel/portable/MemMang/heap_1.c|freertos_kernel/portable/MemMang/heap_2.c|freertos_kernel/portable/MemMang/heap_3.c|freertos_kernel/portable/MemMang/heap_5.c|freertos_kernel/portable/MemMang/heap_useNewlib.c" flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="amazon-freertos"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="board"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="component"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="device"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="drivers"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="fatfs"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="libs"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="sdmmc"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
+						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -709,7 +761,7 @@
 	<storageModule moduleId="com.nxp.mcuxpresso.core.datamodels">
 		<sdkName>SDK_2.x_MIMXRT1052xxxxB</sdkName>
 		<sdkVersion>2.7.0</sdkVersion>
-		<sdkComponents>middleware.amazon_freertos-kernel.MIMXRT1052;middleware.amazon_freertos-kernel.extension.MIMXRT1052;middleware.amazon_freertos-kernel.template.MIMXRT1052;platform.drivers.adc_12b1msps_sar.MIMXRT1052;platform.drivers.common.MIMXRT1052;platform.drivers.clock.MIMXRT1052;device.MIMXRT1052_CMSIS.MIMXRT1052;platform.Include_core_cm7.MIMXRT1052;platform.Include_common.MIMXRT1052;platform.Include_dsp.MIMXRT1052;platform.drivers.adc_etc.MIMXRT1052;platform.drivers.cache_armv7_m7.MIMXRT1052;platform.drivers.csi.MIMXRT1052;platform.drivers.dmamux.MIMXRT1052;platform.drivers.edma.MIMXRT1052;platform.drivers.enc.MIMXRT1052;platform.drivers.igpio.MIMXRT1052;platform.drivers.gpt.MIMXRT1052;platform.drivers.lpi2c.MIMXRT1052;platform.drivers.iomuxc.MIMXRT1052;platform.drivers.lpspi.MIMXRT1052;platform.drivers.lpi2c_edma.MIMXRT1052;platform.drivers.lpspi_edma.MIMXRT1052;platform.drivers.lpuart.MIMXRT1052;platform.drivers.lpuart_edma.MIMXRT1052;platform.drivers.pit.MIMXRT1052;platform.drivers.pwm.MIMXRT1052;platform.drivers.usdhc.MIMXRT1052;platform.drivers.xbara.MIMXRT1052;platform.drivers.xbarb.MIMXRT1052;platform.CMSIS_DSP_Lib.arm_cortexM7lfdp_math.MIMXRT1052;platform.CMSIS_DSP_Lib.arm_cortexM7lfsp_math.MIMXRT1052;platform.utilities.assert.MIMXRT1052;utility.debug_console.MIMXRT1052;component.serial_manager.MIMXRT1052;component.lists.MIMXRT1052;component.serial_manager_uart.MIMXRT1052;component.lpuart_adapter.MIMXRT1052;middleware.fatfs.sd.MIMXRT1052;middleware.sdmmc.sd.MIMXRT1052;middleware.sdmmc.common.MIMXRT1052;middleware.fatfs.MIMXRT1052;middleware.fatfs.template.MIMXRT1052;middleware.fatfs.ram.MIMXRT1052;middleware.sdmmc.usdhcadaptor.interrupt.MIMXRT1052;middleware.usb.device_stack.MIMXRT1052;middleware.usb.stack_common.MIMXRT1052;component.osa.MIMXRT1052;middleware.usb.device_config_template.MIMXRT1052;device.MIMXRT1052_startup.MIMXRT1052;</sdkComponents>
+		<sdkComponents>middleware.amazon_freertos-kernel.MIMXRT1052;middleware.amazon_freertos-kernel.extension.MIMXRT1052;middleware.amazon_freertos-kernel.template.MIMXRT1052;platform.drivers.adc_12b1msps_sar.MIMXRT1052;platform.drivers.common.MIMXRT1052;platform.drivers.clock.MIMXRT1052;device.MIMXRT1052_CMSIS.MIMXRT1052;platform.Include_core_cm7.MIMXRT1052;platform.Include_common.MIMXRT1052;platform.Include_dsp.MIMXRT1052;platform.drivers.adc_etc.MIMXRT1052;platform.drivers.cache_armv7_m7.MIMXRT1052;platform.drivers.csi.MIMXRT1052;platform.drivers.dmamux.MIMXRT1052;platform.drivers.edma.MIMXRT1052;platform.drivers.enc.MIMXRT1052;platform.drivers.igpio.MIMXRT1052;platform.drivers.gpt.MIMXRT1052;platform.drivers.lpi2c.MIMXRT1052;platform.drivers.iomuxc.MIMXRT1052;platform.drivers.lpspi.MIMXRT1052;platform.drivers.lpi2c_edma.MIMXRT1052;platform.drivers.lpspi_edma.MIMXRT1052;platform.drivers.lpuart.MIMXRT1052;platform.drivers.lpuart_edma.MIMXRT1052;platform.drivers.pit.MIMXRT1052;platform.drivers.pwm.MIMXRT1052;platform.drivers.usdhc.MIMXRT1052;platform.drivers.xbara.MIMXRT1052;platform.drivers.xbarb.MIMXRT1052;platform.CMSIS_DSP_Lib.arm_cortexM7lfdp_math.MIMXRT1052;platform.CMSIS_DSP_Lib.arm_cortexM7lfsp_math.MIMXRT1052;platform.utilities.assert.MIMXRT1052;utility.debug_console.MIMXRT1052;component.serial_manager.MIMXRT1052;component.lists.MIMXRT1052;component.serial_manager_uart.MIMXRT1052;component.lpuart_adapter.MIMXRT1052;middleware.fatfs.sd.MIMXRT1052;middleware.sdmmc.sd.MIMXRT1052;middleware.sdmmc.common.MIMXRT1052;middleware.fatfs.MIMXRT1052;middleware.fatfs.template.MIMXRT1052;middleware.fatfs.ram.MIMXRT1052;middleware.usb.device_stack.MIMXRT1052;middleware.usb.stack_common.MIMXRT1052;component.osa.MIMXRT1052;middleware.usb.device_config_template.MIMXRT1052;device.MIMXRT1052_startup.MIMXRT1052;</sdkComponents>
 		<package>MIMXRT1052CVL5B</package>
 		<core>cm7</core>
 		<coreId>core0_MIMXRT1052xxxxB</coreId>
