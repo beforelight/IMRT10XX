@@ -41,12 +41,21 @@ static inline void UART_WriteBlocking(LPUART_Type *base, const uint8_t *data, si
 }
 
 /**
- * @brief   返回串口接收fifo中接收到多少个字节的数据，FIFO大小查手册
+ * @brief   返回串口接收fifo中接收到多少个字节的数据
  * @param  {LPUART_Type*} base : 外设
  * @return {uint32_t}          : 多少字节
  */
 static inline uint32_t UART_RxCountGet(LPUART_Type *base){
     return (base->WATER & LPUART_WATER_RXCOUNT_MASK) >> LPUART_WATER_RXCOUNT_SHIFT;
+}
+
+/**
+ * @brief   返回串口发送是否发送完成
+ * @param  {LPUART_Type*} base : 外设
+ * @return {uint32_t}          :  Transmission Complete Flag 0b0..Transmitter active 0b1..Transmitter idle
+ */
+static inline uint32_t UART_TcGet(LPUART_Type* base) {
+    return base->STAT & LPUART_STAT_TC_MASK;
 }
 
 #if defined(__cplusplus)
