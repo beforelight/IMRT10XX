@@ -1,10 +1,3 @@
-/*
- * sc_adc.h
- *
- *  Created on: 2020年1月28日
- *      Author: 17616
- */
-
 #ifndef SC_ADC_H_
 #define SC_ADC_H_
 
