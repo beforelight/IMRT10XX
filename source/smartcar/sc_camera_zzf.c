@@ -1,4 +1,4 @@
-#include"sc_camera_common_zzf.h"
+#include"sc_camera_zzf.h"
 #include"task.h"
 #include"status.h"
 
