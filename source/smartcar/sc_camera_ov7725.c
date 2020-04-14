@@ -284,7 +284,7 @@ void OV7725_SCCB_Init(void)
 //初始化OV7725
 //返回0:成功
 //返回其他值:错误代码
-status_t OV7725_Init(zzf_frame_size_t size)
+status_t OV7725_Init(ov7725_frame_size_t size)
 {
 	uint16_t i = 0;
 	uint16_t reg = 0;

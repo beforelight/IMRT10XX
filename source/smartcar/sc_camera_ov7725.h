@@ -14,7 +14,7 @@ typedef enum _ov7725_frame_size
 {
     OV7725_FrameSizeVGA480x640 = OV_FRAME_SZIE(480, 640),
     OV7725_FrameSizeQVGA240x320 = OV_FRAME_SZIE(240, 320),
-}zzf_frame_size_t;
+}ov7725_frame_size_t;
 
 #if defined(__cplusplus)
 extern "C" {
@@ -25,7 +25,7 @@ extern "C" {
     uint8_t OV7725_SCCB_RD_Reg(uint8_t reg);
     void    OV7725_SCCB_Init(void);
 
-    status_t   OV7725_Init(zzf_frame_size_t size);
+    status_t   OV7725_Init(ov7725_frame_size_t size);
     void OV7725_Light_Mode(uint8_t mode);
     void OV7725_Color_Saturation(int8_t sat);
     void OV7725_Brightness(int8_t bright);
