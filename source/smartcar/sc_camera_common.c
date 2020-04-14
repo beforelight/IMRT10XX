@@ -104,7 +104,7 @@ status_t CAMERA_ReceiverDeinit(void)
 
 status_t CAMERA_SubmitBuff(void* buff)
 {
-	return CSI_TransferSubmitEmptyBuffer(CSI, &csi_handel, buff);
+	return CSI_TransferSubmitEmptyBuffer(CSI, &csi_handel, (uint32_t)buff);
 }
 
 status_t CAMERA_FullBufferGet(void* buff)

@@ -1,4 +1,5 @@
 #include"sc_camera_zzf.h"
+#include"FreeRTOS.h"
 #include"task.h"
 #include"status.h"
 

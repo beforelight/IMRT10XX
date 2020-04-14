@@ -1,4 +1,5 @@
 #include"sc_camera_ov7725.h"
+#include"FreeRTOS.h"
 #include"task.h"
 #include"fsl_debug_console.h"
 #ifndef _OV7725CFG_H
@@ -280,6 +281,8 @@ void OV7725_SCCB_Init(void)
 {
 	return;
 }
+
+void OV7725_Window_Set(uint16_t width, uint16_t height, uint8_t mode);
 
 //初始化OV7725
 //返回0:成功

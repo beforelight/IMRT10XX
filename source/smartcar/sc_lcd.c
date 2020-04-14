@@ -632,7 +632,7 @@ void LCD_PrintPicture(img_t* src)
 	}
 
 	LCD_Address_Set(0, 0, width - 1, height - 1);
-	uint8_t* image = rgb;
+	uint8_t* image = (uint8_t*)rgb;
 	for (uint32_t i = 0; i < width * height; i++)
 	{
 		LCD_WR_DATA8(image[i * 2 + 1]);
