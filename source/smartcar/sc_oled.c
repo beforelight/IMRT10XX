@@ -708,3 +708,51 @@ void OLED_P6x8Rst(uint8_t x, uint8_t y, uint8_t ch[])
 		j++;
 	}
 }
+
+void OLED_PrintPicture(img_t* src, uint8_t threshold)
+{
+	int scale = 1;
+	int height, width;
+	while (1)
+	{
+		height = src->height / scale;
+		width = src->width / scale;
+		if (height <= 64 && width <= 128)
+		{
+			break;
+		}
+		else {
+			++scale;
+		}
+	}
+	uint8_t* gray = pvPortMalloc(height * width);
+	if (src->format == PixelFormatGray)
+	{
+		uint8_t* p = src->pImg;
+		for (uint32_t i = 0; i < src->height; i += scale)
+		{
+			for (uint32_t j = 0; j < src->width; j += scale)
+			{
+				gray[i * width + j] = p[i * src->width + j];
+			}
+		}
+	}
+	else if (src->format == PixelFormatRGB565)
+	{
+		uint16_t* p = src->pImg;
+		uint16_t buf;
+		for (uint32_t i = 0; i < src->height; i++)
+		{
+			for (uint32_t j = 0; j < src->width; j++)
+			{
+				buf =
+					RGB565_R(p[i * src->width + j]) +
+					RGB565_G(p[i * src->width + j]) +
+					RGB565_B(p[i * src->width + j]);
+				gray[i * width + j] = buf/3;
+			}
+		}
+	}
+	dis_bmp(height, width, gray, threshold);
+	vPortFree(gray);
+}

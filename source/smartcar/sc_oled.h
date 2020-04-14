@@ -18,6 +18,7 @@ qq：512924543
 #ifndef _OELD_H
 #define _OELD_H
 #include"fsl_gpio.h"
+#include"sc_camera_common.h"
  //无复位线是因为采用上电复位电路
 #define OLED_DC_GPIO GPIO2 //数据命令选择线
 #define OLED_DC_PIN 13U
@@ -51,7 +52,7 @@ void image_size_half_forOLED(uint8_t* src, uint8_t* dst, const int row, const in
 void Str_Clr(uint32_t x, uint32_t y, uint32_t num);
 void OLED_Logo(void);
 void OLED_P6x8Rst(uint8_t x, uint8_t y, uint8_t ch[]);
-
+void OLED_PrintPicture(img_t* src, uint8_t threshold);
 
 /********************************************************************/
 

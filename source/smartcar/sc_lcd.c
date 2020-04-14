@@ -368,7 +368,7 @@ void LCD_DrawRectangle(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint1
 void LCD_Draw_Circle(uint16_t x0, uint16_t y0, uint8_t r, uint16_t color)
 {
 	int a, b;
-//	int di;
+	//	int di;
 	a = 0; b = r;
 	while (a <= b)
 	{
@@ -506,7 +506,7 @@ void LCD_ShowNum(uint16_t x, uint16_t y, uint16_t num, uint8_t len, uint16_t col
 void LCD_ShowNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t color)
 {
 	uint8_t t, temp;
-//	uint8_t enshow = 0;
+	//	uint8_t enshow = 0;
 	uint16_t num1;
 	num1 = num * 100;
 	for (t = 0; t < len; t++)
@@ -587,6 +587,58 @@ void LCD_Test2(void)
 		LCD_Clear(RED);
 		LCD_Clear(BLUE);
 	}
+}
+
+void LCD_PrintPicture(img_t* src)
+{
+	int scale = 1;
+	int height, width;
+	while (1)
+	{
+		height = src->height / scale;
+		width = src->width / scale;
+		if (height <= 240 && width <= 240)
+		{
+			break;
+		}
+		else {
+			++scale;
+		}
+	}
+
+	uint16_t* rgb = pvPortMalloc(height * width * 2);
+	if (src->format == PixelFormatGray)
+	{
+		uint8_t* p = src->pImg;
+		for (uint32_t i = 0; i < src->height; i += scale)
+		{
+			for (uint32_t j = 0; j < src->width; j += scale)
+			{
+#define GRAY2RGB565(x) (uint16_t)(((x<<8)&0xF800U)|((x<<3)&0x7E0U) |((x>>3)&0x1FU))
+				rgb[i * width + j] = GRAY2RGB565(p[i * src->width + j]);
+			}
+		}
+	}
+	else if (src->format == PixelFormatRGB565)
+	{
+		uint16_t* p = src->pImg;
+		for (uint32_t i = 0; i < src->height; i++)
+		{
+			for (uint32_t j = 0; j < src->width; j++)
+			{
+				rgb[i * width + j] = p[i * src->width + j];
+			}
+		}
+	}
+
+	LCD_Address_Set(0, 0, width - 1, height - 1);
+	uint8_t* image = rgb;
+	for (uint32_t i = 0; i < width * height; i++)
+	{
+		LCD_WR_DATA8(image[i * 2 + 1]);
+		LCD_WR_DATA8(image[i * 2]);
+	}
+	vPortFree(rgb);
 }
 
 

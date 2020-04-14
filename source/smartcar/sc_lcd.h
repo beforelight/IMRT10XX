@@ -11,6 +11,7 @@
 #define __LCD_H			  	 
 
 #include "fsl_gpio.h"
+#include "sc_camera_common.h"
 
 #define USE_HORIZONTAL 0  //设置横屏或者竖屏显示 0或1为竖屏 2或3为横屏
 
@@ -61,6 +62,7 @@ void LCD_ShowNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t color
 void LCD_ShowPicture(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void LCD_Test(void);
 void LCD_Test2(void);
+void LCD_PrintPicture(img_t* src);
 
 //画笔颜色
 #define WHITE         	 0xFFFF

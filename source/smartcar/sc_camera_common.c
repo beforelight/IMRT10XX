@@ -8,6 +8,41 @@ csi_handle_t csi_handel;
 
 
 
+void CAMERA_Save2PngFile(img_t* src, FIL* fp)
+{
+	uint8_t* rgb = pvPortMalloc(src->height * src->width * 3);
+
+	if (src->format == PixelFormatGray)
+	{
+		uint8_t* p = src->pImg;
+		for (uint32_t i = 0; i < src->height; i++)
+		{
+			for (uint32_t j = 0; j < src->width; j++)
+			{
+				for (uint32_t k = 0; k < 3; k++)
+				{
+					rgb[i * src->width * 3 + j * 3 + k] = p[i * src->width * j];
+				}
+			}
+		}
+	}
+	else if (src->format == PixelFormatRGB565)
+	{
+		uint16_t* p = src->pImg;
+		for (uint32_t i = 0; i < src->height; i++)
+		{
+			for (uint32_t j = 0; j < src->width; j++)
+			{
+				rgb[i * src->width * 3 + j * 3 + 0] = RGB565_R(p[i * src->width * j]);
+				rgb[i * src->width * 3 + j * 3 + 1] = RGB565_G(p[i * src->width * j]);
+				rgb[i * src->width * 3 + j * 3 + 2] = RGB565_B(p[i * src->width * j]);
+			}
+		}
+	}
+	svpng(fp, src->width, src->height, rgb, 0);
+	vPortFree(rgb);
+}
+
 status_t CAMERA_MclkSet(uint32_t clk)
 {
 	if (clk == 24 * 1000 * 1000)

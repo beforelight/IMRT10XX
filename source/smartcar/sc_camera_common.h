@@ -6,84 +6,101 @@
 #define IMXRT_CAMERA_COMMON_H
 
 #include "fsl_csi.h"
+#include "svpng.h"
+
+#define RGB565_R(x) ((uint8_t)((x&0xF800U)>>8) )
+#define RGB565_G(x) ((uint8_t)((x&0x7E0U)>>3)  )
+#define RGB565_B(x) ((uint8_t)((x&0x1FU)<<3)   )
 
 typedef enum _camera_pixel_format
 {
 	PixelFormatGray = 1,//灰度
 	PixelFormatRGB565 = 2,
-}camera_pixel_format_t ;
+}camera_pixel_format_t;
+
+
+typedef struct __img {
+	camera_pixel_format_t format;
+	uint16_t height;
+	uint16_t width;
+	void* pImg;
+}img_t;
 
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-    /**
-     * @brief	设置输出像素时钟，默认24m
-     * @param  {uint32_t} clk : 时钟
-     * @return {status_t}     : kStatus_Success为成功设置
-     */
+
+	void CAMERA_Save2PngFile(img_t* src, FIL* fp);
+
+
+	/**
+	 * @brief	设置输出像素时钟，默认24m
+	 * @param  {uint32_t} clk : 时钟
+	 * @return {status_t}     : kStatus_Success为成功设置
+	 */
 	status_t CAMERA_MclkSet(uint32_t clk);
 
-    /**
-     * @brief	初始化CSI
-     * @brief	这是写摄像头驱动的接口
-     * @param  {csi_config_t*} csi_config : 
-     * @return {status_t}                 : 
-     */
+	/**
+	 * @brief	初始化CSI
+	 * @brief	这是写摄像头驱动的接口
+	 * @param  {csi_config_t*} csi_config :
+	 * @return {status_t}                 :
+	 */
 	status_t CAMERA_ReceiverInit(const csi_config_t* csi_config);
 
-    /**
-     * @brief
-     * @param  {void} undefined : 
-     * @return {status_t}       : 
-     */
+	/**
+	 * @brief
+	 * @param  {void} undefined :
+	 * @return {status_t}       :
+	 */
 	status_t CAMERA_ReceiverDeinit(void);
 
-    /**
-     * @brief	提交一帧图像的空缓存，如果没有缓存，传输会自动停止，最大4帧缓存
-     * @brief	注意缓存所在的内存区域不能启用cache
-     * @brief	注意缓存必须64字节对齐
-     * @param  {void*} buff : 缓存指针
-     * @return {status_t}   : kStatus_Success为成功提交
-     */
+	/**
+	 * @brief	提交一帧图像的空缓存，如果没有缓存，传输会自动停止，最大4帧缓存
+	 * @brief	注意缓存所在的内存区域不能启用cache
+	 * @brief	注意缓存必须64字节对齐
+	 * @param  {void*} buff : 缓存指针
+	 * @return {status_t}   : kStatus_Success为成功提交
+	 */
 	status_t CAMERA_SubmitBuff(void* buff);
 
-    /**
-     * @brief	获取采集好图像的缓存指针
-     * @param  {void*} buff : 有图像的缓存指针
-     * @return {status_t}   : kStatus_Success为成功获取一帧图像缓存
-     */
+	/**
+	 * @brief	获取采集好图像的缓存指针
+	 * @param  {void*} buff : 有图像的缓存指针
+	 * @return {status_t}   : kStatus_Success为成功获取一帧图像缓存
+	 */
 	status_t CAMERA_FullBufferGet(void* buff);
 
-    /**
-     * @brief	开始传输图像，开始传输之前确保已经提交足够的空缓存
-     * @param  {void} undefined : 
-     * @return {status_t}       : kStatus_Success为成功开始
-     */
+	/**
+	 * @brief	开始传输图像，开始传输之前确保已经提交足够的空缓存
+	 * @param  {void} undefined :
+	 * @return {status_t}       : kStatus_Success为成功开始
+	 */
 	status_t CAMERA_ReceiverStart(void);
 
-    /**
-     * @brief	停止传输
-     * @param  {void} undefined : 
-     * @return {status_t}       : 
-     */
+	/**
+	 * @brief	停止传输
+	 * @param  {void} undefined :
+	 * @return {status_t}       :
+	 */
 	status_t CAMERA_ReceiverStop(void);
 
-    /**
-     * @brief	返回目前摄像头的帧率，原理是统计最近60张图像所用的时间
-     * @brief	会阻塞大概1-2秒
-     * @param  {void} undefined : 
-     * @return {float}          :fps 
-     */
+	/**
+	 * @brief	返回目前摄像头的帧率，原理是统计最近60张图像所用的时间
+	 * @brief	会阻塞大概1-2秒
+	 * @param  {void} undefined :
+	 * @return {float}          :fps
+	 */
 	float CAMERA_FpsGet(void);
 
 
-    /**
-     * @brief	传输完成回调函数
-     * @param  {CSI_Type*} base       : 
-     * @param  {csi_handle_t*} handle : 
-     * @param  {status_t} status      : 
-     * @param  {void*} userData       : 
-     */
+	/**
+	 * @brief	传输完成回调函数
+	 * @param  {CSI_Type*} base       :
+	 * @param  {csi_handle_t*} handle :
+	 * @param  {status_t} status      :
+	 * @param  {void*} userData       :
+	 */
 	void CAMERA_Callback(CSI_Type* base, csi_handle_t* handle, status_t status, void* userData);
 
 #if defined(__cplusplus)
