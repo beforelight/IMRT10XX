@@ -39,236 +39,222 @@ void BOARD_InitBootPins(void);
 
 
 /*!
- * @brief Configures pin routing and optionally pin electrical features.
+ * @brief 
  *
  */
-void SWD(void);
-
-/* GPIO_AD_B0_02 (coord M11), LED1 */
-#define LED1_GPIO                                                          GPIO1   /*!< GPIO device name: GPIO1 */
-#define LED1_PORT                                                          GPIO1   /*!< PORT device name: GPIO1 */
-#define LED1_PIN                                                              2U   /*!< GPIO1 pin index: 2 */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void LED(void);
-
-
-/*!
- * @brief Be careful!
- * Be careful!
- * Be careful!
- * The pins used by the core board!
- *
- */
-void SEMC_SDRAM(void);
-
-/* GPIO_AD_B0_13 (coord L14), DEBUG */
-#define DEBUG_UART1_DEBUG_PERIPHERAL                                     LPUART1   /*!< Device name: LPUART1 */
-#define DEBUG_UART1_DEBUG_SIGNAL                                              RX   /*!< LPUART1 signal: RX */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void DEBUG_UART1(void);
-
-/* GPIO_AD_B1_03 (coord M12), RX */
-#define DEBUG_UART2_RX_PERIPHERAL                                        LPUART2   /*!< Device name: LPUART2 */
-#define DEBUG_UART2_RX_SIGNAL                                                 RX   /*!< LPUART2 signal: RX */
-
-/* GPIO_AD_B1_02 (coord L11), TX */
-#define DEBUG_UART2_TX_PERIPHERAL                                        LPUART2   /*!< Device name: LPUART2 */
-#define DEBUG_UART2_TX_SIGNAL                                                 TX   /*!< LPUART2 signal: TX */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void DEBUG_UART2(void);
-
-/* WAKEUP (coord L6), WAKEUP/WAKEUP/WAKEUP Used for bootloader/WAKEUP Used for bootloader/WAKEUP Used for bootloader/WAKEUP Used for bootloader */
-#define WAKEUP_GPIO                                                        GPIO5   /*!< GPIO device name: GPIO5 */
-#define WAKEUP_PORT                                                        GPIO5   /*!< PORT device name: GPIO5 */
-#define WAKEUP_PIN                                                            0U   /*!< GPIO5 pin index: 0 */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void WAKEUP(void);
-
-/* GPIO_SD_B0_03 (coord K1), D1 */
-#define SD_CARD_DATA1_PERIPHERAL                                          USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_DATA1_SIGNAL                                          usdhc_data   /*!< USDHC1 signal: usdhc_data */
-#define SD_CARD_DATA1_CHANNEL                                                 1U   /*!< USDHC1 usdhc_data channel: 1 */
-
-/* GPIO_SD_B0_02 (coord J1), D0 */
-#define SD_CARD_D0_PERIPHERAL                                             USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_D0_SIGNAL                                             usdhc_data   /*!< USDHC1 signal: usdhc_data */
-#define SD_CARD_D0_CHANNEL                                                    0U   /*!< USDHC1 usdhc_data channel: 0 */
-
-/* GPIO_SD_B0_01 (coord J3), CLK */
-#define SD_CARD_CLK_PERIPHERAL                                            USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_CLK_SIGNAL                                             usdhc_clk   /*!< USDHC1 signal: usdhc_clk */
-
-/* GPIO_SD_B0_00 (coord J4), CMD */
-#define SD_CARD_CMD_PERIPHERAL                                            USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_CMD_SIGNAL                                             usdhc_cmd   /*!< USDHC1 signal: usdhc_cmd */
-
-/* GPIO_SD_B0_04 (coord H2), D2 */
-#define SD_CARD_D2_PERIPHERAL                                             USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_D2_SIGNAL                                             usdhc_data   /*!< USDHC1 signal: usdhc_data */
-#define SD_CARD_D2_CHANNEL                                                    2U   /*!< USDHC1 usdhc_data channel: 2 */
-
-/* GPIO_SD_B0_05 (coord J2), D3 */
-#define SD_CARD_D3_PERIPHERAL                                             USDHC1   /*!< Device name: USDHC1 */
-#define SD_CARD_D3_SIGNAL                                             usdhc_data   /*!< USDHC1 signal: usdhc_data */
-#define SD_CARD_D3_CHANNEL                                                    3U   /*!< USDHC1 usdhc_data channel: 3 */
-
-/* GPIO_B1_12 (coord D13), CD */
-#define SD_CARD_CD_GPIO                                                    GPIO2   /*!< GPIO device name: GPIO2 */
-#define SD_CARD_CD_PORT                                                    GPIO2   /*!< PORT device name: GPIO2 */
-#define SD_CARD_CD_PIN                                                       28U   /*!< GPIO2 pin index: 28 */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void SD_CARD(void);
+void WDOG_B(void);
 
 
 /*!
  * @brief 
  *
  */
-void FlexSPI_A_QspiFlash(void);
+void qspiFlash(void);
+
+
+/*!
+ * @brief 
+ *
+ */
+void SDRAM(void);
+
+/* WAKEUP (coord L6), WEKAUP */
+#define SNVS_WAKEUP_GPIO                                                   GPIO5   /*!< GPIO device name: GPIO5 */
+#define SNVS_WAKEUP_PORT                                                   GPIO5   /*!< PORT device name: GPIO5 */
+#define SNVS_WAKEUP_PIN                                                       0U   /*!< GPIO5 pin index: 0 */
+
+/* PMIC_STBY_REQ (coord L7), PMIC_STBY */
+#define SNVS_PMIC_STBY_GPIO                                                GPIO5   /*!< GPIO device name: GPIO5 */
+#define SNVS_PMIC_STBY_PORT                                                GPIO5   /*!< PORT device name: GPIO5 */
+#define SNVS_PMIC_STBY_PIN                                                    2U   /*!< GPIO5 pin index: 2 */
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void SNVS(void);
+
+/* GPIO_SD_B0_03 (coord K1), D1 */
+#define SD_D1_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
+#define SD_D1_SIGNAL                                                  usdhc_data   /*!< USDHC1 signal: usdhc_data */
+#define SD_D1_CHANNEL                                                         1U   /*!< USDHC1 usdhc_data channel: 1 */
+
+/* GPIO_SD_B0_02 (coord J1), D0 */
+#define SD_D0_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
+#define SD_D0_SIGNAL                                                  usdhc_data   /*!< USDHC1 signal: usdhc_data */
+#define SD_D0_CHANNEL                                                         0U   /*!< USDHC1 usdhc_data channel: 0 */
+
+/* GPIO_SD_B0_01 (coord J3), CLK */
+#define SD_CLK_PERIPHERAL                                                 USDHC1   /*!< Device name: USDHC1 */
+#define SD_CLK_SIGNAL                                                  usdhc_clk   /*!< USDHC1 signal: usdhc_clk */
+
+/* GPIO_SD_B0_00 (coord J4), CMD */
+#define SD_CMD_PERIPHERAL                                                 USDHC1   /*!< Device name: USDHC1 */
+#define SD_CMD_SIGNAL                                                  usdhc_cmd   /*!< USDHC1 signal: usdhc_cmd */
+
+/* GPIO_SD_B0_04 (coord H2), D2 */
+#define SD_D2_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
+#define SD_D2_SIGNAL                                                  usdhc_data   /*!< USDHC1 signal: usdhc_data */
+#define SD_D2_CHANNEL                                                         2U   /*!< USDHC1 usdhc_data channel: 2 */
 
 /* GPIO_SD_B0_05 (coord J2), D3 */
-#define SD_DATA3_GPIO_D3_GPIO                                              GPIO3   /*!< GPIO device name: GPIO3 */
-#define SD_DATA3_GPIO_D3_PORT                                              GPIO3   /*!< PORT device name: GPIO3 */
-#define SD_DATA3_GPIO_D3_PIN                                                 17U   /*!< GPIO3 pin index: 17 */
+#define SD_D3_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
+#define SD_D3_SIGNAL                                                  usdhc_data   /*!< USDHC1 signal: usdhc_data */
+#define SD_D3_CHANNEL                                                         3U   /*!< USDHC1 usdhc_data channel: 3 */
+
+/* GPIO_B1_12 (coord D13), CD */
+#define SD_CD_GPIO                                                         GPIO2   /*!< GPIO device name: GPIO2 */
+#define SD_CD_PORT                                                         GPIO2   /*!< PORT device name: GPIO2 */
+#define SD_CD_PIN                                                            28U   /*!< GPIO2 pin index: 28 */
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void SD_DATA3_GPIO(void);
-
-/* GPIO_AD_B0_00 (coord M14), keyboard */
-#define CSI_CAMERA_PWDN_GPIO                                               GPIO1   /*!< GPIO device name: GPIO1 */
-#define CSI_CAMERA_PWDN_PORT                                               GPIO1   /*!< PORT device name: GPIO1 */
-#define CSI_CAMERA_PWDN_PIN                                                   0U   /*!< GPIO1 pin index: 0 */
+void SD(void);
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void CSI_CAMERA(void);
+void camera(void);
 
-/* GPIO_AD_B1_01 (coord K11), CSI */
-#define LPI2C_SDA_GPIO                                                     GPIO1   /*!< GPIO device name: GPIO1 */
-#define LPI2C_SDA_PORT                                                     GPIO1   /*!< PORT device name: GPIO1 */
-#define LPI2C_SDA_PIN                                                        17U   /*!< GPIO1 pin index: 17 */
+/* GPIO_B0_00 (coord D7), D0 */
+#define LCD_D0_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D0_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D0_PIN                                                            0U   /*!< GPIO2 pin index: 0 */
 
-/* GPIO_AD_B1_00 (coord J11), CSI */
-#define LPI2C_SCL_GPIO                                                     GPIO1   /*!< GPIO device name: GPIO1 */
-#define LPI2C_SCL_PORT                                                     GPIO1   /*!< PORT device name: GPIO1 */
-#define LPI2C_SCL_PIN                                                        16U   /*!< GPIO1 pin index: 16 */
+/* GPIO_B0_01 (coord E7), D1 */
+#define LCD_D1_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D1_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D1_PIN                                                            1U   /*!< GPIO2 pin index: 1 */
+
+/* GPIO_B0_02 (coord E8), D2 */
+#define LCD_D2_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D2_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D2_PIN                                                            2U   /*!< GPIO2 pin index: 2 */
+
+/* GPIO_B0_03 (coord D8), D3 */
+#define LCD_D3_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D3_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D3_PIN                                                            3U   /*!< GPIO2 pin index: 3 */
+
+/* GPIO_B0_04 (coord C8), BT_CFG0/PD */
+#define LCD_D4_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D4_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D4_PIN                                                            4U   /*!< GPIO2 pin index: 4 */
+
+/* GPIO_B0_05 (coord B8), BT_CFG1/PD */
+#define LCD_D5_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D5_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D5_PIN                                                            5U   /*!< GPIO2 pin index: 5 */
+
+/* GPIO_B0_06 (coord A8), BT_CFG2/PD */
+#define LCD_D6_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D6_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D6_PIN                                                            6U   /*!< GPIO2 pin index: 6 */
+
+/* GPIO_B0_07 (coord A9), BT_CFG3/PD */
+#define LCD_D7_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_D7_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_D7_PIN                                                            7U   /*!< GPIO2 pin index: 7 */
+
+/* GPIO_B0_12 (coord C10), BT_CFG8/PD */
+#define LCD_WR_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_WR_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_WR_PIN                                                           12U   /*!< GPIO2 pin index: 12 */
+
+/* GPIO_B0_13 (coord D10), BT_CFG9/PD */
+#define LCD_DC_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_DC_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_DC_PIN                                                           13U   /*!< GPIO2 pin index: 13 */
+
+/* GPIO_B1_08 (coord A12), keyboard/C0 */
+#define LCD_C0_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_C0_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_C0_PIN                                                           24U   /*!< GPIO2 pin index: 24 */
+
+/* GPIO_B1_09 (coord A13), keyboard/C1 */
+#define LCD_C1_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_C1_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_C1_PIN                                                           25U   /*!< GPIO2 pin index: 25 */
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void LPI2C(void);
+void LCD(void);
 
-/* GPIO_SD_B1_05 (coord N3), SDA */
-#define LPI2C_GPIO_SDA_GPIO                                                GPIO3   /*!< GPIO device name: GPIO3 */
-#define LPI2C_GPIO_SDA_PORT                                                GPIO3   /*!< PORT device name: GPIO3 */
-#define LPI2C_GPIO_SDA_PIN                                                    5U   /*!< GPIO3 pin index: 5 */
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void SWD(void);
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void ENC(void);
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void UART(void);
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void SPI(void);
 
 /* GPIO_SD_B1_04 (coord P2), SCL */
-#define LPI2C_GPIO_SCL_GPIO                                                GPIO3   /*!< GPIO device name: GPIO3 */
-#define LPI2C_GPIO_SCL_PORT                                                GPIO3   /*!< PORT device name: GPIO3 */
-#define LPI2C_GPIO_SCL_PIN                                                    4U   /*!< GPIO3 pin index: 4 */
+#define IIC_SCL_PERIPHERAL                                                LPI2C1   /*!< Device name: LPI2C1 */
+#define IIC_SCL_SIGNAL                                                       SCL   /*!< LPI2C1 signal: SCL */
+
+/* GPIO_SD_B1_05 (coord N3), SDA */
+#define IIC_SDA_PERIPHERAL                                                LPI2C1   /*!< Device name: LPI2C1 */
+#define IIC_SDA_SIGNAL                                                       SDA   /*!< LPI2C1 signal: SDA */
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void LPI2C_GPIO(void);
+void IIC(void);
 
-/* GPIO_B0_10 (coord D9), BT_CFG6/PD */
-#define FLEXIO8080_WR_PERIPHERAL                                         FLEXIO2   /*!< Device name: FLEXIO2 */
-#define FLEXIO8080_WR_SIGNAL                                                  IO   /*!< FLEXIO2 signal: IO */
-#define FLEXIO8080_WR_CHANNEL                                                10U   /*!< FLEXIO2 IO channel: 10 */
-
-/* GPIO_B0_11 (coord A10), BT_CFG7/PD */
-#define FLEXIO8080_DC_GPIO                                                 GPIO2   /*!< GPIO device name: GPIO2 */
-#define FLEXIO8080_DC_PORT                                                 GPIO2   /*!< PORT device name: GPIO2 */
-#define FLEXIO8080_DC_PIN                                                    11U   /*!< GPIO2 pin index: 11 */
+/* GPIO_AD_B0_08 (coord F13), keyboard JTAG_MOD/JTAG_MOD/PD */
+#define GPIO_BEE_GPIO                                                      GPIO1   /*!< GPIO device name: GPIO1 */
+#define GPIO_BEE_PORT                                                      GPIO1   /*!< PORT device name: GPIO1 */
+#define GPIO_BEE_PIN                                                          8U   /*!< GPIO1 pin index: 8 */
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void FLEXIO8080(void);
+void GPIO(void);
 
-/* GPIO_B0_10 (coord D9), BT_CFG6/PD */
-#define IO8080_WR_GPIO                                                     GPIO2   /*!< GPIO device name: GPIO2 */
-#define IO8080_WR_PORT                                                     GPIO2   /*!< PORT device name: GPIO2 */
-#define IO8080_WR_PIN                                                        10U   /*!< GPIO2 pin index: 10 */
-
-/* GPIO_B0_11 (coord A10), BT_CFG7/PD */
-#define IO8080_DC_GPIO                                                     GPIO2   /*!< GPIO device name: GPIO2 */
-#define IO8080_DC_PORT                                                     GPIO2   /*!< PORT device name: GPIO2 */
-#define IO8080_DC_PIN                                                        11U   /*!< GPIO2 pin index: 11 */
+/* GPIO_B1_10 (coord B13), keyboard/OE_B */
+#define PWM_OE_B_GPIO                                                      GPIO2   /*!< GPIO device name: GPIO2 */
+#define PWM_OE_B_PORT                                                      GPIO2   /*!< PORT device name: GPIO2 */
+#define PWM_OE_B_PIN                                                         26U   /*!< GPIO2 pin index: 26 */
 
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void IO8080(void);
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void PWMplusLED(void);
-
-/* GPIO_AD_B1_02 (coord L11), TX */
-#define ADC_TX_PERIPHERAL                                                   ADC1   /*!< Device name: ADC1 */
-#define ADC_TX_SIGNAL                                                         IN   /*!< ADC1 signal: IN */
-#define ADC_TX_CHANNEL                                                        7U   /*!< ADC1 IN channel: 7 */
-
-/* GPIO_AD_B1_03 (coord M12), RX */
-#define ADC_RX_PERIPHERAL                                                   ADC1   /*!< Device name: ADC1 */
-#define ADC_RX_SIGNAL                                                         IN   /*!< ADC1 signal: IN */
-#define ADC_RX_CHANNEL                                                        8U   /*!< ADC1 IN channel: 8 */
-
-/* GPIO_AD_B1_00 (coord J11), CSI */
-#define ADC_SCL_PERIPHERAL                                                  ADC1   /*!< Device name: ADC1 */
-#define ADC_SCL_SIGNAL                                                        IN   /*!< ADC1 signal: IN */
-#define ADC_SCL_CHANNEL                                                       5U   /*!< ADC1 IN channel: 5 */
-
-/* GPIO_AD_B1_01 (coord K11), CSI */
-#define ADC_SDA_PERIPHERAL                                                  ADC1   /*!< Device name: ADC1 */
-#define ADC_SDA_SIGNAL                                                        IN   /*!< ADC1 signal: IN */
-#define ADC_SDA_CHANNEL                                                       6U   /*!< ADC1 IN channel: 6 */
+void PWM(void);
 
 
 /*!

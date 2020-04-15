@@ -77,7 +77,7 @@ void BOARD_InitBootClocks(void);
 #define DCD_HSRUN_SPDIF0_EXTCLK_OUT                   0UL
 #define DCD_HSRUN_TRACE_CLK_ROOT                      99000000UL
 #define DCD_HSRUN_UART_CLK_ROOT                       80000000UL
-#define DCD_HSRUN_USBPHY1_CLK                         0UL
+#define DCD_HSRUN_USBPHY1_CLK                         480000000UL
 #define DCD_HSRUN_USBPHY2_CLK                         0UL
 #define DCD_HSRUN_USDHC1_CLK_ROOT                     163862068UL
 #define DCD_HSRUN_USDHC2_CLK_ROOT                     163862068UL
