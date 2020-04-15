@@ -16,7 +16,7 @@ typedef enum _zzf_frame_size
 	//ZZF_FrameSize120x188 = ZZF_FRAME_SZIE(120,188),//1052不支持这个分辨率，因为WIDTH要整除8
 	ZZF_FrameSize120x184 = ZZF_FRAME_SZIE(120, 184),
 	ZZF_FrameSize240x376 = ZZF_FRAME_SZIE(240, 376),
-	ZZF_FrameSize480x752 = ZZF_FRAME_SZIE(240, 376),
+	ZZF_FrameSize480x752 = ZZF_FRAME_SZIE(480, 752),
 }zzf_frame_size_t;
 
 #if defined(__cplusplus)
