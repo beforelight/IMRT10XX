@@ -12,6 +12,7 @@
 #include "smartcar/sc_gpio.h"
 #include "task.h"
 #include "sc_sd.h"
+#include "examples/test.h"
 BSS_DTC uint8_t heap_heap1[64 * 1024] ALIGN(8);
 BSS_OC uint8_t heap_heap2[128 * 1024] ALIGN(8);
 BSS_SDRAM uint8_t heap_heap3[4 * 1024 * 1024] ALIGN(8);
