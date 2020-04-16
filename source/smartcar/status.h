@@ -65,7 +65,7 @@ void GPT2_IRQHandler(void);
 void TimerInit(void);
 
 /**
- * @brief   返回自计时器初始化以来经历的脉冲数，100年不溢出
+ * @brief   返回自计时器初始化以来经历的脉冲数
  * @param  {void} undefined : 
  * @return {uint64_t}       : 
  */

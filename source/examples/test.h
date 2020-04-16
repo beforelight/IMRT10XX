@@ -26,6 +26,7 @@
 #define TEST_PIT
 #define TEST_PWM
 #define TEST_SD
+#define TEST_STATUS
 
 void test(TaskFunction_t pxTaskCode, const char* const pcName, uint32_t TimeOutMs, int runDirect) {
 	if (TimeOutMs == 0) { TimeOutMs = ~0; }
@@ -74,7 +75,7 @@ void adc(void* pv)
 	PRINTF("adc\tchannel\tvalue\r\n");
 	for (int i = 3; i < 9; i++)
 	{
-		float val = ADC_Read(ADC1, i) / 4096.0;
+		float val = (float)ADC_Read(ADC1, i) / 4096.0;
 		PRINTF("adc1\%d\t%d.%d%d%dv\r\n", i, (int)val,
 			((int)(val * 10)) % 10,
 			((int)(val * 100)) % 10,
@@ -115,6 +116,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 		if (ch == 'o' || ch == 'O') //初始化ov7725摄像头
 		{
 			PRINTF("select ov7725\r\n");
+			CAMERA_MclkSet(24 * 1000 * 1000);
 			OV7725_Init(OV7725_FrameSizeVGA480x640);
 			OV7725_Light_Mode(0);
 			OV7725_Color_Saturation(0);
@@ -175,6 +177,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 			else
 			{
 				i--;
+				vTaskDelay(1);
 			}
 		}
 		//100张图片采集达成，统计一下fps
@@ -189,7 +192,6 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 
 }
 #endif // TEST_CAMERA
-
 
 #ifdef TEST_ENC
 #include "smartcar/sc_enc.h"
@@ -510,9 +512,24 @@ void pwm(void* pv)
 #endif // TEST_PWM
 
 #ifdef TEST_SD
-
-
+#include"sc_sd.h"
+void sd(void* pv)//关于读写文件系统的示例见摄像头的示例
+{
+	if (kStatus_Success != SD_MscInit())
+	{
+		PRINTF("Please insert SD card\r\n");
+	}
+	vTaskDelay(NULL);
+}
 #endif // TEST_SD
 
-
+#ifdef TEST_STATUS
+void status(void* pv)
+{
+	TaskStatusPrint();
+	APP_PrintRunFrequency(0);
+	PRINTF("%dms\r\n", TimerMsGet());
+	vTaskDelete(NULL);
+}
+#endif //TEST_STATUS
 #endif /* EXAMPLES_TEST_H_ */
