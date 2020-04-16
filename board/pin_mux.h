@@ -58,23 +58,6 @@ void qspiFlash(void);
  */
 void SDRAM(void);
 
-/* WAKEUP (coord L6), WEKAUP */
-#define SNVS_WAKEUP_GPIO                                                   GPIO5   /*!< GPIO device name: GPIO5 */
-#define SNVS_WAKEUP_PORT                                                   GPIO5   /*!< PORT device name: GPIO5 */
-#define SNVS_WAKEUP_PIN                                                       0U   /*!< GPIO5 pin index: 0 */
-
-/* PMIC_STBY_REQ (coord L7), PMIC_STBY */
-#define SNVS_PMIC_STBY_GPIO                                                GPIO5   /*!< GPIO device name: GPIO5 */
-#define SNVS_PMIC_STBY_PORT                                                GPIO5   /*!< PORT device name: GPIO5 */
-#define SNVS_PMIC_STBY_PIN                                                    2U   /*!< GPIO5 pin index: 2 */
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void SNVS(void);
-
 /* GPIO_SD_B0_03 (coord K1), D1 */
 #define SD_D1_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
 #define SD_D1_SIGNAL                                                  usdhc_data   /*!< USDHC1 signal: usdhc_data */
@@ -115,12 +98,29 @@ void SNVS(void);
  */
 void SD(void);
 
+/* WAKEUP (coord L6), WEKAUP */
+#define XSNVS_WAKEUP_GPIO                                                  GPIO5   /*!< GPIO device name: GPIO5 */
+#define XSNVS_WAKEUP_PORT                                                  GPIO5   /*!< PORT device name: GPIO5 */
+#define XSNVS_WAKEUP_PIN                                                      0U   /*!< GPIO5 pin index: 0 */
+
+/* PMIC_STBY_REQ (coord L7), PMIC_STBY */
+#define XSNVS_PMIC_STBY_GPIO                                               GPIO5   /*!< GPIO device name: GPIO5 */
+#define XSNVS_PMIC_STBY_PORT                                               GPIO5   /*!< PORT device name: GPIO5 */
+#define XSNVS_PMIC_STBY_PIN                                                   2U   /*!< GPIO5 pin index: 2 */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void camera(void);
+void xSNVS(void);
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void __camera(void);
 
 /* GPIO_B0_00 (coord D7), D0 */
 #define LCD_D0_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */

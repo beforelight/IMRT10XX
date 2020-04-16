@@ -28,7 +28,7 @@
 #define TEST_SD
 #define TEST_STATUS
 
-void test(TaskFunction_t pxTaskCode, const char* const pcName, uint32_t TimeOutMs, int runDirect) {
+void test(TaskFunction_t pxTaskCode, const char* const pcName, uint32_t TimeOutMs, int runDirect, int exitDirect) {
 	if (TimeOutMs == 0) { TimeOutMs = ~0; }
 	TaskStatus_t xTaskDetails;
 	vTaskGetInfo(NULL, &xTaskDetails, pdTRUE, eInvalid);
@@ -54,7 +54,14 @@ void test(TaskFunction_t pxTaskCode, const char* const pcName, uint32_t TimeOutM
 		e = eTaskGetState(task_handle);
 		if (e == eDeleted || e == eInvalid)
 		{
-			PRINTF("task %s exit!\r\n", pcName);
+			if (exitDirect == 0)
+			{
+				PRINTF("task %s exit!press any key to continue\r\n");
+				GETCHAR();
+			}
+			else {
+				PRINTF("task %s exit!\r\n", pcName);
+			}
 			return;
 		}
 		else if (TimerUsGet() - msp >= TimeOutMs)
@@ -161,7 +168,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 					}
 				}
 				CAMERA_Save2PngFile(&img, &png);//保存到sd卡中
-				LCD_PrintPicture(&png);//在屏幕上显示
+				LCD_PrintPicture(&img);//在屏幕上显示
 				if (FR_OK == f_close(&png))
 				{
 					PRINTF("Save %s success.\r\n", str);
@@ -303,20 +310,20 @@ void flash_lfs(void* pv) {
 void keypad(void* pv)
 {
 	gpio_t row_list[] = {
-	{LCD_D0_GPIO,LCD_D0_PIN,NULL},
-	{LCD_D1_GPIO,LCD_D1_PIN,NULL},
-	{LCD_D2_GPIO,LCD_D2_PIN,NULL},
-	{LCD_D3_GPIO,LCD_D3_PIN,NULL},
-	{LCD_D4_GPIO,LCD_D4_PIN,NULL},
-	{LCD_D5_GPIO,LCD_D5_PIN,NULL},
-	{LCD_D6_GPIO,LCD_D6_PIN,NULL},
-	{LCD_D7_GPIO,LCD_D7_PIN,NULL},
+	{LCD_D0_GPIO,LCD_D0_PIN,0},
+	{LCD_D1_GPIO,LCD_D1_PIN,0},
+	{LCD_D2_GPIO,LCD_D2_PIN,0},
+	{LCD_D3_GPIO,LCD_D3_PIN,0},
+	{LCD_D4_GPIO,LCD_D4_PIN,0},
+	{LCD_D5_GPIO,LCD_D5_PIN,0},
+	{LCD_D6_GPIO,LCD_D6_PIN,0},
+	{LCD_D7_GPIO,LCD_D7_PIN,0},
 	{0,0,0}
 	};
 
 	gpio_t col_list[] = {
-	{LCD_C0_GPIO,LCD_C0_PIN,NULL},
-	{LCD_C1_GPIO,LCD_C1_PIN,NULL},
+	{LCD_C0_GPIO,LCD_C0_PIN,0},
+	{LCD_C1_GPIO,LCD_C1_PIN,0},
 	{0,0,0}
 	};
 	char ch;
@@ -335,7 +342,7 @@ void keypad(void* pv)
 				{
 					PRINTF("%d\t", (int)KEYPAD_Get(&g_keypad, i, j));
 				}
-				PRINTF('\r\n');
+				PRINTF("\r\n");
 			}
 		}
 		else if (ch == 'e' || ch == 'E')
@@ -352,8 +359,7 @@ void keypad(void* pv)
 #include"sc_lcd.h"
 void lcd(void* pv)
 {
-	uint8_t i, m;
-	float t = 0;
+
 	Lcd_Init();			//初始化OLED
 	LCD_Clear(WHITE);
 	BACK_COLOR = WHITE;
@@ -481,7 +487,7 @@ pwm_t my1 = { PWM1,kPWM_Module_3 ,25 * 1000,0,0,kPWM_HighTrue };
 pwm_t my2 = { PWM2,kPWM_Module_3 ,25 * 1000,0,0,kPWM_HighTrue };
 pwm_t my3 = { PWM2,kPWM_Module_2 ,25 * 1000,0,0,kPWM_HighTrue };
 pwm_t my4 = { PWM2,kPWM_Module_1 ,25 * 1000,0,0,kPWM_HighTrue };
-gpio_t OE_B = { PWM_OE_B_GPIO,PWM_OE_B_PIN,NULL };
+gpio_t OE_B = { PWM_OE_B_GPIO,PWM_OE_B_PIN,0 };
 void pwm(void* pv)
 {
 	pwm_t* list[] =
@@ -519,7 +525,7 @@ void sd(void* pv)//关于读写文件系统的示例见摄像头的示例
 	{
 		PRINTF("Please insert SD card\r\n");
 	}
-	vTaskDelay(NULL);
+	vTaskDelete(NULL);
 }
 #endif // TEST_SD
 

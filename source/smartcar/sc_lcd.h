@@ -12,6 +12,7 @@
 
 #include "fsl_gpio.h"
 #include "sc_camera_common.h"
+#include "pin_mux.h"
 
 #define USE_HORIZONTAL 0  //设置横屏或者竖屏显示 0或1为竖屏 2或3为横屏
 
@@ -23,14 +24,22 @@
 #define LCD_W 240
 #define LCD_H 240
 #endif
-#define LCD_DATA_LINE_GPIO GPIO2
-#define LCD_DATA_LINE_PIN_START 0U
 
+#ifndef LCD_D0_GPIO
+#define LCD_D0_GPIO GPIO2
+#define LCD_D0_PIN 0U
+#endif // !LCD_D0_GPIO
+
+#ifndef LCD_WR_GPIO
 #define LCD_WR_GPIO GPIO2
-#define LCD_WR_PIN 10U
+#define LCD_WR_PIN 12U
+#endif // !LCD_WR_GPIO
 
+#ifndef LCD_DC_GPIO
 #define LCD_DC_GPIO GPIO2
-#define LCD_DC_PIN 11U
+#define LCD_DC_PIN 13U
+#endif // !LDC_DC_GPIO
+
 
 
 

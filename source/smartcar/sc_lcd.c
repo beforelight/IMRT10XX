@@ -18,12 +18,12 @@ uint16_t BACK_COLOR;   //背景色
 ******************************************************************************/
 inline void LCD_Writ_Bus(uint8_t dat)
 {
-	LCD_DATA_LINE_GPIO->DR_SET = dat << LCD_DATA_LINE_PIN_START;
+	LCD_D0_GPIO->DR_SET = dat << LCD_D0_PIN;
 	//如果LCD_DATA_LINE_GPIO==LCD_WR_GPIO
 //	LCD_DATA_LINE_GPIO->DR_CLEAR = (((~dat) & 0xff )<< LCD_DATA_LINE_PIN_START )| (1 << IO8080_WR_PIN);
 	//否则
 	LCD_WR_CLR;
-	LCD_DATA_LINE_GPIO->DR_CLEAR = ((~dat) & 0xff) << LCD_DATA_LINE_PIN_START;
+	LCD_D0_GPIO->DR_CLEAR = ((~dat) & 0xff) << LCD_D0_PIN;
 	LCD_WR_SET;//上升沿采样
 }
 
