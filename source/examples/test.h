@@ -21,6 +21,11 @@
 //#define TEST_GPIO//这个就不用写示例了
 //#define TEST_IIC//没法单独测试
 #define TEST_KEYPAD
+#define TEST_LCD
+#define TEST_OLED
+#define TEST_PIT
+#define TEST_PWM
+#define TEST_SD
 
 void test(TaskFunction_t pxTaskCode, const char* const pcName, uint32_t TimeOutMs, int runDirect) {
 	if (TimeOutMs == 0) { TimeOutMs = ~0; }
@@ -86,6 +91,7 @@ void adc(void* pv)
 #include "smartcar/sc_sd.h"
 #include "smartcar/sc_camera_ov7725.h"
 #include "smartcar/sc_camera_zzf.h"
+#include "sc_lcd.h"
 BSS_SDRAM_NOCACHE uint8_t buff1[1024 * 1024] ALIGN(64);//最多4缓存，这里声明为1mb的缓存
 BSS_SDRAM_NOCACHE uint8_t buff2[1024 * 1024] ALIGN(64);//是因为这俩摄像头都用这个缓存
 BSS_SDRAM_NOCACHE uint8_t buff3[1024 * 1024] ALIGN(64);//实际图片多大，缓存就多大
@@ -99,6 +105,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 	if (SD_Mount() == kStatus_Success)
 	{
 		char ch;
+		Lcd_Init();
 		while (1)
 		{
 			PRINTF("which one?o->ov7725 z->zzf\r\n");
@@ -152,6 +159,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 					}
 				}
 				CAMERA_Save2PngFile(&img, &png);//保存到sd卡中
+				LCD_PrintPicture(&png);//在屏幕上显示
 				if (FR_OK == f_close(&png))
 				{
 					PRINTF("Save %s success.\r\n", str);
@@ -287,6 +295,224 @@ void flash_lfs(void* pv) {
 }
 #endif // TEST_FLASH
 
+#ifdef TEST_KEYPAD
+#include "pin_mux.h"
+#include "sc_keypad.h"
+void keypad(void* pv)
+{
+	gpio_t row_list[] = {
+	{LCD_D0_GPIO,LCD_D0_PIN,NULL},
+	{LCD_D1_GPIO,LCD_D1_PIN,NULL},
+	{LCD_D2_GPIO,LCD_D2_PIN,NULL},
+	{LCD_D3_GPIO,LCD_D3_PIN,NULL},
+	{LCD_D4_GPIO,LCD_D4_PIN,NULL},
+	{LCD_D5_GPIO,LCD_D5_PIN,NULL},
+	{LCD_D6_GPIO,LCD_D6_PIN,NULL},
+	{LCD_D7_GPIO,LCD_D7_PIN,NULL},
+	{0,0,0}
+	};
+
+	gpio_t col_list[] = {
+	{LCD_C0_GPIO,LCD_C0_PIN,NULL},
+	{LCD_C1_GPIO,LCD_C1_PIN,NULL},
+	{0,0,0}
+	};
+	char ch;
+	KEYPAD_Init(&g_keypad, col_list, row_list);
+	while (1)
+	{
+		PRINTF("\r\np->print status of keypad and e->exit\r\n");
+		ch = GETCHAR();
+		if (ch == 'p' || ch == 'P')
+		{
+			PRINTF("\tc0\tc1\r\n");
+			for (int i = 0; i < 8; i++)
+			{
+				PRINTF("r%d\t", i);
+				for (int j = 0; j < 2; j++)
+				{
+					PRINTF("%d\t", (int)KEYPAD_Get(&g_keypad, i, j));
+				}
+				PRINTF('\r\n');
+			}
+		}
+		else if (ch == 'e' || ch == 'E')
+		{
+			break;
+		}
+	}
+	vTaskDelete(NULL);
+}
+
+#endif // TEST_KEYPAD
+
+#ifdef TEST_LCD
+#include"sc_lcd.h"
+void lcd(void* pv)
+{
+	uint8_t i, m;
+	float t = 0;
+	Lcd_Init();			//初始化OLED
+	LCD_Clear(WHITE);
+	BACK_COLOR = WHITE;
+	LCD_ShowString(10, 35, "2.4 TFT SPI 240*320", RED);
+	LCD_ShowString(10, 55, "LCD_W:", RED);	LCD_ShowNum(70, 55, LCD_W, 3, RED);
+	LCD_ShowString(110, 55, "LCD_H:", RED); LCD_ShowNum(160, 55, LCD_H, 3, RED);
+	LCD_ShowNum1(80, 95, 3.14159f, 5, RED);
+	vTaskDelete(NULL);
+}
+#endif // TEST_LCD
+
+#ifdef TEST_OLED
+#include"sc_oled.h"
+void oled(void* pv)
+{
+	OLED_Init();
+	OLED_Fill(0xff);
+	vTaskDelay(100);
+	OLED_Logo();
+	vTaskDelay(100);
+	vTaskDelete(NULL);
+}
+#endif // TEST_OLED
+
+#ifdef TEST_PIT
+#include"sc_pit.h"
+#include"status.h"
+int c0count = 0;
+int c1count = 0;
+int c2count = 0;
+int c3count = 0;
+uint32_t c0time_us = 0;
+uint32_t c1time_us = 0;
+uint32_t c2time_us = 0;
+uint32_t c3time_us = 0;
+uint32_t c0pit_us = 0;
+uint32_t c1pit_us = 0;
+uint32_t c2pit_us = 0;
+uint32_t c3pit_us = 0;
+void pit(void* pv)
+{
+	PIT_Init2(kPIT_Chnl_0, 500);//500us
+	PIT_Init2(kPIT_Chnl_1, 5 * 1000);//5ms
+	PIT_Init2(kPIT_Chnl_2, 10 * 1000);//10ms
+	PIT_Init2(kPIT_Chnl_3, 20 * 1000);//20ms
+	NVIC_SetPriority(PIT_IRQn, 6);//设置pit中断优先级为6
+	PIT_StartTimer(PIT, kPIT_Chnl_0);
+	PIT_StartTimer(PIT, kPIT_Chnl_1);
+	PIT_StartTimer(PIT, kPIT_Chnl_2);
+	PIT_StartTimer(PIT, kPIT_Chnl_3);
+	while (1)
+	{
+		vTaskDelay(10);
+		if (c0count >= 3 &&
+			c1count >= 3 &&
+			c2count >= 3 &&
+			c3count >= 3) {
+			PRINTF("Period us-->ch0:%d,ch1:%d,ch2:%d,ch3:%d\r\n", c0pit_us, c1pit_us, c2pit_us, c3pit_us);
+			break;
+		}
+	}
+	vTaskDelete(NULL);
+}
+//中断服务函数（不准直接改名字可以用define改名字）
+//注意四个pit通道共用一个中断服务函数
+/*RAMFUNC_ITC*/ void PIT_IRQHandler(void)
+{
+	/*清除中断标志位 （要用的时候解注释，通道可换）*/
+	if (PIT_GetStatusFlags(PIT, kPIT_Chnl_0) == kPIT_TimerFlag)
+	{
+		PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
+		c0count++;
+		c0pit_us = TimerUsGet() - c0time_us;
+		c0time_us = TimerUsGet();
+		if (c0count >= 3)
+		{
+			PIT_StopTimer(PIT, kPIT_Chnl_0);
+		}
+	}
+	if (PIT_GetStatusFlags(PIT, kPIT_Chnl_1) == kPIT_TimerFlag)
+	{
+		PIT_ClearStatusFlags(PIT, kPIT_Chnl_1, kPIT_TimerFlag);
+		c1count++;
+		c1pit_us = TimerUsGet() - c1time_us;
+		c1time_us = TimerUsGet();
+		if (c1count >= 3)
+		{
+			PIT_StopTimer(PIT, kPIT_Chnl_1);
+		}
+	}
+	if (PIT_GetStatusFlags(PIT, kPIT_Chnl_2) == kPIT_TimerFlag)
+	{
+		PIT_ClearStatusFlags(PIT, kPIT_Chnl_2, kPIT_TimerFlag);
+		c2count++;
+		c2pit_us = TimerUsGet() - c2time_us;
+		c2time_us = TimerUsGet();
+		if (c2count >= 3)
+		{
+			PIT_StopTimer(PIT, kPIT_Chnl_2);
+		}
+	}
+	if (PIT_GetStatusFlags(PIT, kPIT_Chnl_3) == kPIT_TimerFlag)
+	{
+		PIT_ClearStatusFlags(PIT, kPIT_Chnl_3, kPIT_TimerFlag);
+		c3count++;
+		c3pit_us = TimerUsGet() - c3time_us;
+		c3time_us = TimerUsGet();
+		if (c3count >= 3)
+		{
+			PIT_StopTimer(PIT, kPIT_Chnl_3);
+		}
+	}
+	/*中断服务函数内容*/
+	__DSB();
+	/*DSB--数据同步屏障
+	 * 作用：因为CPU时钟的主频大于IP总线时钟故会出现中断标志位还未被清掉时中断服务函数中的内容会执行完，而使得程序一遍一遍的进入中断服务函数，
+	 * 而DSB则是为了预防这一情况的发生。*/
+}
+#endif // TEST_PIT
+
+#ifdef TEST_PWM
+#include"sc_pwm.h"
+#include"sc_gpio.h"
+pwm_t my1 = { PWM1,kPWM_Module_3 ,25 * 1000,0,0,kPWM_HighTrue };
+pwm_t my2 = { PWM2,kPWM_Module_3 ,25 * 1000,0,0,kPWM_HighTrue };
+pwm_t my3 = { PWM2,kPWM_Module_2 ,25 * 1000,0,0,kPWM_HighTrue };
+pwm_t my4 = { PWM2,kPWM_Module_1 ,25 * 1000,0,0,kPWM_HighTrue };
+gpio_t OE_B = { PWM_OE_B_GPIO,PWM_OE_B_PIN,NULL };
+void pwm(void* pv)
+{
+	pwm_t* list[] =
+	{
+		&my1,
+		&my2,
+		&my3,
+		&my4,
+		NULL
+	};
+	PWM_Init2(list);
+	GPIO_Init(&OE_B);
+	my1.dutyA = 10.0;
+	my1.dutyB = 20.0;
+	my2.dutyA = 30.0;
+	my2.dutyB = 40.0;
+	my3.dutyA = 50.0;
+	my3.dutyB = 60.0;
+	my4.dutyA = 70.0;
+	my4.dutyB = 80.0;
+	PWM_Change(&my1);
+	PWM_Change(&my2);
+	PWM_Change(&my3);
+	PWM_Change(&my4);
+	GPIO_Write(&OE_B, 0);//使能缓冲芯片输出
+	vTaskDelete(NULL);
+}
+#endif // TEST_PWM
+
+#ifdef TEST_SD
+
+
+#endif // TEST_SD
 
 
 #endif /* EXAMPLES_TEST_H_ */

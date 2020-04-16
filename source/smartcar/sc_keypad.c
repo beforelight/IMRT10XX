@@ -51,6 +51,7 @@ void KEYPAD_Init(keypad_t *s, gpio_t *Rows, gpio_t *Cols) {
     for (size_t i = 0; i < s->colNum; i++) {
         s->cols[i].direction = kGPIO_DigitalInput;
         GPIO_Init(&s->cols[i]);
+        GPIO_Read(&s->cols[i]);
     }
 }
 

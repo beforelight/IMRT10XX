@@ -124,6 +124,7 @@ void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 ******************************************************************************/
 void Lcd_Init(void)
 {
+	vTaskDelay(10); //等待上电复位
 	//************* Start Initial Sequence **********// 
 	LCD_WR_REG(0x36);
 	if (USE_HORIZONTAL == 0)LCD_WR_DATA8(0x00);
@@ -227,39 +228,39 @@ void LCD_Clear(uint16_t Color)
 }
 
 
-/******************************************************************************
-	  函数说明：LCD显示汉字
-	  入口数据：x,y   起始坐标
-				index 汉字的序号
-				size  字号
-	  返回值：  无
-******************************************************************************/
-void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t index, uint8_t size, uint16_t color)
-{
-	uint8_t i, j;
-	const uint8_t* temp;
-	uint8_t size1;
-	if (size == 16) { temp = Hzk16; }//选择字号
-	if (size == 32) { temp = Hzk32; }
-	LCD_Address_Set(x, y, x + size - 1, y + size - 1); //设置一个汉字的区域
-	size1 = size * size / 8;//一个汉字所占的字节
-	temp += index * size1;//写入的起始位置
-	for (j = 0; j < size1; j++)
-	{
-		for (i = 0; i < 8; i++)
-		{
-			if ((*temp & (1 << i)) != 0)//从数据的低位开始读
-			{
-				LCD_WR_DATA(color);//点亮
-			}
-			else
-			{
-				LCD_WR_DATA(BACK_COLOR);//不点亮
-			}
-		}
-		temp++;
-	}
-}
+///******************************************************************************
+//	  函数说明：LCD显示汉字
+//	  入口数据：x,y   起始坐标
+//				index 汉字的序号
+//				size  字号
+//	  返回值：  无
+//******************************************************************************/
+//void LCD_ShowChinese(uint16_t x, uint16_t y, uint8_t index, uint8_t size, uint16_t color)
+//{
+//	uint8_t i, j;
+//	const uint8_t* temp;
+//	uint8_t size1;
+//	if (size == 16) { temp = Hzk16; }//选择字号
+//	if (size == 32) { temp = Hzk32; }
+//	LCD_Address_Set(x, y, x + size - 1, y + size - 1); //设置一个汉字的区域
+//	size1 = size * size / 8;//一个汉字所占的字节
+//	temp += index * size1;//写入的起始位置
+//	for (j = 0; j < size1; j++)
+//	{
+//		for (i = 0; i < 8; i++)
+//		{
+//			if ((*temp & (1 << i)) != 0)//从数据的低位开始读
+//			{
+//				LCD_WR_DATA(color);//点亮
+//			}
+//			else
+//			{
+//				LCD_WR_DATA(BACK_COLOR);//不点亮
+//			}
+//		}
+//		temp++;
+//	}
+//}
 
 
 /******************************************************************************
@@ -578,16 +579,16 @@ void LCD_ShowNum1(uint16_t x, uint16_t y, float num, uint8_t len, uint16_t color
 //	}
 //}
 
-void LCD_Test2(void)
-{
-	Lcd_Init();			//初始化OLED  
-	while (1)
-	{
-
-		LCD_Clear(RED);
-		LCD_Clear(BLUE);
-	}
-}
+//void LCD_Test2(void)
+//{
+//	Lcd_Init();			//初始化OLED  
+//	while (1)
+//	{
+//
+//		LCD_Clear(RED);
+//		LCD_Clear(BLUE);
+//	}
+//}
 
 void LCD_PrintPicture(img_t* src)
 {

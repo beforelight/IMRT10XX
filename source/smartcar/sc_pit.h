@@ -4,7 +4,7 @@
 #include "fsl_pit.h"
 
 /**
- * @brief 初始化pit并立即生效，注意各个通道共用同一个中断服务函数
+ * @brief 初始化pit，但不会立即生效，注意各个通道共用同一个中断服务函数
  * 启用函数：PIT_EnableInterrupts
  * 关闭函数：PIT_DisableInterrupts
  * @param  {pit_chnl_t} channel : 通道
