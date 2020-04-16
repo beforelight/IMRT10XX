@@ -18,7 +18,7 @@ typedef struct _gpio_class {
     GPIO_Type *base;
     uint32_t pin;
     gpio_pin_direction_t direction;//记录引脚的输入输出状态
-} gpio_t;
+} gpio_t;//gpio_t的对象只能被引用，不能被复制
 
 typedef struct __led {
     gpio_t parent;

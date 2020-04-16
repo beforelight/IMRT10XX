@@ -29,7 +29,11 @@ typedef struct __img {
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-
+	/**
+	 * @brief	将图片保存到文件当中，保存格式为png
+	 * @param  {img_t*} src : 图像指针
+	 * @param  {FIL*} fp    : 文件指针
+	 */
 	void CAMERA_Save2PngFile(img_t* src, FIL* fp);
 
 

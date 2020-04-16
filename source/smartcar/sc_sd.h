@@ -33,7 +33,7 @@ status_t SD_Init2(void);
 status_t SD_Mount(void);
 
 /**
- * @brief   初始化sd卡并变身读卡器，通过usb连接电脑
+ * @brief   初始化sd卡挂载为usb大容量存储设备
  * @param  {void} undefined : 
  * @return {status_t}       : kStatus_Success表示成功
  */
