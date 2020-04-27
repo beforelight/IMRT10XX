@@ -18,14 +18,34 @@ qq：512924543
 #ifndef _OELD_H
 #define _OELD_H
 #include"fsl_gpio.h"
+#include"pin_mux.h"
 #include"sc_camera_common.h"
- //无复位线是因为采用上电复位电路
+
+#ifndef OLED_DC_GPIO
 #define OLED_DC_GPIO GPIO2 //数据命令选择线
 #define OLED_DC_PIN 13U
+#endif // !OLED_DC_GPIO
+
+#ifndef OLED_D0_GPIO
 #define OLED_D0_GPIO GPIO2 //时钟线
 #define OLED_D0_PIN 12U
+#endif // !OLED_D0_GPIO
+
+#ifndef OLED_D1_GPIO
 #define OLED_D1_GPIO GPIO2 //数据线
 #define OLED_D1_PIN 0U
+#endif // !OLED_D1_GPIO
+
+#if defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) //复位线
+#define OLED_RES_SET() GPIO_PortSet(OLED_RES_GPIO,1<<OLED_RES_PIN)
+#define OLED_RES_CLR() GPIO_PortClear(OLED_RES_GPIO,1<<OLED_RES_PIN)
+#endif // OLED_RES_GPIO
+
+#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
+#define OLED_SC_SET() GPIO_PortSet(OLED_SC_GPIO,1<<OLED_SC_PIN)
+#define OLED_SC_CLR() GPIO_PortClear(OLED_SC_GPIO,1<<OLED_SC_PIN)
+#endif // OLED_SC_GPIO
+
 
 #define OLED_DC_SET() GPIO_PortSet(OLED_DC_GPIO,1<<OLED_DC_PIN)
 #define OLED_DC_CLR() GPIO_PortClear(OLED_DC_GPIO,1<<OLED_DC_PIN)

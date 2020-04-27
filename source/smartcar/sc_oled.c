@@ -318,6 +318,9 @@ void OLED_WrDat(uint8_t data)
 //内部使用用户无需调用
 void OLED_WrByte(uint8_t OneByte)
 {
+#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
+	OLED_SC_CLR();
+#endif // OLED_SC_GPIO
 	uint8_t i = 8;
 	while (i--)
 	{
@@ -327,6 +330,9 @@ void OLED_WrByte(uint8_t OneByte)
 		OLED_D0_SET();
 		OneByte <<= 1;
 	}
+#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
+	OLED_SC_SET();
+#endif // OLED_SC_GPIO
 }
 
 //内部使用用户无需调用
@@ -389,7 +395,18 @@ void OLED_Init(void)
 	GPIO_PinInit(OLED_DC_GPIO, OLED_DC_PIN, &pinconfig);
 	GPIO_PinInit(OLED_D0_GPIO, OLED_D0_PIN, &pinconfig);
 	GPIO_PinInit(OLED_D1_GPIO, OLED_D1_PIN, &pinconfig);
+#if defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) //复位线
+	GPIO_PinInit(OLED_RES_GPIO, OLED_RES_PIN, &pinconfig);
+#endif // OLED_RES_GPIO
+#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
+	GPIO_PinInit(OLED_SC_GPIO, OLED_SC_PIN, &pinconfig);
+#endif // OLED_SC_GPIO
 
+#if defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) //复位线
+	OLED_RES_CLR();
+	vTaskDelay(20);
+	OLED_RES_SET();
+#endif // OLED_RES_GPIO
 	vTaskDelay(20);//等待上电复位完成
 	OLED_WrCmd(0xae);//--turn off oled panel
 	OLED_WrCmd(0x00);//---set low column address
@@ -749,7 +766,7 @@ void OLED_PrintPicture(img_t* src, uint8_t threshold)
 					RGB565_R(p[i * src->width + j]) +
 					RGB565_G(p[i * src->width + j]) +
 					RGB565_B(p[i * src->width + j]);
-				gray[i * width + j] = buf/3;
+				gray[i * width + j] = buf / 3;
 			}
 		}
 	}
