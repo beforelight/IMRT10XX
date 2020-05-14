@@ -90,8 +90,7 @@ extern "C" {
 	status_t CAMERA_ReceiverStop(void);
 
 	/**
-	 * @brief	返回目前摄像头的帧率，原理是统计最近60张图像所用的时间
-	 * @brief	会阻塞大概1-2秒
+	 * @brief	返回目前摄像头最近几帧图片的帧率
 	 * @param  {void} undefined :
 	 * @return {float}          :fps
 	 */
