@@ -1,4 +1,4 @@
-/*
+﻿/*
  * test.h
  *
  *  Created on: 2020年4月15日
@@ -151,7 +151,7 @@ void camera(void* pv)//采集图像并且保存到sd卡中
 		assert(kStatus_Success == CAMERA_ReceiverStart());
 		for (int i = 0; i < 100; i++)
 		{
-			if (kStatus_Success == CAMERA_FullBufferGet(img.pImg)) {
+			if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
 				snprintf(str, 100, "/picture/%d.png", i);
 				error = f_open(&png, str, (FA_WRITE | FA_CREATE_ALWAYS));
 				if (error)
@@ -525,6 +525,127 @@ void sd(void* pv)//关于读写文件系统的示例见摄像头的示例
 	{
 		PRINTF("Please insert SD card\r\n");
 	}
+	//下面开始测试sd卡存图程序是否好使
+	img_t a;
+	FIL png;
+	a.height = 64;
+	a.width = 128;
+	a.format = PixelFormatGray;
+	a.pImg = pvPortMalloc(64 * 128);
+	memset(a.pImg, 0, 64 * 128);
+	for (size_t i = 0; i < 128; i++)
+	{
+		((uint8_t*)a.pImg)[30 * 128 + i] = 255;
+		((uint8_t*)a.pImg)[63 * 128 + i] = 255;
+		((uint8_t*)a.pImg)[50 * 128 + i] = 255;
+	}
+	for (size_t i = 0; i < 64; i++)
+	{
+		((uint8_t*)a.pImg)[i * 128 + 30] = 255;
+		((uint8_t*)a.pImg)[i * 128 + 90] = 255;
+		((uint8_t*)a.pImg)[i * 128 + 120] = 255;
+	}
+	//准备好图片开始存
+	char* str = "/64*128.png";
+	int error = f_open(&png, str, (FA_WRITE | FA_CREATE_ALWAYS));
+	if (error)
+	{
+		if (error == FR_EXIST)
+		{
+			PRINTF("%s exists.\r\n", str);
+		}
+		else
+		{
+			PRINTF("Open %s failed.\r\n", str);
+			vTaskDelete(NULL);
+			return;
+		}
+	}
+	CAMERA_Save2PngFile(&a, &png);//保存到sd卡中
+	if (FR_OK == f_close(&png))
+	{
+		PRINTF("Save %s success.\r\n", str);
+	}
+	else
+	{
+		PRINTF("close %s failed.\r\n", str);
+		vTaskDelete(NULL);
+	}
+
+
+	vPortFree(a.pImg);
+
+
+
+	a.height = 240;
+	a.width = 320;
+	a.format = PixelFormatGray;
+	a.pImg = pvPortMalloc(240 * 320);
+
+	memset(a.pImg, 0, 240 * 320);
+	for (size_t i = 0; i < 320; i++)
+	{
+		((uint8_t*)a.pImg)[30 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[31 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[32 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[33 * 320 + i] = 255;
+
+		((uint8_t*)a.pImg)[50 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[51 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[52 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[53 * 320 + i] = 255;
+
+		((uint8_t*)a.pImg)[200 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[201 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[202 * 320 + i] = 255;
+		((uint8_t*)a.pImg)[203 * 320 + i] = 255;
+	}
+
+	for (size_t i = 0; i < 240; i++)
+	{
+		((uint8_t*)a.pImg)[i * 320 + 30] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 31] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 32] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 33] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 90] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 91] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 92] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 93] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 120] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 121] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 122] = 255;
+		((uint8_t*)a.pImg)[i * 320 + 123] = 255;
+	}
+	//准备好图片开始存
+	char* str = "/240*320.png";
+	int error = f_open(&png, str, (FA_WRITE | FA_CREATE_ALWAYS));
+	if (error)
+	{
+		if (error == FR_EXIST)
+		{
+			PRINTF("%s exists.\r\n", str);
+		}
+		else
+		{
+			PRINTF("Open %s failed.\r\n", str);
+			vTaskDelete(NULL);
+			return;
+		}
+	}
+	CAMERA_Save2PngFile(&a, &png);//保存到sd卡中
+	if (FR_OK == f_close(&png))
+	{
+		PRINTF("Save %s success.\r\n", str);
+	}
+	else
+	{
+		PRINTF("close %s failed.\r\n", str);
+		vTaskDelete(NULL);
+	}
+	vPortFree(a.pImg);
+
+
+
 	vTaskDelete(NULL);
 }
 #endif // TEST_SD

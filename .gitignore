@@ -1,7 +1,12 @@
-Debug/
-IMRT10XX.sln
-IMRT10XX.vcxproj
-IMRT10XX.vcxproj.filters
-IMRT10XX.vcxproj.user
+/Debug/
+/Release/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+CMakeLists.txt
 /.vs/IMRT10XX/v16
 /.vs
+/.idea
+/cmake-build-debug
+/x64/

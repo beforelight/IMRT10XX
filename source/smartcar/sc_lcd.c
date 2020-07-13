@@ -611,23 +611,23 @@ void LCD_PrintPicture(img_t* src)
 	if (src->format == PixelFormatGray)
 	{
 		uint8_t* p = src->pImg;
-		for (uint32_t i = 0; i < src->height; i += scale)
-		{
-			for (uint32_t j = 0; j < src->width; j += scale)
-			{
+        for (uint32_t i = 0; i < height; i += 1)
+        {
+            for (uint32_t j = 0; j < width; j += 1)
+            {
 #define GRAY2RGB565(x) (uint16_t)(((x<<8)&0xF800U)|((x<<3)&0x7E0U) |((x>>3)&0x1FU))
-				rgb[i * width + j] = GRAY2RGB565(p[i * src->width + j]);
+				rgb[i * width + j] = GRAY2RGB565(p[i * scale* src->width + j* scale]);
 			}
 		}
 	}
 	else if (src->format == PixelFormatRGB565)
 	{
 		uint16_t* p = src->pImg;
-		for (uint32_t i = 0; i < src->height; i++)
-		{
-			for (uint32_t j = 0; j < src->width; j++)
+        for (uint32_t i = 0; i < height; i += 1)
+        {
+            for (uint32_t j = 0; j < width; j += 1)
 			{
-				rgb[i * width + j] = p[i * src->width + j];
+				rgb[i * width + j] = p[i * scale* src->width + j* scale];
 			}
 		}
 	}
