@@ -6,6 +6,7 @@
 #include <board/pin_mux.h>
 #include <drv_keypad.h>
 #include <fsl_debug_console.h>
+#include <FreeRTOS.h>
 #include <task.h>
 #include <drv_lcd.h>
 #include <drv_oled.h>

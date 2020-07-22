@@ -3,6 +3,7 @@
  * @brief   Application entry point.
  */
 #include <source/examples/Unitest.h>
+#include <FreeRTOS.h>
 #include <task.h>
 #include <board/clock_config.h>
 #include "cm_backtrace/cm_backtrace.h"
@@ -27,6 +28,6 @@ int main(void) {
 	while (1) {
 		i++;
 		vTaskDelay(10);//等待10ticks，大概是10ms
-		__NOP()
+		__NOP();
 	}
 }
