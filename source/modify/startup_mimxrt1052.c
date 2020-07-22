@@ -1,4 +1,4 @@
-//*****************************************************************************
+﻿//*****************************************************************************
 // MIMXRT1052 startup code for use with MCUXpresso IDE
 //
 // Version : 190919
@@ -385,15 +385,8 @@ void PWM4_2_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PWM4_3_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 void PWM4_FAULT_DriverIRQHandler(void) ALIAS(IntDefaultHandler);
 
-//*****************************************************************************
-// The entry point for the application.
-// __main() is the entry point for Redlib based applications
-// main() is the entry point for Newlib based applications
-//*****************************************************************************
-#if defined (__REDLIB__)
-extern void __main(void);
-#endif
-extern int main(void);
+
+extern int entrance2main(void);
 
 //*****************************************************************************
 // External declaration for the pointer to the stack top from the Linker Script
@@ -701,12 +694,8 @@ void ResetISR(void) {
     // Reenable interrupts
     __asm volatile ("cpsie i");
 
-#if defined (__REDLIB__)
-    // Call the Redlib library, which in turn calls main()
-    __main();
-#else
-    main();
-#endif
+
+    entrance2main();
 
     //
     // main() shouldn't return, but if it does, we'll just enter an infinite loop

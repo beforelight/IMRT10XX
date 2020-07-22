@@ -32,7 +32,7 @@
  * @file    board.h
  * @brief   Board initialization header file.
  */
- 
+
 /* This is a template for board specific configuration created by MCUXpresso IDE Project Wizard.*/
 
 #ifndef _BOARD_H_
@@ -106,8 +106,8 @@ extern "C" {
 void BOARD_SD_Pin_Config(uint32_t speed, uint32_t strength);
 #endif
 
+void entrance2main(void);
 void BOARD_InitDebugConsole(void);
-
 void BOARD_ConfigMPU(void);//初始化内存保护单元和cache
 void BOARD_ConfigVectors(void);//将中断向量表加载到内存中
 
