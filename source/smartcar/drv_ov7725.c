@@ -1,4 +1,4 @@
-#include"sc_camera_ov7725.h"
+#include"drv_ov7725.h"
 #include"FreeRTOS.h"
 #include"task.h"
 #include"fsl_debug_console.h"

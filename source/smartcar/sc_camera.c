@@ -1,4 +1,4 @@
-#include"sc_camera_common.h"
+#include"sc_camera.h"
 #include"fsl_debug_console.h"
 #include"status.h"
 #include"task.h"

@@ -97,9 +97,9 @@ void adc(void* pv)
 #ifdef TEST_CAMERA 
 #include <stdio.h>
 #include "smartcar/sc_sd.h"
-#include "smartcar/sc_camera_ov7725.h"
-#include "smartcar/sc_camera_zzf.h"
-#include "sc_lcd.h"
+#include "smartcar/drv_ov7725.h"
+#include "smartcar/drv_zzf.h"
+#include "drv_lcd.h"
 BSS_SDRAM_NOCACHE uint8_t buff1[1024 * 1024] ALIGN(64);//最多4缓存，这里声明为1mb的缓存
 BSS_SDRAM_NOCACHE uint8_t buff2[1024 * 1024] ALIGN(64);//是因为这俩摄像头都用这个缓存
 BSS_SDRAM_NOCACHE uint8_t buff3[1024 * 1024] ALIGN(64);//实际图片多大，缓存就多大
@@ -306,7 +306,7 @@ void flash_lfs(void* pv) {
 
 #ifdef TEST_KEYPAD
 #include "pin_mux.h"
-#include "sc_keypad.h"
+#include "drv_keypad.h"
 void keypad(void* pv)
 {
 	gpio_t row_list[] = {
@@ -356,7 +356,7 @@ void keypad(void* pv)
 #endif // TEST_KEYPAD
 
 #ifdef TEST_LCD
-#include"sc_lcd.h"
+#include"drv_lcd.h"
 void lcd(void* pv)
 {
 
@@ -372,7 +372,7 @@ void lcd(void* pv)
 #endif // TEST_LCD
 
 #ifdef TEST_OLED
-#include"sc_oled.h"
+#include"drv_oled.h"
 void oled(void* pv)
 {
 	OLED_Init();

@@ -5,7 +5,7 @@
 #ifndef IMXRT_CAMERA_OV7725_H
 #define IMXRT_CAMERA_OV7725_H
 
-#include"sc_camera_common.h"
+#include"sc_camera.h"
 
 #define OV_FRAME_SZIE(HEIGHT, WIDTH) (uint32_t)((HEIGHT<<16)|WIDTH)
 #define OV_FRAME_WIDTH(size) ((uint32_t)size&0xffff)

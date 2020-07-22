@@ -5,7 +5,7 @@
 #ifndef IMXRT_CAMERA_ZZF_H
 #define IMXRT_CAMERA_ZZF_H
 
-#include"sc_camera_common.h"
+#include"sc_camera.h"
 #include"sc_uart.h"
 
 #define ZZF_FRAME_SZIE(HEIGHT, WIDTH) (uint32_t)((HEIGHT<<16)|WIDTH)

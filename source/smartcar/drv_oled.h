@@ -19,7 +19,7 @@ qq：512924543
 #define _OELD_H
 #include"fsl_gpio.h"
 #include"pin_mux.h"
-#include"sc_camera_common.h"
+#include"sc_camera.h"
 
 #ifndef OLED_DC_GPIO
 #define OLED_DC_GPIO GPIO2 //数据命令选择线

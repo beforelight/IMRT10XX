@@ -4,7 +4,7 @@
  *  Created on: 2020年1月21日
  *      Author: 17616
  */
-#include "sc_lcd.h"
+#include "drv_lcd.h"
 #include "stdint.h"
 #include "stdlib.h"
 #include "FreeRTOS.h"

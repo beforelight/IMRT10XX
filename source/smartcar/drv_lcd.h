@@ -11,7 +11,7 @@
 #define __LCD_H			  	 
 
 #include "fsl_gpio.h"
-#include "sc_camera_common.h"
+#include "sc_camera.h"
 #include "pin_mux.h"
 
 #define USE_HORIZONTAL 0  //设置横屏或者竖屏显示 0或1为竖屏 2或3为横屏
