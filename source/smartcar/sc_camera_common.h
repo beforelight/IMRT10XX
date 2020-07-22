@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by 17616 on 2020/3/17.
 //
 
@@ -11,6 +11,8 @@
 #define RGB565_R(x) ((uint8_t)((x&0xF800U)>>8) )
 #define RGB565_G(x) ((uint8_t)((x&0x7E0U)>>3)  )
 #define RGB565_B(x) ((uint8_t)((x&0x1FU)<<3)   )
+
+#define RGB565(r,g,b) (uint16_t)(((r<<8)&0xF800U)|((g<<3)&0x7E0U)|((b>>3)&0x1FU))
 
 typedef enum _camera_pixel_format
 {

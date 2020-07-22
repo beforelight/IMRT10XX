@@ -1,4 +1,4 @@
-#include "sc_pit.h"
+﻿#include "sc_pit.h"
 
 /**
  * @brief 初始化pit，但不会立即生效，注意各个通道共用同一个中断服务函数

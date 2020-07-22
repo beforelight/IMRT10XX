@@ -7,7 +7,8 @@
  */
 #ifndef _FSL_DEBUG_CONSOLE_CONF_H_
 #define _FSL_DEBUG_CONSOLE_CONF_H_
-
+#define PRINTF_FLOAT_ENABLE 1U
+#define PRINTF_ADVANCED_ENABLE 1U
 /****************Debug console configuration********************/
 
 /*! @brief If Non-blocking mode is needed, please define it at project setting,
