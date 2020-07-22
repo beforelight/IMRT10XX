@@ -1,4 +1,4 @@
-#include"drv_ov7725.h"
+﻿#include"drv_ov7725.h"
 #include"FreeRTOS.h"
 #include"task.h"
 #include"fsl_debug_console.h"
@@ -317,8 +317,8 @@ status_t OV7725_Init(ov7725_frame_size_t size)
 		OV7725_SCCB_WR_Reg(ov7725_init_reg_tb1[i][0], ov7725_init_reg_tb1[i][1]);
 	}
 
-	int height = OV_FRAME_HEIGHT(size);
-	int width = OV_FRAME_WIDTH(size);
+	int height = CAMERA_FRAME_HEIGHT(size);
+	int width = CAMERA_FRAME_WIDTH(size);
 	if (height <= 240 && width <= 320)
 	{
 		OV7725_Window_Set(width, height, 0);

@@ -14,6 +14,11 @@
 
 #define RGB565(r,g,b) (uint16_t)(((r<<8)&0xF800U)|((g<<3)&0x7E0U)|((b>>3)&0x1FU))
 
+#define CAMERA_FRAME_SZIE(HEIGHT, WIDTH) (uint32_t)((HEIGHT<<16)|WIDTH)
+#define CAMERA_FRAME_WIDTH(size) ((uint32_t)size&0xffff)
+#define CAMERA_FRAME_HEIGHT(size) (((uint32_t)size&(0xffff<<16))>>16)
+
+
 typedef enum _camera_pixel_format
 {
 	PixelFormatGray = 1,//灰度

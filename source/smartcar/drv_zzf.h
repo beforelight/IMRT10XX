@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by 17616 on 2020/3/17.
 //
 
@@ -8,15 +8,13 @@
 #include"sc_camera.h"
 #include"sc_uart.h"
 
-#define ZZF_FRAME_SZIE(HEIGHT, WIDTH) (uint32_t)((HEIGHT<<16)|WIDTH)
-#define ZZF_FRAME_WIDTH(size) ((uint32_t)size&0xffff)
-#define ZZF_FRAME_HEIGHT(size) (((uint32_t)size&(0xffff<<16))>>16)
+
 
 typedef enum _zzf_frame_size {
     //ZZF_FrameSize120x188 = ZZF_FRAME_SZIE(120,188),//1052不支持这个分辨率，因为WIDTH要整除8
-    ZZF_FrameSize120x184 = ZZF_FRAME_SZIE(120, 184),
-    ZZF_FrameSize240x376 = ZZF_FRAME_SZIE(240, 376),
-    ZZF_FrameSize480x752 = ZZF_FRAME_SZIE(480, 752),
+    ZZF_FrameSize120x184 = CAMERA_FRAME_SZIE(120, 184),
+    ZZF_FrameSize240x376 = CAMERA_FRAME_SZIE(240, 376),
+    ZZF_FrameSize480x752 = CAMERA_FRAME_SZIE(480, 752),
 } zzf_frame_size_t;
 
 #if defined(__cplusplus)

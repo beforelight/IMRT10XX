@@ -1,4 +1,4 @@
-/*
+﻿/*
  * sc_gpio.c
  *
  *  Created on: 2020年1月13日
@@ -63,28 +63,4 @@ void GPIO_Out(gpio_t *s) {
         s->base->GDIR |= (1UL << s->pin);//修改成输出
         s->direction = kGPIO_DigitalOutput;
     }
-}
-
-void LED_Init(led_t *s) {
-    GPIO_Init((gpio_t *) s);
-}
-
-void LED_ON(led_t *s) {
-    GPIO_Clear((gpio_t *) s);
-}
-
-void LED_OFF(led_t *s) {
-    GPIO_Set((gpio_t *) s);
-}
-
-void BEE_Init(bee_t *s) {
-    GPIO_Init((gpio_t *) s);
-}
-
-void BEE_ON(bee_t *s) {
-    GPIO_Set((gpio_t *) s);
-}
-
-void BEE_OFF(bee_t *s) {
-    GPIO_Clear((gpio_t *) s);
 }

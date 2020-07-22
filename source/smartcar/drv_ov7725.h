@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by 17616 on 2020/3/17.
 //
 
@@ -7,13 +7,9 @@
 
 #include"sc_camera.h"
 
-#define OV_FRAME_SZIE(HEIGHT, WIDTH) (uint32_t)((HEIGHT<<16)|WIDTH)
-#define OV_FRAME_WIDTH(size) ((uint32_t)size&0xffff)
-#define OV_FRAME_HEIGHT(size) (((uint32_t)size&(0xffff<<16))>>16)
-
 typedef enum _ov7725_frame_size {
-    OV7725_FrameSizeVGA480x640 = OV_FRAME_SZIE(480, 640),
-    OV7725_FrameSizeQVGA240x320 = OV_FRAME_SZIE(240, 320),
+    OV7725_FrameSizeVGA480x640 = CAMERA_FRAME_SZIE(480, 640),
+    OV7725_FrameSizeQVGA240x320 = CAMERA_FRAME_SZIE(240, 320),
 } ov7725_frame_size_t;
 
 #if defined(__cplusplus)

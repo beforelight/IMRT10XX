@@ -1,4 +1,4 @@
-#include"drv_zzf.h"
+﻿#include"drv_zzf.h"
 #include"FreeRTOS.h"
 #include"task.h"
 #include"status.h"
@@ -71,8 +71,8 @@ csi_config_t zzf_csi_config = {
 status_t ZZF_Init(zzf_frame_size_t frameSize, LPUART_Type* LPUARTx)
 {
 	uartx = LPUARTx;
-	MT9V032_CFG[SET_COL - 1][1] = ZZF_FRAME_WIDTH(frameSize);
-	MT9V032_CFG[SET_ROW - 1][1] = ZZF_FRAME_HEIGHT(frameSize);
+	MT9V032_CFG[SET_COL - 1][1] = CAMERA_FRAME_WIDTH(frameSize);
+	MT9V032_CFG[SET_ROW - 1][1] = CAMERA_FRAME_HEIGHT(frameSize);
 	vTaskDelay(50);//等待上电初始化完成
 	int16_t temp = 0;
 
@@ -123,8 +123,8 @@ status_t ZZF_Init(zzf_frame_size_t frameSize, LPUART_Type* LPUARTx)
 		return kStatus_Fail;
 	}
 	//摄像头上面的配置初始化完了，开始初始化摄像头接收的东西
-	zzf_csi_config.width = ZZF_FRAME_WIDTH(frameSize);
-	zzf_csi_config.height = ZZF_FRAME_HEIGHT(frameSize);
+	zzf_csi_config.width = CAMERA_FRAME_WIDTH(frameSize);
+	zzf_csi_config.height = CAMERA_FRAME_HEIGHT(frameSize);
 	zzf_csi_config.linePitch_Bytes = zzf_csi_config.width * zzf_csi_config.bytesPerPixel;
 	return CAMERA_ReceiverInit(&zzf_csi_config);
 }

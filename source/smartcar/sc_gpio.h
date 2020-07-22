@@ -1,4 +1,4 @@
-/*
+﻿/*
  * sc_gpio.h
  *
  *  Created on: 2020年1月13日
@@ -19,14 +19,6 @@ typedef struct _gpio_class {
     uint32_t pin;
     gpio_pin_direction_t direction;//记录引脚的输入输出状态
 } gpio_t;//gpio_t的对象只能被引用，不能被复制
-
-typedef struct __led {
-    gpio_t parent;
-} led_t;
-
-typedef struct __bee {
-    gpio_t parent;
-} bee_t;
 
 /**
  * @brief  初始化io
@@ -77,42 +69,6 @@ void GPIO_Toggle(gpio_t *s);
  * @return {uint32_t}        : 1为高电平，0为低电平
  */
 uint32_t GPIO_Read(gpio_t *s);
-
-/**
- * @brief  初始化LED
- * @param  {led_t*} s : 
- */
-void LED_Init(led_t *s);
-
-/**
- * @brief   点亮（低电平点亮）
- * @param  {led_t*} s : 
- */
-void LED_ON(led_t *s);
-
-/**
- * @brief   熄灭（高电平熄灭）
- * @param  {led_t*} s : 
- */
-void LED_OFF(led_t *s);
-
-/**
- * @brief   初始化蜂鸣器
- * @param  {bee_t*} s : 
- */
-void BEE_Init(bee_t *s);
-
-/**
- * @brief   响（高电平响）
- * @param  {bee_t*} s : 
- */
-void BEE_ON(bee_t *s);
-
-/**
- * @brief   灭（低电平灭）
- * @param  {bee_t*} s : 
- */
-void BEE_OFF(bee_t *s);
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
