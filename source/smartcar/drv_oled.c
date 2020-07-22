@@ -1,29 +1,9 @@
-/*********************************************************************************************************************
-Smartcar OLED显示底层
-制作人：王学嘉
-联系方式：18846446962
-qq：512924543
-备注：哈尔滨工业大学智能车创新俱乐部专用，请勿泄露，感谢逐飞科技
-	  OLED接线有多种方式，想要自己开发的同学请自行查询芯片手册
-					OLED接线定义：
-					------------------------------------
-					OLED液晶      单片机
-						PTD0          A15
-						PTD1          A16
-						RES         A14
-						DC          B16
-					------------------------------------
- ********************************************************************************************************************/
- /*********************************************************************************************************************
- 引用头文件
- *********************************************************************************************************************/
-
-#include "drv_oled.h"
+﻿#include "drv_oled.h"
 #include"FreeRTOS.h"
 #include"task.h"
- /*********************************************************************************************************************
- 宏定义
- *********************************************************************************************************************/
+/*********************************************************************************************************************
+宏定义
+*********************************************************************************************************************/
 #define XLevelL		0x00
 #define XLevelH		0x10
 #define XLevel		((XLevelH&0x0F)*16+XLevelL)
@@ -32,10 +12,6 @@ qq：512924543
 #define	Brightness	0xCF
 #define X_WIDTH         128
 #define Y_WIDTH         64
-
-
-
-
 
 
 
@@ -318,9 +294,7 @@ void OLED_WrDat(uint8_t data)
 //内部使用用户无需调用
 void OLED_WrByte(uint8_t OneByte)
 {
-#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
 	OLED_SC_CLR();
-#endif // OLED_SC_GPIO
 	uint8_t i = 8;
 	while (i--)
 	{
@@ -330,9 +304,7 @@ void OLED_WrByte(uint8_t OneByte)
 		OLED_D0_SET();
 		OneByte <<= 1;
 	}
-#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
 	OLED_SC_SET();
-#endif // OLED_SC_GPIO
 }
 
 //内部使用用户无需调用
@@ -381,7 +353,7 @@ void OLED_Fill(uint8_t bmp_data)//填充颜色选择0x00 or 0xff
 
 
 //-------------------------------------------------------------------------------------------------------------------
-//  @brief      OLED初始化函数
+//  @brief      OLED初始化函数，注意必须在mcux tools将引脚初始化为输出
 //  @param      NULL
 //  @return     void
 //  @since      v1.0
@@ -389,25 +361,14 @@ void OLED_Fill(uint8_t bmp_data)//填充颜色选择0x00 or 0xff
 //-------------------------------------------------------------------------------------------------------------------
 void OLED_Init(void)
 {
-	gpio_pin_config_t pinconfig;
-	pinconfig.direction = kGPIO_DigitalOutput;
-	pinconfig.outputLogic = 1;
-	GPIO_PinInit(OLED_DC_GPIO, OLED_DC_PIN, &pinconfig);
-	GPIO_PinInit(OLED_D0_GPIO, OLED_D0_PIN, &pinconfig);
-	GPIO_PinInit(OLED_D1_GPIO, OLED_D1_PIN, &pinconfig);
-#if defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) //复位线
-	GPIO_PinInit(OLED_RES_GPIO, OLED_RES_PIN, &pinconfig);
-#endif // OLED_RES_GPIO
-#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) //片选线
-	GPIO_PinInit(OLED_SC_GPIO, OLED_SC_PIN, &pinconfig);
-#endif // OLED_SC_GPIO
-
-#if defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) //复位线
+	OLED_DC_SET();
+	OLED_D0_SET();
+	OLED_D1_SET();
+	OLED_SC_SET();
 	OLED_RES_CLR();
-	vTaskDelay(20);
+	vTaskDelay(10);
 	OLED_RES_SET();
-#endif // OLED_RES_GPIO
-	vTaskDelay(20);//等待上电复位完成
+	vTaskDelay(10);//等待复位完成
 	OLED_WrCmd(0xae);//--turn off oled panel
 	OLED_WrCmd(0x00);//---set low column address
 	OLED_WrCmd(0x10);//---set high column address
@@ -726,50 +687,55 @@ void OLED_P6x8Rst(uint8_t x, uint8_t y, uint8_t ch[])
 	}
 }
 
+/******************************************************************************
+	  函数说明：显示图片，自动缩放至合适大小
+	  入口数据：src   图片
+	  返回值：  无
+******************************************************************************/
 void OLED_PrintPicture(img_t* src, uint8_t threshold)
 {
-    int scale = 1;
-    int height, width;
-    while (1)
-    {
-        height = src->height / scale;
-        width = src->width / scale;
-        if (height <= 64 && width <= 128)
-        {
-            break;
-        }
-        else {
-            ++scale;
-        }
-    }
-    uint8_t* gray = pvPortMalloc(height * width);
-    if (src->format == PixelFormatGray)
-    {
-        uint8_t* p = src->pImg;
-        for (uint32_t i = 0; i < height; i += 1)
-        {
-            for (uint32_t j = 0; j < width; j += 1)
-            {
-                gray[i * width + j] = p[i* scale * src->width + j* scale];
-            }
-        }
-    }
-    else if (src->format == PixelFormatRGB565)
-    {
-        uint16_t* p = src->pImg;
-        uint16_t buf;
-        for (uint32_t i = 0; i < height; i += 1)
-        {
-            for (uint32_t j = 0; j < width; j += 1)
-            {
-                buf =
-                        RGB565_R(p[i* scale* src->width + j* scale]) +
-                        RGB565_G(p[i* scale* src->width + j* scale]) +
-                        RGB565_B(p[i* scale* src->width + j* scale]);
-                gray[i * width + j] = buf / 3;
-            }
-        }
-    }
-    dis_bmp(height, width, gray, threshold);
-    vPortFree(gray);
+	int scale = 1;
+	int height, width;
+	while (1)
+	{
+		height = src->height / scale;
+		width = src->width / scale;
+		if (height <= 64 && width <= 128)
+		{
+			break;
+		}
+		else {
+			++scale;
+		}
+	}
+	uint8_t* gray = pvPortMalloc(height * width);
+	if (src->format == PixelFormatGray)
+	{
+		uint8_t* p = src->pImg;
+		for (uint32_t i = 0; i < height; i += 1)
+		{
+			for (uint32_t j = 0; j < width; j += 1)
+			{
+				gray[i * width + j] = p[i * scale * src->width + j * scale];
+			}
+		}
+	}
+	else if (src->format == PixelFormatRGB565)
+	{
+		uint16_t* p = src->pImg;
+		uint16_t buf;
+		for (uint32_t i = 0; i < height; i += 1)
+		{
+			for (uint32_t j = 0; j < width; j += 1)
+			{
+				buf =
+					RGB565_R(p[i * scale * src->width + j * scale]) +
+					RGB565_G(p[i * scale * src->width + j * scale]) +
+					RGB565_B(p[i * scale * src->width + j * scale]);
+				gray[i * width + j] = buf / 3;
+			}
+		}
+	}
+	dis_bmp(height, width, gray, threshold);
+	vPortFree(gray);
 }
