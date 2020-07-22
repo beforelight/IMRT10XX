@@ -259,7 +259,7 @@ void main_task(void* pv)
 }
 void entrance2main(void) {
 	vPortDefineHeapRegions(xHeapRegions);
-	xTaskCreate(main_task, "main task", 1024, NULL, 2, &main_task_handle);
+	xTaskCreate(main_task, "main task", 2048, NULL, 2, &main_task_handle);
 	vTaskStartScheduler();
 	return;
 }
