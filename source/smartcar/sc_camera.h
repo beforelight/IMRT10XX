@@ -6,7 +6,6 @@
 #define IMXRT_CAMERA_COMMON_H
 
 #include "fsl_csi.h"
-#include "svpng.h"
 
 #define RGB565_R(x) ((uint8_t)((x&0xF800U)>>8) )
 #define RGB565_G(x) ((uint8_t)((x&0x7E0U)>>3)  )
@@ -36,14 +35,6 @@ typedef struct __img {
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-	/**
-	 * @brief	将图片保存到文件当中，保存格式为png
-	 * @param  {img_t*} src : 图像指针
-	 * @param  {FIL*} fp    : 文件指针
-	 */
-	void CAMERA_Save2PngFile(img_t* src, FIL* fp);
-
-
 	/**
 	 * @brief	设置输出像素时钟，默认24m
 	 * @param  {uint32_t} clk : 时钟

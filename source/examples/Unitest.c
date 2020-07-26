@@ -21,6 +21,8 @@
 #include <sc_pit.h>
 #include <sc_pwm.h>
 #include <status.h>
+#include <source/smartcar/svbmp.h>
+#include <stdio.h>
 
 TaskHandle_t LED_task_handle;
 
@@ -36,6 +38,13 @@ void LED_task(void *pvData) {
 UnitestItem_t item_list[] = {
 //        {U_keypad, "keypad", NULL},
         {U_status, "status", NULL},
+        {U_keypad, "keypad", NULL},
+        {U_lcd,    "lcd",    NULL},
+        {U_oled,   "oled",   NULL},
+        {U_zzf,    "zzf&oled", "oled"},
+        {U_zzf,    "zzf&lcd",  "lcd"},
+        {U_zzf,    "zzf&sd",   "sd"},
+        {U_adc,    "adc",    NULL},
         {NULL, NULL,         NULL},//确定结尾有多少个
 };
 
@@ -62,7 +71,8 @@ void Unitest(void) {
         }
         PRINTF("Enter the number and -1 to exit:");
         int ans = -1;
-        SCANF("%d", &ans);PRINTF("\r\n");
+        SCANF("%d", &ans);
+        PRINTF("\r\n");
         if (ans == -1) {
             PRINTF("Unitest exit!\r\n");
             break;
@@ -111,8 +121,8 @@ void U_keypad(void *pv) {
     };
     char ch;
     KEYPAD_Init(&g_keypad, col_list, row_list);
+    PRINTF("\r\np->print status of keypad and e->exit\r\n");
     while (1) {
-        PRINTF("\r\np->print status of keypad and e->exit\r\n");
         ch = GETCHAR();
         if (ch == 'p' || ch == 'P') {
             PRINTF("\tc0\tc1\r\n");
@@ -131,24 +141,129 @@ void U_keypad(void *pv) {
 }
 
 void U_lcd(void *pv) {
-    Lcd_Init();            //初始化OLED
+    Lcd_Init();            //初始化LCD
     LCD_Clear(WHITE);
     BACK_COLOR = WHITE;
+    GETCHAR();
+    LCD_Clear(RGB565(255, 0, 0));
+    GETCHAR();
+    LCD_Clear(RGB565(0, 255, 0));
+    GETCHAR();
+    LCD_Clear(RGB565(0, 0, 255));
+    GETCHAR();
+    LCD_Clear(WHITE);
     LCD_ShowString(10, 35, "2.4 TFT SPI 240*320", RED);
     LCD_ShowString(10, 55, "LCD_W:", RED);
     LCD_ShowNum(70, 55, LCD_W, 3, RED);
     LCD_ShowString(110, 55, "LCD_H:", RED);
     LCD_ShowNum(160, 55, LCD_H, 3, RED);
     LCD_ShowNum1(80, 95, 3.14159f, 5, RED);
+    GETCHAR();//测试显示彩色图像
+    LCD_Clear(WHITE);
+    img_t b;
+    b.format = PixelFormatRGB565;
+    b.height = 240;
+    b.width = 320;
+    b.pImg = pvPortMalloc(b.height * b.width * 2);
+    memset(b.pImg, 0, b.height * b.width * 2);
+    for (size_t i = 0; i < b.width; i++) {
+        ((uint16_t *) b.pImg)[28 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[29 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[30 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[31 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[39 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[40 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[41 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[42 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[49 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[50 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[51 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[52 * b.width + i] = RGB565(0, 0, 255);
+    }
+    LCD_PrintPicture(&b);
+    vPortFree(b.pImg);
+    GETCHAR();//测试显示灰度图像
+    LCD_Clear(WHITE);
+    img_t a;
+    a.format = PixelFormatGray;
+    a.height = 120;
+    a.width = 184;
+    a.pImg = pvPortMalloc(a.height * a.width);
+    memset(a.pImg, 0, a.height * a.width);
+    for (size_t i = 0; i < a.width; i++) {
+        ((uint8_t *) a.pImg)[41 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[42 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[43 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[44 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[31 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[32 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[33 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[34 * a.width + i] = 128;
+    }
+    LCD_PrintPicture(&a);
+    vPortFree(a.pImg);
+    GETCHAR();
+    LCD_Clear(WHITE);
     vTaskDelete(NULL);
 }
 
 void U_oled(void *pv) {
     OLED_Init();
+    OLED_Fill(0);
+    GETCHAR();
     OLED_Fill(0xff);
-    vTaskDelay(100);
+    GETCHAR();
     OLED_Logo();
-    vTaskDelay(100);
+    GETCHAR();
+    OLED_Fill(0);
+    OLED_P6x8Str(0, 0, (uint8_t*)"Nobody knows oled then me!");
+    OLED_P6x8Rst(6 * 5, 4, (uint8_t*)"FAKE NEWS!");
+    GETCHAR();//测试显示彩色图像
+    OLED_Fill(0xff);
+    img_t b;
+    b.format = PixelFormatRGB565;
+    b.height = 240;
+    b.width = 320;
+    b.pImg = pvPortMalloc(b.height * b.width * 2);
+    memset(b.pImg, 0, b.height * b.width * 2);
+    for (size_t i = 0; i < b.width; i++) {
+        ((uint16_t *) b.pImg)[28 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[29 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[30 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[31 * b.width + i] = RGB565(255, 0, 0);
+        ((uint16_t *) b.pImg)[39 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[40 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[41 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[42 * b.width + i] = RGB565(0, 255, 0);
+        ((uint16_t *) b.pImg)[49 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[50 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[51 * b.width + i] = RGB565(0, 0, 255);
+        ((uint16_t *) b.pImg)[52 * b.width + i] = RGB565(0, 0, 255);
+    }
+    OLED_PrintPicture(&b, 100);
+    vPortFree(b.pImg);
+    GETCHAR();//测试显示灰度图像
+    OLED_Fill(0xff);
+    img_t a;
+    a.format = PixelFormatGray;
+    a.height = 120;
+    a.width = 184;
+    a.pImg = pvPortMalloc(a.height * a.width);
+    memset(a.pImg, 0, a.height * a.width);
+    for (size_t i = 0; i < a.width; i++) {
+        ((uint8_t *) a.pImg)[41 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[42 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[43 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[44 * a.width + i] = 255;
+        ((uint8_t *) a.pImg)[31 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[32 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[33 * a.width + i] = 128;
+        ((uint8_t *) a.pImg)[34 * a.width + i] = 128;
+    }
+    OLED_PrintPicture(&a, 100);
+    vPortFree(a.pImg);
+    GETCHAR();
+    OLED_Fill(0xff);
     vTaskDelete(NULL);
 }
 
@@ -210,7 +325,7 @@ void U_ov7725(void *pv) {
                         return;
                     }
                 }
-                CAMERA_Save2PngFile(&img, &png);//保存到sd卡中
+                //CAMERA_Save2BmpFile(&img, &png);//保存到sd卡中
                 LCD_PrintPicture(&img);//在屏幕上显示
                 if (FR_OK == f_close(&png)) {
                     PRINTF("Save %s success.\r\n", str);
@@ -236,14 +351,17 @@ void U_ov7725(void *pv) {
 
 void U_adc(void *pv) {
     ADC_Init2();
+    PRINTF("there are the sample value of adc\r\n");
+    PRINTF("Enter 'q' to quit and others to continue\r\n");
     PRINTF("adc\tchannel\tvalue\r\n");
-    for (int i = 3; i < 9; i++) {
-        float val = (float) ADC_Read(ADC1, i) / 4096.0;
-        PRINTF("adc1\%d\t%d.%d%d%dv\r\n", i, (int) val,
-               ((int) (val * 10)) % 10,
-               ((int) (val * 100)) % 10,
-               ((int) (val * 1000)) % 10
-        );
+    while (1) {
+        for (int i = 3; i < 9; i++) {
+            float val = (float) ADC_Read(ADC1, i) / 4096.0;
+            PRINTF("adc1\t%d\t%fv\r\n", i, val);
+        }
+        char quit;
+        quit = GETCHAR();
+        if (quit == 'q' || quit == 'Q') { break; }
     }
     PRINTF("\r\n");
     vTaskDelete(NULL);
@@ -420,12 +538,67 @@ void U_status(void *pv) {
     vTaskDelete(NULL);
 }
 
-void STEP(void) {
-    while (GPIO_PinRead(XSNVS_WAKEUP_GPIO, XSNVS_WAKEUP_PIN) != 0) {
-//        vTaskDelay(10);
-    __NOP();
+BSS_SDRAM_NOCACHE uint8_t zzf_buf1[752 * 480] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint8_t zzf_buf2[752 * 480] ALIGN(64);//这里只用了双缓存，缓存需64字节对齐
+void U_zzf(void *pv) {
+    PRINTF("总钻风摄像头测试\r\n");
+    //先准备其他资源
+    if (0 == strcmp(pv, "oled")) {
+        OLED_Init();
+    } else if (0 == strcmp(pv, "lcd")) {
+        Lcd_Init();
+    } else if (0 == strcmp(pv, "sd")) {
+        if (kStatus_Success != SD_Mount()) {
+            vTaskDelete(NULL);
+        }
+        f_mkdir("0:/zzf");//在根目录下创建名为zzf的文件夹
+    } else {
+        vTaskDelete(NULL);
     }
+    img_t img;
+    //初始化摄像头
+    UART_Init(LPUART4, 9600, 80 * 1000 * 1000);
+    if (kStatus_Success != ZZF_Init(ZZF_FrameSize480x752, LPUART4)) {
+        PRINTF("zzf init fail!\r\n");
+        vTaskDelete(NULL);
+    }
+    img.format = PixelFormatGray;
+    img.width = 752;
+    img.height = 480;
+    CAMERA_SubmitBuff(zzf_buf1);
+    CAMERA_SubmitBuff(zzf_buf2);
+    if (kStatus_Success != CAMERA_ReceiverStart())//开始接收摄像头传来的图像
+    {
+        PRINTF("zzf init fail!\r\n");
+        vTaskDelete(NULL);
+    }
+    for (int i = 0; i < 100; i++) {
+        if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
+            //如果成功接收一帧图像，则按情况输出到Oled,lcd，Sd卡
+            if (0 == strcmp(pv, "oled")) {
+                OLED_PrintPicture(&img, 100);
+            } else if (0 == strcmp(pv, "lcd")) {
+                LCD_PrintPicture(&img);
+            } else if (0 == strcmp(pv, "sd")) {
+                FIL fil;
+                char line[64];
+                snprintf(line, 64, "o:/zzf/%d.bmp", i);
+                f_open(&fil, line, FA_CREATE_ALWAYS | FA_WRITE);
+                BMP_Save(&fil, &img);
+            }
+            PRINTF("fps=%f\r\n", CAMERA_FpsGet());
+            CAMERA_SubmitBuff(img.pImg);//将空缓存提交
+
+        } else {
+            i--;
+            vTaskDelay(1);
+        }
+    }
+    CAMERA_ReceiverStop();//停止传输
+    CAMERA_ReceiverDeinit();//De-initialize
+    vTaskDelete(NULL);
 }
+
 //中断服务函数（不准直接改名字可以用define改名字）
 //注意四个pit通道共用一个中断服务函数
 /*RAMFUNC_ITC*/ void PIT_IRQHandler(void) {

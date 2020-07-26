@@ -26,7 +26,7 @@ status_t SD_CardDetect(void);
 status_t SD_Init2(void);
 
 /**
- * @brief   初始化sd卡并挂载fatfs
+ * @brief   初始化sd卡并挂载fatfs，sd卡将会挂载到0:/路径下
  * @param  {void} undefined : 
  * @return {status_t}       : kStatus_Success表示成功
  */
