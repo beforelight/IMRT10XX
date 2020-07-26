@@ -37,13 +37,19 @@
 
 #ifndef _BOARD_H_
 #define _BOARD_H_
-
-/**
- * @brief	The board name 
- */
-#define BOARD_NAME "imxRT1052BoardV1.0"
-
 #include "fsl_gpio.h"
+
+/*! @brief The board name */
+#define BOARD_NAME "IMXRT1050-v1.3"
+/* The UART to use for debug messages. */
+#define BOARD_DEBUG_UART_TYPE kSerialPort_Uart
+#define BOARD_DEBUG_UART_BASEADDR (uint32_t) LPUART1
+#define BOARD_DEBUG_UART_INSTANCE 1U
+#ifndef BOARD_DEBUG_UART_BAUDRATE
+#define BOARD_DEBUG_UART_BAUDRATE (1152000U)
+#endif /* BOARD_DEBUG_UART_BAUDRATE */
+
+
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */

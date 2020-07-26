@@ -21,67 +21,65 @@
 #include <sc_pit.h>
 #include <sc_pwm.h>
 #include <status.h>
+
 TaskHandle_t LED_task_handle;
-void LED_task(void* pvData) {
-	gpio_t led1 = { XSNVS_PMIC_STBY_GPIO, XSNVS_PMIC_STBY_PIN,0 };
-	GPIO_Init(&led1);
-	while (1) {
+
+void LED_task(void *pvData) {
+    gpio_t led1 = {XSNVS_PMIC_STBY_GPIO, XSNVS_PMIC_STBY_PIN, 0};
+    GPIO_Init(&led1);
+    while (1) {
         GPIO_Toggle(&led1);
-		vTaskDelay(1 * configTICK_RATE_HZ);//等待1秒
-	}
+        vTaskDelay(1 * configTICK_RATE_HZ);//等待1秒
+    }
 }
 
 UnitestItem_t item_list[] = {
-        {U_keypad,"keypad",NULL},
-        {NULL,NULL,NULL},//确定结尾有多少个
+//        {U_keypad, "keypad", NULL},
+        {U_status, "status", NULL},
+        {NULL, NULL,         NULL},//确定结尾有多少个
 };
 
 void Unitest(void) {
-    int num=0;
+    int num = 0;
     TaskHandle_t task_handle;
     TaskStatus_t xTaskDetails;
     vTaskGetInfo(NULL, &xTaskDetails, pdTRUE, eInvalid);//获取自己任务优先级
-    xTaskCreate(LED_task, "led task", 128, NULL, xTaskDetails.uxCurrentPriority + 1, &LED_task_handle);
-    while(item_list[num].pxTaskCode !=NULL){
+    xTaskCreate(LED_task, "led task", 64, NULL, xTaskDetails.uxCurrentPriority + 1, &LED_task_handle);
+    while (item_list[num].pxTaskCode != NULL) {
         num++;
     }
     PRINTF("Unitest has %d items\r\n", num);
-    uint8_t* item_done = pvPortMalloc(sizeof(uint8_t) * num);
+    uint8_t *item_done = pvPortMalloc(sizeof(uint8_t) * num);
     memset(item_done, 0, sizeof(uint8_t) * num);
-    while (1)
-    {
+    while (1) {
         PRINTF("\r\nUnitest>>>\r\n");
-        for (int i = 0; i < num; i++)
-        {
+        for (int i = 0; i < num; i++) {
             if (item_done[i] == 0) {
                 PRINTF("%d:\t%s\r\n", i, item_list[i].pcName);
-            }
-            else{
+            } else {
                 PRINTF("%d:\t%s\t√\r\n", i, item_list[i].pcName);
             }
         }
         PRINTF("Enter the number and -1 to exit:");
         int ans = -1;
-        SCANF("%d", &ans);
+        SCANF("%d", &ans);PRINTF("\r\n");
         if (ans == -1) {
             PRINTF("Unitest exit!\r\n");
             break;
-        }
-        else if (0<=ans&&ans<num)//选中任务啦
+        } else if (0 <= ans && ans < num)//选中任务啦
         {
             PRINTF("run %s......", item_list[ans].pcName);
             xTaskCreate(item_list[ans].pxTaskCode,
-                item_list[ans].pcName, 2048,
-                item_list[ans].pvParameters,
-                xTaskDetails.uxCurrentPriority,
-                &task_handle);
+                        item_list[ans].pcName, 2048,
+                        item_list[ans].pvParameters,
+                        xTaskDetails.uxCurrentPriority,
+                        &task_handle);
             eTaskState e;
             while (1) {//等待测试任务退出
                 e = eTaskGetState(task_handle);
-                if (e == eDeleted || e == eInvalid){
+                if (e == eDeleted || e == eInvalid) {
                     break;
-                }
-                else{
+                } else {
                     vTaskDelay(100);
                 }
             }
@@ -390,13 +388,13 @@ pwm_t my4 = {PWM2, kPWM_Module_1, 25 * 1000, 0, 0, kPWM_HighTrue};
 gpio_t OE_B = {PWM_OE_B_GPIO, PWM_OE_B_PIN, 0};
 
 void U_pwm(void *pv) {
-    pwm_t *list[] ={
-                    &my1,
-                    &my2,
-                    &my3,
-                    &my4,
-                    NULL
-            };
+    pwm_t *list[] = {
+            &my1,
+            &my2,
+            &my3,
+            &my4,
+            NULL
+    };
     PWM_Init2(list);
     GPIO_Init(&OE_B);
     my1.dutyA = 10.0;
@@ -420,6 +418,13 @@ void U_status(void *pv) {
     APP_PrintRunFrequency(0);
     PRINTF("%dms\r\n", TimerMsGet());
     vTaskDelete(NULL);
+}
+
+void STEP(void) {
+    while (GPIO_PinRead(XSNVS_WAKEUP_GPIO, XSNVS_WAKEUP_PIN) != 0) {
+//        vTaskDelay(10);
+    __NOP();
+    }
 }
 //中断服务函数（不准直接改名字可以用define改名字）
 //注意四个pit通道共用一个中断服务函数

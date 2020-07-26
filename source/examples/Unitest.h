@@ -14,6 +14,10 @@ typedef struct UnitestItem
 	void* const pvParameters;
 }UnitestItem_t;
 
+
+void STEP(void);
+
+
 void Unitest(void);
 
 void U_keypad(void* pv);

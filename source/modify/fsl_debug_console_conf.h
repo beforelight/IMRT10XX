@@ -7,8 +7,10 @@
  */
 #ifndef _FSL_DEBUG_CONSOLE_CONF_H_
 #define _FSL_DEBUG_CONSOLE_CONF_H_
+//添加于2020年7月26日
 #define PRINTF_FLOAT_ENABLE 1U
 #define PRINTF_ADVANCED_ENABLE 1U
+#define DEBUG_CONSOLE_ENABLE_ECHO
 /****************Debug console configuration********************/
 
 /*! @brief If Non-blocking mode is needed, please define it at project setting,
