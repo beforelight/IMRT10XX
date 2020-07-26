@@ -39,6 +39,13 @@ void BOARD_InitBootPins(void);
 
 
 /*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void ADC(void);
+
+
+/*!
  * @brief 
  *
  */
@@ -57,6 +64,23 @@ void qspiFlash(void);
  *
  */
 void SDRAM(void);
+
+/* WAKEUP (coord L6), WEKAUP/WAKEUP&LED */
+#define XSNVS_WAKEUP_GPIO                                                  GPIO5   /*!< GPIO device name: GPIO5 */
+#define XSNVS_WAKEUP_PORT                                                  GPIO5   /*!< PORT device name: GPIO5 */
+#define XSNVS_WAKEUP_PIN                                                      0U   /*!< GPIO5 pin index: 0 */
+
+/* PMIC_STBY_REQ (coord L7), PMIC_STBY */
+#define XSNVS_PMIC_STBY_GPIO                                               GPIO5   /*!< GPIO device name: GPIO5 */
+#define XSNVS_PMIC_STBY_PORT                                               GPIO5   /*!< PORT device name: GPIO5 */
+#define XSNVS_PMIC_STBY_PIN                                                   2U   /*!< GPIO5 pin index: 2 */
+
+
+/*!
+ * @brief Configures pin routing and optionally pin electrical features.
+ *
+ */
+void xSNVS(void);
 
 /* GPIO_SD_B0_03 (coord K1), D1 */
 #define SD_D1_PERIPHERAL                                                  USDHC1   /*!< Device name: USDHC1 */
@@ -98,29 +122,12 @@ void SDRAM(void);
  */
 void SD(void);
 
-/* WAKEUP (coord L6), WEKAUP */
-#define XSNVS_WAKEUP_GPIO                                                  GPIO5   /*!< GPIO device name: GPIO5 */
-#define XSNVS_WAKEUP_PORT                                                  GPIO5   /*!< PORT device name: GPIO5 */
-#define XSNVS_WAKEUP_PIN                                                      0U   /*!< GPIO5 pin index: 0 */
-
-/* PMIC_STBY_REQ (coord L7), PMIC_STBY */
-#define XSNVS_PMIC_STBY_GPIO                                               GPIO5   /*!< GPIO device name: GPIO5 */
-#define XSNVS_PMIC_STBY_PORT                                               GPIO5   /*!< PORT device name: GPIO5 */
-#define XSNVS_PMIC_STBY_PIN                                                   2U   /*!< GPIO5 pin index: 2 */
-
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void xSNVS(void);
-
-
-/*!
- * @brief Configures pin routing and optionally pin electrical features.
- *
- */
-void __camera(void);
+void camera(void);
 
 /* GPIO_B0_00 (coord D7), D0 */
 #define LCD_D0_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
@@ -172,15 +179,20 @@ void __camera(void);
 #define LCD_DC_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
 #define LCD_DC_PIN                                                           13U   /*!< GPIO2 pin index: 13 */
 
-/* GPIO_B1_08 (coord A12), keyboard/C0 */
+/* GPIO_B1_08 (coord A12), keyboard/C0/C0 */
 #define LCD_C0_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
 #define LCD_C0_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
 #define LCD_C0_PIN                                                           24U   /*!< GPIO2 pin index: 24 */
 
-/* GPIO_B1_09 (coord A13), keyboard/C1 */
+/* GPIO_B1_09 (coord A13), keyboard/C1/C1 */
 #define LCD_C1_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
 #define LCD_C1_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
 #define LCD_C1_PIN                                                           25U   /*!< GPIO2 pin index: 25 */
+
+/* GPIO_B0_15 (coord E11), BT_CFG11/PD */
+#define LCD_CS_GPIO                                                        GPIO2   /*!< GPIO device name: GPIO2 */
+#define LCD_CS_PORT                                                        GPIO2   /*!< PORT device name: GPIO2 */
+#define LCD_CS_PIN                                                           15U   /*!< GPIO2 pin index: 15 */
 
 
 /*!
@@ -202,6 +214,10 @@ void SWD(void);
  *
  */
 void ENC(void);
+
+/* GPIO_AD_B0_02 (coord M11), 外接k66 */
+#define UART_LED1_PERIPHERAL                                             LPUART6   /*!< Device name: LPUART6 */
+#define UART_LED1_SIGNAL                                                      TX   /*!< LPUART6 signal: TX */
 
 
 /*!
@@ -232,10 +248,10 @@ void SPI(void);
  */
 void IIC(void);
 
-/* GPIO_AD_B0_08 (coord F13), keyboard JTAG_MOD/JTAG_MOD/PD */
-#define GPIO_BEE_GPIO                                                      GPIO1   /*!< GPIO device name: GPIO1 */
-#define GPIO_BEE_PORT                                                      GPIO1   /*!< PORT device name: GPIO1 */
-#define GPIO_BEE_PIN                                                          8U   /*!< GPIO1 pin index: 8 */
+/* GPIO_B0_14 (coord E10), BT_CFG10/PD */
+#define GPIO_BEE_GPIO                                                      GPIO2   /*!< GPIO device name: GPIO2 */
+#define GPIO_BEE_PORT                                                      GPIO2   /*!< PORT device name: GPIO2 */
+#define GPIO_BEE_PIN                                                         14U   /*!< GPIO2 pin index: 14 */
 
 
 /*!
@@ -244,7 +260,7 @@ void IIC(void);
  */
 void GPIO(void);
 
-/* GPIO_B1_10 (coord B13), keyboard/OE_B */
+/* GPIO_B1_10 (coord B13), keyboard/OE_B/OE_B */
 #define PWM_OE_B_GPIO                                                      GPIO2   /*!< GPIO device name: GPIO2 */
 #define PWM_OE_B_PORT                                                      GPIO2   /*!< PORT device name: GPIO2 */
 #define PWM_OE_B_PIN                                                         26U   /*!< GPIO2 pin index: 26 */
@@ -256,12 +272,37 @@ void GPIO(void);
  */
 void PWM(void);
 
+/* GPIO_B0_15 (coord E11), BT_CFG11/PD */
+#define OLED_CS_GPIO                                                       GPIO2   /*!< GPIO device name: GPIO2 */
+#define OLED_CS_PORT                                                       GPIO2   /*!< PORT device name: GPIO2 */
+#define OLED_CS_PIN                                                          15U   /*!< GPIO2 pin index: 15 */
+
+/* GPIO_B0_00 (coord D7), D0 */
+#define OLED_DC_GPIO                                                       GPIO2   /*!< GPIO device name: GPIO2 */
+#define OLED_DC_PORT                                                       GPIO2   /*!< PORT device name: GPIO2 */
+#define OLED_DC_PIN                                                           0U   /*!< GPIO2 pin index: 0 */
+
+/* GPIO_B0_01 (coord E7), D1 */
+#define OLED_RES_GPIO                                                      GPIO2   /*!< GPIO device name: GPIO2 */
+#define OLED_RES_PORT                                                      GPIO2   /*!< PORT device name: GPIO2 */
+#define OLED_RES_PIN                                                          1U   /*!< GPIO2 pin index: 1 */
+
+/* GPIO_B0_02 (coord E8), D2 */
+#define OLED_D1_GPIO                                                       GPIO2   /*!< GPIO device name: GPIO2 */
+#define OLED_D1_PORT                                                       GPIO2   /*!< PORT device name: GPIO2 */
+#define OLED_D1_PIN                                                           2U   /*!< GPIO2 pin index: 2 */
+
+/* GPIO_B0_03 (coord D8), D3 */
+#define OLED_D0_GPIO                                                       GPIO2   /*!< GPIO device name: GPIO2 */
+#define OLED_D0_PORT                                                       GPIO2   /*!< PORT device name: GPIO2 */
+#define OLED_D0_PIN                                                           3U   /*!< GPIO2 pin index: 3 */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
  *
  */
-void ADC(void);
+void OLED(void);
 
 #if defined(__cplusplus)
 }

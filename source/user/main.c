@@ -14,8 +14,6 @@
 
 
 int main(void) {
-	BOARD_ConfigVectors();//拷贝中断向量表到内存
-	BOARD_ConfigMPU();//初始化内存保护单元和cache
 	BOARD_InitBootPins();//初始化引脚
 	BOARD_InitBootClocks();//初始化时钟
 	BOARD_InitBootPeripherals();//初始化外设

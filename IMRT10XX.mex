@@ -25,18 +25,18 @@
             <power_domains/>
             <pin_labels>
                <pin_label pin_num="M11" pin_signal="GPIO_AD_B0_02" label="外接k66" identifier="LED1"/>
-               <pin_label pin_num="L6" pin_signal="WAKEUP" label="WEKAUP" identifier="WAKEUP"/>
+               <pin_label pin_num="L6" pin_signal="WAKEUP" label="WEKAUP/WAKEUP&amp;LED" identifier="WAKEUP"/>
                <pin_label pin_num="M6" pin_signal="ONOFF" label="ONOFF" identifier="ONOFF"/>
                <pin_label pin_num="D9" pin_signal="GPIO_B0_10" label="BT_CFG6/PD" identifier="WRX;WR"/>
                <pin_label pin_num="A10" pin_signal="GPIO_B0_11" label="BT_CFG7/PD" identifier="CSX;DC"/>
                <pin_label pin_num="L14" pin_signal="GPIO_AD_B0_13" label="DEBUG" identifier="DEBUG"/>
                <pin_label pin_num="K14" pin_signal="GPIO_AD_B0_12" label="DEBUG" identifier="DEBUG"/>
-               <pin_label pin_num="F11" pin_signal="GPIO_AD_B0_04" label=" PD/0_SPI/1_Serial Downloader/BOOT_MODE0/PD" identifier="BT_PD_0_SPI__1_SerialDownloader"/>
-               <pin_label pin_num="G14" pin_signal="GPIO_AD_B0_05" label="bee PD/0/BOOT_MODE1/PU" identifier="BT_PD_0"/>
-               <pin_label pin_num="A12" pin_signal="GPIO_B1_08" label="keyboard/C0" identifier="D0;C0"/>
-               <pin_label pin_num="A13" pin_signal="GPIO_B1_09" label="keyboard/C1" identifier="D1;C1"/>
-               <pin_label pin_num="B13" pin_signal="GPIO_B1_10" label="keyboard/OE_B" identifier="DC;OE_B"/>
-               <pin_label pin_num="F13" pin_signal="GPIO_AD_B0_08" label="keyboard JTAG_MOD/JTAG_MOD/PD" identifier="BEE"/>
+               <pin_label pin_num="F11" pin_signal="GPIO_AD_B0_04" label=" PD/0_SPI/1_Serial Downloader/BOOT_MODE0/PD/BOOT_MODE0/PD" identifier="BT_PD_0_SPI__1_SerialDownloader"/>
+               <pin_label pin_num="G14" pin_signal="GPIO_AD_B0_05" label="bee PD/0/BOOT_MODE1/PU/BOOT_MODE1/PU" identifier="BT_PD_0"/>
+               <pin_label pin_num="A12" pin_signal="GPIO_B1_08" label="keyboard/C0/C0" identifier="D0;C0"/>
+               <pin_label pin_num="A13" pin_signal="GPIO_B1_09" label="keyboard/C1/C1" identifier="D1;C1"/>
+               <pin_label pin_num="B13" pin_signal="GPIO_B1_10" label="keyboard/OE_B/OE_B" identifier="DC;OE_B"/>
+               <pin_label pin_num="F13" pin_signal="GPIO_AD_B0_08" label="keyboard JTAG_MOD/JTAG_MOD/PD/JTAG_MOD/PD" identifier="BEE"/>
                <pin_label pin_num="D13" pin_signal="GPIO_B1_12" label="CD" identifier="CD"/>
                <pin_label pin_num="H2" pin_signal="GPIO_SD_B0_04" label="D2" identifier="D2"/>
                <pin_label pin_num="J1" pin_signal="GPIO_SD_B0_02" label="D0" identifier="D0"/>
@@ -46,10 +46,10 @@
                <pin_label pin_num="K1" pin_signal="GPIO_SD_B0_03" label="D1" identifier="DATA1;D1"/>
                <pin_label pin_num="N3" pin_signal="GPIO_SD_B1_05" label="SDA" identifier="SDA"/>
                <pin_label pin_num="P2" pin_signal="GPIO_SD_B1_04" label="SCL" identifier="SCL"/>
-               <pin_label pin_num="D7" pin_signal="GPIO_B0_00" label="D0" identifier="D0"/>
-               <pin_label pin_num="E7" pin_signal="GPIO_B0_01" label="D1" identifier="D1"/>
-               <pin_label pin_num="E8" pin_signal="GPIO_B0_02" label="D2" identifier="D2"/>
-               <pin_label pin_num="D8" pin_signal="GPIO_B0_03" label="D3" identifier="D3"/>
+               <pin_label pin_num="D7" pin_signal="GPIO_B0_00" label="D0" identifier="D0;DC"/>
+               <pin_label pin_num="E7" pin_signal="GPIO_B0_01" label="D1" identifier="D1;RES"/>
+               <pin_label pin_num="E8" pin_signal="GPIO_B0_02" label="D2" identifier="D2;D1"/>
+               <pin_label pin_num="D8" pin_signal="GPIO_B0_03" label="D3" identifier="D3;D0"/>
                <pin_label pin_num="C8" pin_signal="GPIO_B0_04" label="BT_CFG0/PD" identifier="D4"/>
                <pin_label pin_num="B8" pin_signal="GPIO_B0_05" label="BT_CFG1/PD" identifier="D5"/>
                <pin_label pin_num="A8" pin_signal="GPIO_B0_06" label="BT_CFG2/PD" identifier="D6"/>
@@ -60,13 +60,46 @@
                <pin_label pin_num="D10" pin_signal="GPIO_B0_13" label="BT_CFG9/PD" identifier="DC"/>
                <pin_label pin_num="B9" pin_signal="GPIO_B0_08" label="BT_CFG4/PD"/>
                <pin_label pin_num="C9" pin_signal="GPIO_B0_09" label="BT_CFG5/PD"/>
-               <pin_label pin_num="E10" pin_signal="GPIO_B0_14" label="BT_CFG10/PD" identifier=""/>
-               <pin_label pin_num="E11" pin_signal="GPIO_B0_15" label="BT_CFG11/PD" identifier=""/>
+               <pin_label pin_num="E10" pin_signal="GPIO_B0_14" label="BT_CFG10/PD" identifier="BEE"/>
+               <pin_label pin_num="E11" pin_signal="GPIO_B0_15" label="BT_CFG11/PD" identifier="RES;SC;CS"/>
                <pin_label pin_num="G11" pin_signal="GPIO_AD_B0_03" label="外接k66"/>
                <pin_label pin_num="L7" pin_signal="PMIC_STBY_REQ" label="PMIC_STBY" identifier="PMIC_STBY"/>
             </pin_labels>
          </pins_profile>
          <functions_list>
+            <function name="ADC">
+               <description>Configures pin routing and optionally pin electrical features.</description>
+               <options>
+                  <callFromInitBoot>true</callFromInitBoot>
+                  <coreID>core0</coreID>
+                  <enableClock>true</enableClock>
+               </options>
+               <dependencies>
+                  <dependency resourceType="Peripheral" resourceId="ADC1" description="Peripheral ADC1 is not initialized" problem_level="1" source="Pins:ADC">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:ADC">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:ADC">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+               </dependencies>
+               <pins>
+                  <pin peripheral="ADC1" signal="IN, 3" pin_num="H14" pin_signal="GPIO_AD_B0_14"/>
+                  <pin peripheral="ADC1" signal="IN, 4" pin_num="L10" pin_signal="GPIO_AD_B0_15"/>
+                  <pin peripheral="ADC1" signal="IN, 5" pin_num="J11" pin_signal="GPIO_AD_B1_00"/>
+                  <pin peripheral="ADC1" signal="IN, 6" pin_num="K11" pin_signal="GPIO_AD_B1_01"/>
+                  <pin peripheral="ADC1" signal="IN, 7" pin_num="L11" pin_signal="GPIO_AD_B1_02"/>
+                  <pin peripheral="ADC1" signal="IN, 8" pin_num="M12" pin_signal="GPIO_AD_B1_03"/>
+               </pins>
+            </function>
             <function name="WDOG_B">
                <description></description>
                <options>
@@ -196,6 +229,53 @@
                   <pin peripheral="SEMC" signal="ADDR, 12" pin_num="A3" pin_signal="GPIO_EMC_20"/>
                </pins>
             </function>
+            <function name="xSNVS">
+               <description>Configures pin routing and optionally pin electrical features.</description>
+               <options>
+                  <callFromInitBoot>true</callFromInitBoot>
+                  <coreID>core0</coreID>
+                  <enableClock>true</enableClock>
+               </options>
+               <dependencies>
+                  <dependency resourceType="Peripheral" resourceId="GPIO5" description="Peripheral GPIO5 is not initialized" problem_level="1" source="Pins:xSNVS">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="Peripheral" resourceId="SNVS" description="Peripheral SNVS is not initialized" problem_level="1" source="Pins:xSNVS">
+                     <feature name="initialized" evaluation="equal">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:xSNVS">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:xSNVS">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="Pins initialization requires the IGPIO Driver in the project." problem_level="2" source="Pins:xSNVS">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+               </dependencies>
+               <pins>
+                  <pin peripheral="GPIO5" signal="gpio_io, 00" pin_num="L6" pin_signal="WAKEUP">
+                     <pin_features>
+                        <pin_feature name="direction" value="INPUT"/>
+                        <pin_feature name="pull_up_down_config" value="Pull_Up_100K_Ohm"/>
+                        <pin_feature name="open_drain" value="Enable"/>
+                        <pin_feature name="drive_strength" value="R0"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO5" signal="gpio_io, 02" pin_num="L7" pin_signal="PMIC_STBY_REQ"/>
+                  <pin peripheral="SNVS" signal="snvs_pmic_on_req" pin_num="K7" pin_signal="PMIC_ON_REQ"/>
+               </pins>
+            </function>
             <function name="SD">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
@@ -250,7 +330,7 @@
                   </pin>
                </pins>
             </function>
-            <function name="xSNVS">
+            <function name="camera">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
                   <callFromInitBoot>true</callFromInitBoot>
@@ -258,64 +338,17 @@
                   <enableClock>true</enableClock>
                </options>
                <dependencies>
-                  <dependency resourceType="Peripheral" resourceId="GPIO5" description="Peripheral GPIO5 is not initialized" problem_level="1" source="Pins:xSNVS">
+                  <dependency resourceType="Peripheral" resourceId="CSI" description="Peripheral CSI is not initialized" problem_level="1" source="Pins:camera">
                      <feature name="initialized" evaluation="equal">
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="Peripheral" resourceId="SNVS" description="Peripheral SNVS is not initialized" problem_level="1" source="Pins:xSNVS">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:xSNVS">
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:camera">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:xSNVS">
-                     <feature name="enabled" evaluation="equal" configuration="core0">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="Pins initialization requires the IGPIO Driver in the project." problem_level="2" source="Pins:xSNVS">
-                     <feature name="enabled" evaluation="equal" configuration="core0">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-               </dependencies>
-               <pins>
-                  <pin peripheral="GPIO5" signal="gpio_io, 00" pin_num="L6" pin_signal="WAKEUP">
-                     <pin_features>
-                        <pin_feature name="direction" value="INPUT"/>
-                        <pin_feature name="pull_up_down_config" value="Pull_Up_100K_Ohm"/>
-                        <pin_feature name="open_drain" value="Enable"/>
-                        <pin_feature name="drive_strength" value="R0"/>
-                     </pin_features>
-                  </pin>
-                  <pin peripheral="SNVS" signal="snvs_pmic_on_req" pin_num="K7" pin_signal="PMIC_ON_REQ"/>
-                  <pin peripheral="GPIO5" signal="gpio_io, 02" pin_num="L7" pin_signal="PMIC_STBY_REQ"/>
-               </pins>
-            </function>
-            <function name="__camera">
-               <description>Configures pin routing and optionally pin electrical features.</description>
-               <options>
-                  <callFromInitBoot>true</callFromInitBoot>
-                  <coreID>core0</coreID>
-                  <enableClock>true</enableClock>
-               </options>
-               <dependencies>
-                  <dependency resourceType="Peripheral" resourceId="CSI" description="Peripheral CSI is not initialized" problem_level="1" source="Pins:__camera">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:__camera">
-                     <feature name="enabled" evaluation="equal" configuration="core0">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:__camera">
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:camera">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
@@ -399,7 +432,7 @@
             <function name="LCD">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
-                  <callFromInitBoot>false</callFromInitBoot>
+                  <callFromInitBoot>true</callFromInitBoot>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
                </options>
@@ -428,24 +461,28 @@
                <pins>
                   <pin peripheral="GPIO2" signal="gpio_io, 00" pin_num="D7" pin_signal="GPIO_B0_00">
                      <pin_features>
+                        <pin_feature name="identifier" value="D0"/>
                         <pin_feature name="direction" value="OUTPUT"/>
                         <pin_feature name="gpio_init_state" value="true"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="GPIO2" signal="gpio_io, 01" pin_num="E7" pin_signal="GPIO_B0_01">
                      <pin_features>
+                        <pin_feature name="identifier" value="D1"/>
                         <pin_feature name="direction" value="OUTPUT"/>
                         <pin_feature name="gpio_init_state" value="true"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="GPIO2" signal="gpio_io, 02" pin_num="E8" pin_signal="GPIO_B0_02">
                      <pin_features>
+                        <pin_feature name="identifier" value="D2"/>
                         <pin_feature name="direction" value="OUTPUT"/>
                         <pin_feature name="gpio_init_state" value="true"/>
                      </pin_features>
                   </pin>
                   <pin peripheral="GPIO2" signal="gpio_io, 03" pin_num="D8" pin_signal="GPIO_B0_03">
                      <pin_features>
+                        <pin_feature name="identifier" value="D3"/>
                         <pin_feature name="direction" value="OUTPUT"/>
                         <pin_feature name="gpio_init_state" value="true"/>
                      </pin_features>
@@ -500,6 +537,11 @@
                         <pin_feature name="direction" value="INPUT"/>
                         <pin_feature name="pull_up_down_config" value="Pull_Up_47K_Ohm"/>
                         <pin_feature name="pull_keeper_select" value="Pull"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 15" pin_num="E11" pin_signal="GPIO_B0_15">
+                     <pin_features>
+                        <pin_feature name="identifier" value="CS"/>
                      </pin_features>
                   </pin>
                </pins>
@@ -679,11 +721,7 @@
                   <pin peripheral="LPUART4" signal="RX" pin_num="B11" pin_signal="GPIO_B1_01"/>
                   <pin peripheral="LPUART4" signal="TX" pin_num="A11" pin_signal="GPIO_B1_00"/>
                   <pin peripheral="LPUART6" signal="RX" pin_num="G11" pin_signal="GPIO_AD_B0_03"/>
-                  <pin peripheral="LPUART6" signal="TX" pin_num="M11" pin_signal="GPIO_AD_B0_02">
-                     <pin_features>
-                        <pin_feature name="identifier" value=""/>
-                     </pin_features>
-                  </pin>
+                  <pin peripheral="LPUART6" signal="TX" pin_num="M11" pin_signal="GPIO_AD_B0_02"/>
                </pins>
             </function>
             <function name="SPI">
@@ -777,21 +815,9 @@
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="Pins initialization requires the IGPIO Driver in the project." problem_level="2" source="Pins:GPIO">
-                     <feature name="enabled" evaluation="equal" configuration="core0">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
                </dependencies>
                <pins>
-                  <pin peripheral="GPIO1" signal="gpio_io, 08" pin_num="F13" pin_signal="GPIO_AD_B0_08">
-                     <pin_features>
-                        <pin_feature name="direction" value="OUTPUT"/>
-                        <pin_feature name="hysteresis_enable" value="Enable"/>
-                        <pin_feature name="pull_up_down_config" value="Pull_Down_100K_Ohm"/>
-                        <pin_feature name="drive_strength" value="R0_4"/>
-                     </pin_features>
-                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 14" pin_num="E10" pin_signal="GPIO_B0_14"/>
                </pins>
             </function>
             <function name="PWM">
@@ -854,37 +880,64 @@
                   <pin peripheral="PWM1" signal="B, 3" pin_num="M5" pin_signal="GPIO_SD_B1_01"/>
                </pins>
             </function>
-            <function name="ADC">
+            <function name="OLED">
                <description>Configures pin routing and optionally pin electrical features.</description>
                <options>
-                  <callFromInitBoot>true</callFromInitBoot>
+                  <callFromInitBoot>false</callFromInitBoot>
                   <coreID>core0</coreID>
                   <enableClock>true</enableClock>
                </options>
                <dependencies>
-                  <dependency resourceType="Peripheral" resourceId="ADC1" description="Peripheral ADC1 is not initialized" problem_level="1" source="Pins:ADC">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:ADC">
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:OLED">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
                   </dependency>
-                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:ADC">
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.iomuxc" description="Pins initialization requires the IOMUXC Driver in the project." problem_level="2" source="Pins:OLED">
+                     <feature name="enabled" evaluation="equal" configuration="core0">
+                        <data>true</data>
+                     </feature>
+                  </dependency>
+                  <dependency resourceType="SWComponent" resourceId="platform.drivers.igpio" description="Pins initialization requires the IGPIO Driver in the project." problem_level="2" source="Pins:OLED">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
                      </feature>
                   </dependency>
                </dependencies>
                <pins>
-                  <pin peripheral="ADC1" signal="IN, 3" pin_num="H14" pin_signal="GPIO_AD_B0_14"/>
-                  <pin peripheral="ADC1" signal="IN, 4" pin_num="L10" pin_signal="GPIO_AD_B0_15"/>
-                  <pin peripheral="ADC1" signal="IN, 5" pin_num="J11" pin_signal="GPIO_AD_B1_00"/>
-                  <pin peripheral="ADC1" signal="IN, 6" pin_num="K11" pin_signal="GPIO_AD_B1_01"/>
-                  <pin peripheral="ADC1" signal="IN, 7" pin_num="L11" pin_signal="GPIO_AD_B1_02"/>
-                  <pin peripheral="ADC1" signal="IN, 8" pin_num="M12" pin_signal="GPIO_AD_B1_03"/>
+                  <pin peripheral="GPIO2" signal="gpio_io, 15" pin_num="E11" pin_signal="GPIO_B0_15">
+                     <pin_features>
+                        <pin_feature name="identifier" value="CS"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 00" pin_num="D7" pin_signal="GPIO_B0_00">
+                     <pin_features>
+                        <pin_feature name="identifier" value="DC"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 01" pin_num="E7" pin_signal="GPIO_B0_01">
+                     <pin_features>
+                        <pin_feature name="identifier" value="RES"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 02" pin_num="E8" pin_signal="GPIO_B0_02">
+                     <pin_features>
+                        <pin_feature name="identifier" value="D1"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                     </pin_features>
+                  </pin>
+                  <pin peripheral="GPIO2" signal="gpio_io, 03" pin_num="D8" pin_signal="GPIO_B0_03">
+                     <pin_features>
+                        <pin_feature name="identifier" value="D0"/>
+                        <pin_feature name="direction" value="OUTPUT"/>
+                        <pin_feature name="gpio_init_state" value="true"/>
+                     </pin_features>
+                  </pin>
                </pins>
             </function>
          </functions_list>
@@ -1023,13 +1076,7 @@
             <processor_version>7.0.1</processor_version>
             <output_format>c_array</output_format>
          </dcdx_profile>
-         <dcdx_configurations>
-            <dcdx_configuration name="Device_configuration">
-               <description></description>
-               <options/>
-               <command_groups/>
-            </dcdx_configuration>
-         </dcdx_configurations>
+         <dcdx_configurations/>
       </dcdx>
       <periphs name="Peripherals" version="7.0" enabled="true" update_project_code="true">
          <generated_project_files>
@@ -1051,7 +1098,7 @@
             <component name="system" uuid="aaff4d3f-7874-4344-9e1a-8772bc692a39" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="93a6af7c-9220-4e42-9877-8aa23c8eaa7f" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="20905e4c-04f2-4aea-9bab-87e23235739c" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

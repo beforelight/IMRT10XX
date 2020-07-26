@@ -41,6 +41,7 @@ void Unitest(void) {
     TaskHandle_t task_handle;
     TaskStatus_t xTaskDetails;
     vTaskGetInfo(NULL, &xTaskDetails, pdTRUE, eInvalid);//获取自己任务优先级
+    xTaskCreate(LED_task, "led task", 128, NULL, xTaskDetails.uxCurrentPriority + 1, &LED_task_handle);
     while(item_list[num].pxTaskCode !=NULL){
         num++;
     }
@@ -89,6 +90,7 @@ void Unitest(void) {
         }
     }
     vPortFree(item_done);
+    vTaskDelete(LED_task_handle);
 }
 
 void U_keypad(void *pv) {

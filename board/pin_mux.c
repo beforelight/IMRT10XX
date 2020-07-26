@@ -13,18 +13,18 @@ mcu_data: ksdk2_0
 processor_version: 7.0.1
 pin_labels:
 - {pin_num: M11, pin_signal: GPIO_AD_B0_02, label: 外接k66, identifier: LED1}
-- {pin_num: L6, pin_signal: WAKEUP, label: WEKAUP, identifier: WAKEUP}
+- {pin_num: L6, pin_signal: WAKEUP, label: WEKAUP/WAKEUP&LED, identifier: WAKEUP}
 - {pin_num: M6, pin_signal: ONOFF, label: ONOFF, identifier: ONOFF}
 - {pin_num: D9, pin_signal: GPIO_B0_10, label: BT_CFG6/PD, identifier: WRX;WR}
 - {pin_num: A10, pin_signal: GPIO_B0_11, label: BT_CFG7/PD, identifier: CSX;DC}
 - {pin_num: L14, pin_signal: GPIO_AD_B0_13, label: DEBUG, identifier: DEBUG}
 - {pin_num: K14, pin_signal: GPIO_AD_B0_12, label: DEBUG, identifier: DEBUG}
-- {pin_num: F11, pin_signal: GPIO_AD_B0_04, label: ' PD/0_SPI/1_Serial Downloader/BOOT_MODE0/PD', identifier: BT_PD_0_SPI__1_SerialDownloader}
-- {pin_num: G14, pin_signal: GPIO_AD_B0_05, label: bee PD/0/BOOT_MODE1/PU, identifier: BT_PD_0}
-- {pin_num: A12, pin_signal: GPIO_B1_08, label: keyboard/C0, identifier: D0;C0}
-- {pin_num: A13, pin_signal: GPIO_B1_09, label: keyboard/C1, identifier: D1;C1}
-- {pin_num: B13, pin_signal: GPIO_B1_10, label: keyboard/OE_B, identifier: DC;OE_B}
-- {pin_num: F13, pin_signal: GPIO_AD_B0_08, label: keyboard JTAG_MOD/JTAG_MOD/PD, identifier: BEE}
+- {pin_num: F11, pin_signal: GPIO_AD_B0_04, label: ' PD/0_SPI/1_Serial Downloader/BOOT_MODE0/PD/BOOT_MODE0/PD', identifier: BT_PD_0_SPI__1_SerialDownloader}
+- {pin_num: G14, pin_signal: GPIO_AD_B0_05, label: bee PD/0/BOOT_MODE1/PU/BOOT_MODE1/PU, identifier: BT_PD_0}
+- {pin_num: A12, pin_signal: GPIO_B1_08, label: keyboard/C0/C0, identifier: D0;C0}
+- {pin_num: A13, pin_signal: GPIO_B1_09, label: keyboard/C1/C1, identifier: D1;C1}
+- {pin_num: B13, pin_signal: GPIO_B1_10, label: keyboard/OE_B/OE_B, identifier: DC;OE_B}
+- {pin_num: F13, pin_signal: GPIO_AD_B0_08, label: keyboard JTAG_MOD/JTAG_MOD/PD/JTAG_MOD/PD, identifier: BEE}
 - {pin_num: D13, pin_signal: GPIO_B1_12, label: CD, identifier: CD}
 - {pin_num: H2, pin_signal: GPIO_SD_B0_04, label: D2, identifier: D2}
 - {pin_num: J1, pin_signal: GPIO_SD_B0_02, label: D0, identifier: D0}
@@ -34,10 +34,10 @@ pin_labels:
 - {pin_num: K1, pin_signal: GPIO_SD_B0_03, label: D1, identifier: DATA1;D1}
 - {pin_num: N3, pin_signal: GPIO_SD_B1_05, label: SDA, identifier: SDA}
 - {pin_num: P2, pin_signal: GPIO_SD_B1_04, label: SCL, identifier: SCL}
-- {pin_num: D7, pin_signal: GPIO_B0_00, label: D0, identifier: D0}
-- {pin_num: E7, pin_signal: GPIO_B0_01, label: D1, identifier: D1}
-- {pin_num: E8, pin_signal: GPIO_B0_02, label: D2, identifier: D2}
-- {pin_num: D8, pin_signal: GPIO_B0_03, label: D3, identifier: D3}
+- {pin_num: D7, pin_signal: GPIO_B0_00, label: D0, identifier: D0;DC}
+- {pin_num: E7, pin_signal: GPIO_B0_01, label: D1, identifier: D1;RES}
+- {pin_num: E8, pin_signal: GPIO_B0_02, label: D2, identifier: D2;D1}
+- {pin_num: D8, pin_signal: GPIO_B0_03, label: D3, identifier: D3;D0}
 - {pin_num: C8, pin_signal: GPIO_B0_04, label: BT_CFG0/PD, identifier: D4}
 - {pin_num: B8, pin_signal: GPIO_B0_05, label: BT_CFG1/PD, identifier: D5}
 - {pin_num: A8, pin_signal: GPIO_B0_06, label: BT_CFG2/PD, identifier: D6}
@@ -48,8 +48,8 @@ pin_labels:
 - {pin_num: D10, pin_signal: GPIO_B0_13, label: BT_CFG9/PD, identifier: DC}
 - {pin_num: B9, pin_signal: GPIO_B0_08, label: BT_CFG4/PD}
 - {pin_num: C9, pin_signal: GPIO_B0_09, label: BT_CFG5/PD}
-- {pin_num: E10, pin_signal: GPIO_B0_14, label: BT_CFG10/PD}
-- {pin_num: E11, pin_signal: GPIO_B0_15, label: BT_CFG11/PD}
+- {pin_num: E10, pin_signal: GPIO_B0_14, label: BT_CFG10/PD, identifier: BEE}
+- {pin_num: E11, pin_signal: GPIO_B0_15, label: BT_CFG11/PD, identifier: RES;SC;CS}
 - {pin_num: G11, pin_signal: GPIO_AD_B0_03, label: 外接k66}
 - {pin_num: L7, pin_signal: PMIC_STBY_REQ, label: PMIC_STBY, identifier: PMIC_STBY}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
@@ -68,9 +68,11 @@ pin_labels:
  * 
  * END ****************************************************************************************************************/
 void BOARD_InitBootPins(void) {
-    SD();
+    ADC();
     xSNVS();
-    __camera();
+    SD();
+    camera();
+    LCD();
     SWD();
     ENC();
     UART();
@@ -78,8 +80,51 @@ void BOARD_InitBootPins(void) {
     IIC();
     GPIO();
     PWM();
-    ADC();
 }
+
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+ADC:
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: H14, peripheral: ADC1, signal: 'IN, 3', pin_signal: GPIO_AD_B0_14}
+  - {pin_num: L10, peripheral: ADC1, signal: 'IN, 4', pin_signal: GPIO_AD_B0_15}
+  - {pin_num: J11, peripheral: ADC1, signal: 'IN, 5', pin_signal: GPIO_AD_B1_00}
+  - {pin_num: K11, peripheral: ADC1, signal: 'IN, 6', pin_signal: GPIO_AD_B1_01}
+  - {pin_num: L11, peripheral: ADC1, signal: 'IN, 7', pin_signal: GPIO_AD_B1_02}
+  - {pin_num: M12, peripheral: ADC1, signal: 'IN, 8', pin_signal: GPIO_AD_B1_03}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : ADC
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+void ADC(void) {
+  CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
+
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_14_GPIO1_IO14,        /* GPIO_AD_B0_14 is configured as GPIO1_IO14 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B0_15_GPIO1_IO15,        /* GPIO_AD_B0_15 is configured as GPIO1_IO15 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_00_GPIO1_IO16,        /* GPIO_AD_B1_00 is configured as GPIO1_IO16 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_01_GPIO1_IO17,        /* GPIO_AD_B1_01 is configured as GPIO1_IO17 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_02_GPIO1_IO18,        /* GPIO_AD_B1_02 is configured as GPIO1_IO18 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_AD_B1_03_GPIO1_IO19,        /* GPIO_AD_B1_03 is configured as GPIO1_IO19 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+}
+
 
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
@@ -349,6 +394,57 @@ void SDRAM(void) {
 
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+xSNVS:
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+- pin_list:
+  - {pin_num: L6, peripheral: GPIO5, signal: 'gpio_io, 00', pin_signal: WAKEUP, direction: INPUT, pull_up_down_config: Pull_Up_100K_Ohm, open_drain: Enable, drive_strength: R0}
+  - {pin_num: L7, peripheral: GPIO5, signal: 'gpio_io, 02', pin_signal: PMIC_STBY_REQ}
+  - {pin_num: K7, peripheral: SNVS, signal: snvs_pmic_on_req, pin_signal: PMIC_ON_REQ}
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
+ */
+
+/* FUNCTION ************************************************************************************************************
+ *
+ * Function Name : xSNVS
+ * Description   : Configures pin routing and optionally pin electrical features.
+ *
+ * END ****************************************************************************************************************/
+void xSNVS(void) {
+  CLOCK_EnableClock(kCLOCK_IomuxcSnvs);       /* iomuxc_snvs clock (iomuxc_snvs_clk_enable): 0x03U */
+
+  /* GPIO configuration of WAKEUP on WAKEUP (pin L6) */
+  gpio_pin_config_t WAKEUP_config = {
+      .direction = kGPIO_DigitalInput,
+      .outputLogic = 0U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on WAKEUP (pin L6) */
+  GPIO_PinInit(GPIO5, 0U, &WAKEUP_config);
+
+  IOMUXC_SetPinMux(
+      IOMUXC_SNVS_PMIC_ON_REQ_SNVS_LP_PMIC_ON_REQ,  /* PMIC_ON_REQ is configured as SNVS_LP_PMIC_ON_REQ */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_SNVS_PMIC_STBY_REQ_GPIO5_IO02,   /* PMIC_STBY_REQ is configured as GPIO5_IO02 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_SNVS_WAKEUP_GPIO5_IO00,          /* WAKEUP is configured as GPIO5_IO00 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinConfig(
+      IOMUXC_SNVS_WAKEUP_GPIO5_IO00,          /* WAKEUP PAD functional properties : */
+      0x01B888U);                             /* Slew Rate Field: Slow Slew Rate
+                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
+                                                 Speed Field: medium(100MHz)
+                                                 Open Drain Enable Field: Open Drain Enabled
+                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
+                                                 Pull / Keep Select Field: Pull
+                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
+                                                 Hyst. Enable Field: Hysteresis Enabled */
+}
+
+
+/*
+ * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 SD:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
@@ -416,58 +512,7 @@ void SD(void) {
 
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-xSNVS:
-- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
-- pin_list:
-  - {pin_num: L6, peripheral: GPIO5, signal: 'gpio_io, 00', pin_signal: WAKEUP, direction: INPUT, pull_up_down_config: Pull_Up_100K_Ohm, open_drain: Enable, drive_strength: R0}
-  - {pin_num: K7, peripheral: SNVS, signal: snvs_pmic_on_req, pin_signal: PMIC_ON_REQ}
-  - {pin_num: L7, peripheral: GPIO5, signal: 'gpio_io, 02', pin_signal: PMIC_STBY_REQ}
- * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
- */
-
-/* FUNCTION ************************************************************************************************************
- *
- * Function Name : xSNVS
- * Description   : Configures pin routing and optionally pin electrical features.
- *
- * END ****************************************************************************************************************/
-void xSNVS(void) {
-  CLOCK_EnableClock(kCLOCK_IomuxcSnvs);       /* iomuxc_snvs clock (iomuxc_snvs_clk_enable): 0x03U */
-
-  /* GPIO configuration of WAKEUP on WAKEUP (pin L6) */
-  gpio_pin_config_t WAKEUP_config = {
-      .direction = kGPIO_DigitalInput,
-      .outputLogic = 0U,
-      .interruptMode = kGPIO_NoIntmode
-  };
-  /* Initialize GPIO functionality on WAKEUP (pin L6) */
-  GPIO_PinInit(GPIO5, 0U, &WAKEUP_config);
-
-  IOMUXC_SetPinMux(
-      IOMUXC_SNVS_PMIC_ON_REQ_SNVS_LP_PMIC_ON_REQ,  /* PMIC_ON_REQ is configured as SNVS_LP_PMIC_ON_REQ */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_SNVS_PMIC_STBY_REQ_GPIO5_IO02,   /* PMIC_STBY_REQ is configured as GPIO5_IO02 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_SNVS_WAKEUP_GPIO5_IO00,          /* WAKEUP is configured as GPIO5_IO00 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinConfig(
-      IOMUXC_SNVS_WAKEUP_GPIO5_IO00,          /* WAKEUP PAD functional properties : */
-      0x01B888U);                             /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0(260 Ohm @ 3.3V, 150 Ohm@1.8V, 240 Ohm for DDR)
-                                                 Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Enabled
-                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
-                                                 Pull / Keep Select Field: Pull
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Up
-                                                 Hyst. Enable Field: Hysteresis Enabled */
-}
-
-
-/*
- * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-__camera:
+camera:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
   - {pin_num: J13, peripheral: CSI, signal: 'csi_data, 06', pin_signal: GPIO_AD_B1_11, speed: MHZ_200, slew_rate: Fast}
@@ -487,11 +532,11 @@ __camera:
 
 /* FUNCTION ************************************************************************************************************
  *
- * Function Name : __camera
+ * Function Name : camera
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
-void __camera(void) {
+void camera(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
   IOMUXC_SetPinMux(
@@ -656,12 +701,12 @@ void __camera(void) {
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
 LCD:
-- options: {callFromInitBoot: 'false', coreID: core0, enableClock: 'true'}
+- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: D7, peripheral: GPIO2, signal: 'gpio_io, 00', pin_signal: GPIO_B0_00, direction: OUTPUT, gpio_init_state: 'true'}
-  - {pin_num: E7, peripheral: GPIO2, signal: 'gpio_io, 01', pin_signal: GPIO_B0_01, direction: OUTPUT, gpio_init_state: 'true'}
-  - {pin_num: E8, peripheral: GPIO2, signal: 'gpio_io, 02', pin_signal: GPIO_B0_02, direction: OUTPUT, gpio_init_state: 'true'}
-  - {pin_num: D8, peripheral: GPIO2, signal: 'gpio_io, 03', pin_signal: GPIO_B0_03, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: D7, peripheral: GPIO2, signal: 'gpio_io, 00', pin_signal: GPIO_B0_00, identifier: D0, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: E7, peripheral: GPIO2, signal: 'gpio_io, 01', pin_signal: GPIO_B0_01, identifier: D1, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: E8, peripheral: GPIO2, signal: 'gpio_io, 02', pin_signal: GPIO_B0_02, identifier: D2, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: D8, peripheral: GPIO2, signal: 'gpio_io, 03', pin_signal: GPIO_B0_03, identifier: D3, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: C8, peripheral: GPIO2, signal: 'gpio_io, 04', pin_signal: GPIO_B0_04, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: B8, peripheral: GPIO2, signal: 'gpio_io, 05', pin_signal: GPIO_B0_05, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: A8, peripheral: GPIO2, signal: 'gpio_io, 06', pin_signal: GPIO_B0_06, direction: OUTPUT, gpio_init_state: 'true'}
@@ -670,6 +715,7 @@ LCD:
   - {pin_num: D10, peripheral: GPIO2, signal: 'gpio_io, 13', pin_signal: GPIO_B0_13, direction: OUTPUT, gpio_init_state: 'true'}
   - {pin_num: A12, peripheral: GPIO2, signal: 'gpio_io, 24', pin_signal: GPIO_B1_08, identifier: C0, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
   - {pin_num: A13, peripheral: GPIO2, signal: 'gpio_io, 25', pin_signal: GPIO_B1_09, identifier: C1, direction: INPUT, pull_up_down_config: Pull_Up_47K_Ohm, pull_keeper_select: Pull}
+  - {pin_num: E11, peripheral: GPIO2, signal: 'gpio_io, 15', pin_signal: GPIO_B0_15, identifier: CS}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -819,6 +865,9 @@ void LCD(void) {
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B0_13_GPIO2_IO13,           /* GPIO_B0_13 is configured as GPIO2_IO13 */
+      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
+  IOMUXC_SetPinMux(
+      IOMUXC_GPIO_B0_15_GPIO2_IO15,           /* GPIO_B0_15 is configured as GPIO2_IO15 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
       IOMUXC_GPIO_B1_08_GPIO2_IO24,           /* GPIO_B1_08 is configured as GPIO2_IO24 */
@@ -1039,7 +1088,7 @@ UART:
   - {pin_num: B11, peripheral: LPUART4, signal: RX, pin_signal: GPIO_B1_01}
   - {pin_num: A11, peripheral: LPUART4, signal: TX, pin_signal: GPIO_B1_00}
   - {pin_num: G11, peripheral: LPUART6, signal: RX, pin_signal: GPIO_AD_B0_03}
-  - {pin_num: M11, peripheral: LPUART6, signal: TX, pin_signal: GPIO_AD_B0_02, identifier: ''}
+  - {pin_num: M11, peripheral: LPUART6, signal: TX, pin_signal: GPIO_AD_B0_02}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -1166,8 +1215,7 @@ void IIC(void) {
 GPIO:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: F13, peripheral: GPIO1, signal: 'gpio_io, 08', pin_signal: GPIO_AD_B0_08, direction: OUTPUT, hysteresis_enable: Enable, pull_up_down_config: Pull_Down_100K_Ohm,
-    drive_strength: R0_4}
+  - {pin_num: E10, peripheral: GPIO2, signal: 'gpio_io, 14', pin_signal: GPIO_B0_14}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -1180,28 +1228,9 @@ GPIO:
 void GPIO(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
-  /* GPIO configuration of BEE on GPIO_AD_B0_08 (pin F13) */
-  gpio_pin_config_t BEE_config = {
-      .direction = kGPIO_DigitalOutput,
-      .outputLogic = 0U,
-      .interruptMode = kGPIO_NoIntmode
-  };
-  /* Initialize GPIO functionality on GPIO_AD_B0_08 (pin F13) */
-  GPIO_PinInit(GPIO1, 8U, &BEE_config);
-
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_08_GPIO1_IO08,        /* GPIO_AD_B0_08 is configured as GPIO1_IO08 */
+      IOMUXC_GPIO_B0_14_GPIO2_IO14,           /* GPIO_B0_14 is configured as GPIO2_IO14 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_AD_B0_08_GPIO1_IO08,        /* GPIO_AD_B0_08 PAD functional properties : */
-      0x0130A0U);                             /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0/4
-                                                 Speed Field: medium(100MHz)
-                                                 Open Drain Enable Field: Open Drain Disabled
-                                                 Pull / Keep Enable Field: Pull/Keeper Enabled
-                                                 Pull / Keep Select Field: Pull
-                                                 Pull Up / Down Config. Field: 100K Ohm Pull Down
-                                                 Hyst. Enable Field: Hysteresis Enabled */
 }
 
 
@@ -1292,44 +1321,76 @@ void PWM(void) {
 
 /*
  * TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
-ADC:
-- options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
+OLED:
+- options: {callFromInitBoot: 'false', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: H14, peripheral: ADC1, signal: 'IN, 3', pin_signal: GPIO_AD_B0_14}
-  - {pin_num: L10, peripheral: ADC1, signal: 'IN, 4', pin_signal: GPIO_AD_B0_15}
-  - {pin_num: J11, peripheral: ADC1, signal: 'IN, 5', pin_signal: GPIO_AD_B1_00}
-  - {pin_num: K11, peripheral: ADC1, signal: 'IN, 6', pin_signal: GPIO_AD_B1_01}
-  - {pin_num: L11, peripheral: ADC1, signal: 'IN, 7', pin_signal: GPIO_AD_B1_02}
-  - {pin_num: M12, peripheral: ADC1, signal: 'IN, 8', pin_signal: GPIO_AD_B1_03}
+  - {pin_num: E11, peripheral: GPIO2, signal: 'gpio_io, 15', pin_signal: GPIO_B0_15, identifier: CS}
+  - {pin_num: D7, peripheral: GPIO2, signal: 'gpio_io, 00', pin_signal: GPIO_B0_00, identifier: DC, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: E7, peripheral: GPIO2, signal: 'gpio_io, 01', pin_signal: GPIO_B0_01, identifier: RES, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: E8, peripheral: GPIO2, signal: 'gpio_io, 02', pin_signal: GPIO_B0_02, identifier: D1, direction: OUTPUT, gpio_init_state: 'true'}
+  - {pin_num: D8, peripheral: GPIO2, signal: 'gpio_io, 03', pin_signal: GPIO_B0_03, identifier: D0, direction: OUTPUT, gpio_init_state: 'true'}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
 /* FUNCTION ************************************************************************************************************
  *
- * Function Name : ADC
+ * Function Name : OLED
  * Description   : Configures pin routing and optionally pin electrical features.
  *
  * END ****************************************************************************************************************/
-void ADC(void) {
+void OLED(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
+  /* GPIO configuration of DC on GPIO_B0_00 (pin D7) */
+  gpio_pin_config_t DC_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_B0_00 (pin D7) */
+  GPIO_PinInit(GPIO2, 0U, &DC_config);
+
+  /* GPIO configuration of RES on GPIO_B0_01 (pin E7) */
+  gpio_pin_config_t RES_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_B0_01 (pin E7) */
+  GPIO_PinInit(GPIO2, 1U, &RES_config);
+
+  /* GPIO configuration of D1 on GPIO_B0_02 (pin E8) */
+  gpio_pin_config_t D1_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_B0_02 (pin E8) */
+  GPIO_PinInit(GPIO2, 2U, &D1_config);
+
+  /* GPIO configuration of D0 on GPIO_B0_03 (pin D8) */
+  gpio_pin_config_t D0_config = {
+      .direction = kGPIO_DigitalOutput,
+      .outputLogic = 1U,
+      .interruptMode = kGPIO_NoIntmode
+  };
+  /* Initialize GPIO functionality on GPIO_B0_03 (pin D8) */
+  GPIO_PinInit(GPIO2, 3U, &D0_config);
+
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_14_GPIO1_IO14,        /* GPIO_AD_B0_14 is configured as GPIO1_IO14 */
+      IOMUXC_GPIO_B0_00_GPIO2_IO00,           /* GPIO_B0_00 is configured as GPIO2_IO00 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B0_15_GPIO1_IO15,        /* GPIO_AD_B0_15 is configured as GPIO1_IO15 */
+      IOMUXC_GPIO_B0_01_GPIO2_IO01,           /* GPIO_B0_01 is configured as GPIO2_IO01 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_00_GPIO1_IO16,        /* GPIO_AD_B1_00 is configured as GPIO1_IO16 */
+      IOMUXC_GPIO_B0_02_GPIO2_IO02,           /* GPIO_B0_02 is configured as GPIO2_IO02 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_01_GPIO1_IO17,        /* GPIO_AD_B1_01 is configured as GPIO1_IO17 */
+      IOMUXC_GPIO_B0_03_GPIO2_IO03,           /* GPIO_B0_03 is configured as GPIO2_IO03 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_02_GPIO1_IO18,        /* GPIO_AD_B1_02 is configured as GPIO1_IO18 */
-      0U);                                    /* Software Input On Field: Input Path is determined by functionality */
-  IOMUXC_SetPinMux(
-      IOMUXC_GPIO_AD_B1_03_GPIO1_IO19,        /* GPIO_AD_B1_03 is configured as GPIO1_IO19 */
+      IOMUXC_GPIO_B0_15_GPIO2_IO15,           /* GPIO_B0_15 is configured as GPIO2_IO15 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
 }
 

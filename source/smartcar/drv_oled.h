@@ -42,12 +42,12 @@
 #endif // defined(OLED_RES_GPIO)&&defined(OLED_RES_PIN) 
 
 //片选线，可选，不接时直接拉低
-#if defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) 
-#define OLED_SC_SET() GPIO_PortSet(OLED_SC_GPIO,1<<OLED_SC_PIN)
-#define OLED_SC_CLR() GPIO_PortClear(OLED_SC_GPIO,1<<OLED_SC_PIN)
+#if defined(OLED_CS_GPIO)&&defined(OLED_CS_PIN)
+#define OLED_CS_SET() GPIO_PortSet(OLED_CS_GPIO,1<<OLED_CS_PIN)
+#define OLED_CS_CLR() GPIO_PortClear(OLED_CS_GPIO,1<<OLED_CS_PIN)
 #else
-#define OLED_SC_SET()
-#define OLED_SC_CLR()
+#define OLED_CS_SET()
+#define OLED_CS_CLR()
 #endif // defined(OLED_SC_GPIO)&&defined(OLED_SC_PIN) 
 
 void OLED_Init(void);

@@ -294,7 +294,7 @@ void OLED_WrDat(uint8_t data)
 //内部使用用户无需调用
 void OLED_WrByte(uint8_t OneByte)
 {
-	OLED_SC_CLR();
+	OLED_CS_CLR();
 	uint8_t i = 8;
 	while (i--)
 	{
@@ -304,7 +304,7 @@ void OLED_WrByte(uint8_t OneByte)
 		OLED_D0_SET();
 		OneByte <<= 1;
 	}
-	OLED_SC_SET();
+	OLED_CS_SET();
 }
 
 //内部使用用户无需调用
@@ -364,7 +364,7 @@ void OLED_Init(void)
 	OLED_DC_SET();
 	OLED_D0_SET();
 	OLED_D1_SET();
-	OLED_SC_SET();
+	OLED_CS_SET();
 	OLED_RES_CLR();
 	vTaskDelay(10);
 	OLED_RES_SET();

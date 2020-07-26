@@ -258,6 +258,8 @@ void main_task(void* pv)
 	}
 }
 void entrance2main(void) {
+    BOARD_ConfigVectors();//拷贝中断向量表到内存
+    BOARD_ConfigMPU();//初始化内存保护单元和cache
 	vPortDefineHeapRegions(xHeapRegions);
 	xTaskCreate(main_task, "main task", 2048, NULL, 2, &main_task_handle);
 	vTaskStartScheduler();
