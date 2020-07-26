@@ -5,7 +5,9 @@
 ## 软件版本
 
 MCUXpresso IDE v11.1.1_3241
+
 MCUXpresso Config v7
+
 MCUXpresso SDK 2.7.0
 
 ## 如何使用？
