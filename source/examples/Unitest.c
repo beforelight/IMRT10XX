@@ -120,26 +120,28 @@ void U_keypad(void *pv) {
             {0, 0,                    0}
     };
     char ch;
-    KEYPAD_Init(&g_keypad, col_list, row_list);
-    PRINTF("\r\np->print status of keypad and e->exit\r\n");
+    KEYPAD_Init(&g_keypad, row_list, col_list);
+    PRINTF("Enter 'q' to quit and others to continue\r\n");
     while (1) {
         ch = GETCHAR();
-        if (ch == 'p' || ch == 'P') {
-            PRINTF("\tc0\tc1\r\n");
-            for (int i = 0; i < 8; i++) {
-                PRINTF("r%d\t", i);
-                for (int j = 0; j < 2; j++) {
-                    PRINTF("%d\t", (int) KEYPAD_Get(&g_keypad, i, j));
-                }
-                PRINTF("\r\n");
-            }
-        } else if (ch == 'e' || ch == 'E') {
+        if (ch == 'q' || ch == 'Q') {
             break;
         }
+        PRINTF("\r\n\tc0\tc1\r\n");
+        for (int i = 0; i < g_keypad.rowNum; i++) {
+            PRINTF("r%d\t", i);
+            for (int j = 0; j < g_keypad.colNum; j++) {
+                PRINTF("%d\t", (int) KEYPAD_Get(&g_keypad, i, j));
+            }
+            PRINTF("\r\n");
+        }
     }
+    KEYPAD_Deinit(&g_keypad);
     vTaskDelete(NULL);
 }
 
+BSS_SDRAM uint8_t b_bmp_buf[240*320*2] ALIGN(64);
+BSS_SDRAM uint8_t a_bmp_buf[120*184] ALIGN(64);
 void U_lcd(void *pv) {
     Lcd_Init();            //初始化LCD
     LCD_Clear(WHITE);
@@ -164,8 +166,7 @@ void U_lcd(void *pv) {
     b.format = PixelFormatRGB565;
     b.height = 240;
     b.width = 320;
-    b.pImg = pvPortMalloc(b.height * b.width * 2);
-    memset(b.pImg, 0, b.height * b.width * 2);
+    b.pImg = b_bmp_buf;
     for (size_t i = 0; i < b.width; i++) {
         ((uint16_t *) b.pImg)[28 * b.width + i] = RGB565(255, 0, 0);
         ((uint16_t *) b.pImg)[29 * b.width + i] = RGB565(255, 0, 0);
@@ -181,15 +182,13 @@ void U_lcd(void *pv) {
         ((uint16_t *) b.pImg)[52 * b.width + i] = RGB565(0, 0, 255);
     }
     LCD_PrintPicture(&b);
-    vPortFree(b.pImg);
     GETCHAR();//测试显示灰度图像
     LCD_Clear(WHITE);
     img_t a;
     a.format = PixelFormatGray;
     a.height = 120;
     a.width = 184;
-    a.pImg = pvPortMalloc(a.height * a.width);
-    memset(a.pImg, 0, a.height * a.width);
+    a.pImg = a_bmp_buf;
     for (size_t i = 0; i < a.width; i++) {
         ((uint8_t *) a.pImg)[41 * a.width + i] = 255;
         ((uint8_t *) a.pImg)[42 * a.width + i] = 255;
@@ -201,7 +200,6 @@ void U_lcd(void *pv) {
         ((uint8_t *) a.pImg)[34 * a.width + i] = 128;
     }
     LCD_PrintPicture(&a);
-    vPortFree(a.pImg);
     GETCHAR();
     LCD_Clear(WHITE);
     vTaskDelete(NULL);
@@ -216,16 +214,15 @@ void U_oled(void *pv) {
     OLED_Logo();
     GETCHAR();
     OLED_Fill(0);
-    OLED_P6x8Str(0, 0, (uint8_t*)"Nobody knows oled then me!");
-    OLED_P6x8Rst(6 * 5, 4, (uint8_t*)"FAKE NEWS!");
+    OLED_P6x8Str(0, 0, (uint8_t *) "Nobody knows oled then me!");
+    OLED_P6x8Rst(6 * 5, 4, (uint8_t *) "FAKE NEWS!");
     GETCHAR();//测试显示彩色图像
     OLED_Fill(0xff);
     img_t b;
     b.format = PixelFormatRGB565;
     b.height = 240;
     b.width = 320;
-    b.pImg = pvPortMalloc(b.height * b.width * 2);
-    memset(b.pImg, 0, b.height * b.width * 2);
+    b.pImg = b_bmp_buf;
     for (size_t i = 0; i < b.width; i++) {
         ((uint16_t *) b.pImg)[28 * b.width + i] = RGB565(255, 0, 0);
         ((uint16_t *) b.pImg)[29 * b.width + i] = RGB565(255, 0, 0);
@@ -241,15 +238,13 @@ void U_oled(void *pv) {
         ((uint16_t *) b.pImg)[52 * b.width + i] = RGB565(0, 0, 255);
     }
     OLED_PrintPicture(&b, 100);
-    vPortFree(b.pImg);
     GETCHAR();//测试显示灰度图像
     OLED_Fill(0xff);
     img_t a;
     a.format = PixelFormatGray;
     a.height = 120;
     a.width = 184;
-    a.pImg = pvPortMalloc(a.height * a.width);
-    memset(a.pImg, 0, a.height * a.width);
+    a.pImg = a_bmp_buf;
     for (size_t i = 0; i < a.width; i++) {
         ((uint8_t *) a.pImg)[41 * a.width + i] = 255;
         ((uint8_t *) a.pImg)[42 * a.width + i] = 255;
@@ -261,7 +256,6 @@ void U_oled(void *pv) {
         ((uint8_t *) a.pImg)[34 * a.width + i] = 128;
     }
     OLED_PrintPicture(&a, 100);
-    vPortFree(a.pImg);
     GETCHAR();
     OLED_Fill(0xff);
     vTaskDelete(NULL);
@@ -351,13 +345,12 @@ void U_ov7725(void *pv) {
 
 void U_adc(void *pv) {
     ADC_Init2();
-    PRINTF("there are the sample value of adc\r\n");
     PRINTF("Enter 'q' to quit and others to continue\r\n");
-    PRINTF("adc\tchannel\tvalue\r\n");
     while (1) {
+        PRINTF("\r\nadc\tchannel\tvalue\r\n");
         for (int i = 3; i < 9; i++) {
-            float val = (float) ADC_Read(ADC1, i) / 4096.0;
-            PRINTF("adc1\t%d\t%fv\r\n", i, val);
+            float val = 3.3f * (float) ADC_Read(ADC1, i) / 4096.0;
+            PRINTF("adc1\t%d\t%.3fv\r\n", i, val);
         }
         char quit;
         quit = GETCHAR();

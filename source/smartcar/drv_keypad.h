@@ -12,6 +12,7 @@
 
 
 #define KEYPAD_MALLOC pvPortMalloc
+#define KEYPAD_FREE vPortFree
 
 typedef struct _keypad {
     gpio_t *rows;//行
@@ -34,6 +35,11 @@ typedef struct _keypad_key {
  * @param  {gpio_class_t*} Rows : 行线的gpio对象数组，最后一个必须为0以确定有几根行线
  */
 void KEYPAD_Init(keypad_t *s, gpio_t *Rows, gpio_t *Cols);
+
+
+
+void KEYPAD_Deinit(keypad_t *s);
+
 
 /**
  * @brief  返回按键输入，无滤波

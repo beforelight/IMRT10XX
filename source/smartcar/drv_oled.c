@@ -687,6 +687,9 @@ void OLED_P6x8Rst(uint8_t x, uint8_t y, uint8_t ch[])
 	}
 }
 
+
+uint8_t gray[64*128];
+#define max(a,b) (a>b?a:b)
 /******************************************************************************
 	  函数说明：显示图片，自动缩放至合适大小
 	  入口数据：src   图片
@@ -696,7 +699,7 @@ void OLED_PrintPicture(img_t* src, uint8_t threshold)
 {
 	int scale = 1;
 	int height, width;
-	while (1)
+	while (1)//查询缩放比例
 	{
 		height = src->height / scale;
 		width = src->width / scale;
@@ -708,7 +711,7 @@ void OLED_PrintPicture(img_t* src, uint8_t threshold)
 			++scale;
 		}
 	}
-	uint8_t* gray = pvPortMalloc(height * width);
+	//刷
 	if (src->format == PixelFormatGray)
 	{
 		uint8_t* p = src->pImg;
@@ -728,14 +731,11 @@ void OLED_PrintPicture(img_t* src, uint8_t threshold)
 		{
 			for (uint32_t j = 0; j < width; j += 1)
 			{
-				buf =
-					RGB565_R(p[i * scale * src->width + j * scale]) +
-					RGB565_G(p[i * scale * src->width + j * scale]) +
-					RGB565_B(p[i * scale * src->width + j * scale]);
-				gray[i * width + j] = buf / 3;
+			    buf = p[i * scale * src->width + j * scale];
+                //HSV的V通道的算法
+				gray[i * width + j] = max(max(RGB565_R(buf),RGB565_G(buf)),RGB565_B(buf));
 			}
 		}
 	}
 	dis_bmp(height, width, gray, threshold);
-	vPortFree(gray);
 }

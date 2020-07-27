@@ -42,14 +42,12 @@ void KEYPAD_Init(keypad_t *s, gpio_t *Rows, gpio_t *Cols) {
     //初始化引脚
     //行线配置成输出引脚
     for (size_t i = 0; i < s->rowNum; i++) {
-        s->rows[i].direction = kGPIO_DigitalOutput;
         GPIO_Init(&s->rows[i]);
         GPIO_Write(&s->rows[i], 1);
     }
 
     //列线配置成输入引脚
     for (size_t i = 0; i < s->colNum; i++) {
-        s->cols[i].direction = kGPIO_DigitalInput;
         GPIO_Init(&s->cols[i]);
         GPIO_Read(&s->cols[i]);
     }
@@ -91,4 +89,10 @@ uint32_t KEYPAD_Get(keypad_t *s, int row, int col) {
     }
     return 1;
 
+}
+
+void KEYPAD_Deinit(keypad_t *s) {
+    KEYPAD_FREE(s->cols);
+    KEYPAD_FREE(s->rows);
+    memset(s,0,sizeof(keypad_t));
 }

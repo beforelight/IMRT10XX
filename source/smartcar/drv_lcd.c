@@ -12,7 +12,7 @@
 #include "board.h"
 
 #ifndef __OLEDFONT_H
-#define __OLEDFONT_H 	   
+#define __OLEDFONT_H
 static const uint8_t asc2_1608[1520] = {
 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
 0x00,0x00,0x00,0x08,0x08,0x08,0x08,0x08,0x08,0x08,0x00,0x00,0x18,0x18,0x00,0x00,
@@ -213,7 +213,7 @@ void LCD_Address_Set(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2)
 void Lcd_Init(void)
 {
 	vTaskDelay(10); //等待上电复位
-	//************* Start Initial Sequence **********// 
+	//************* Start Initial Sequence **********//
 	LCD_WR_REG(0x36);
 	if (USE_HORIZONTAL == 0)LCD_WR_DATA8(0x00);
 	else if (USE_HORIZONTAL == 1)LCD_WR_DATA8(0xC0);
@@ -290,7 +290,7 @@ void Lcd_Init(void)
 	LCD_WR_REG(0x21);
 
 	LCD_WR_REG(0x11);
-	//vTaskDelay(10); 
+	//vTaskDelay(10);
 
 	LCD_WR_REG(0x29);
 }
@@ -358,7 +358,7 @@ void LCD_Clear(uint16_t Color)
 ******************************************************************************/
 void LCD_DrawPoint(uint16_t x, uint16_t y, uint16_t color)
 {
-	LCD_Address_Set(x, y, x, y);//设置光标位置 
+	LCD_Address_Set(x, y, x, y);//设置光标位置
 	LCD_WR_DATA(color);
 }
 
@@ -383,10 +383,10 @@ void LCD_DrawPoint_big(uint16_t x, uint16_t y, uint16_t color)
 void LCD_Fill(uint16_t xsta, uint16_t ysta, uint16_t xend, uint16_t yend, uint16_t color)
 {
 	uint16_t i, j;
-	LCD_Address_Set(xsta, ysta, xend, yend);      //设置光标位置 
+	LCD_Address_Set(xsta, ysta, xend, yend);      //设置光标位置
 	for (i = ysta; i <= yend; i++)
 	{
-		for (j = xsta; j <= xend; j++)LCD_WR_DATA(color);//设置光标位置 	    
+		for (j = xsta; j <= xend; j++)LCD_WR_DATA(color);//设置光标位置
 	}
 }
 
@@ -402,17 +402,17 @@ void LCD_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint16_t c
 	uint16_t t;
 	int xerr = 0, yerr = 0, delta_x, delta_y, distance;
 	int incx, incy, uRow, uCol;
-	delta_x = x2 - x1; //计算坐标增量 
+	delta_x = x2 - x1; //计算坐标增量
 	delta_y = y2 - y1;
 	uRow = x1;//画线起点坐标
 	uCol = y1;
-	if (delta_x > 0)incx = 1; //设置单步方向 
-	else if (delta_x == 0)incx = 0;//垂直线 
+	if (delta_x > 0)incx = 1; //设置单步方向
+	else if (delta_x == 0)incx = 0;//垂直线
 	else { incx = -1; delta_x = -delta_x; }
 	if (delta_y > 0)incy = 1;
-	else if (delta_y == 0)incy = 0;//水平线 
+	else if (delta_y == 0)incy = 0;//水平线
 	else { incy = -1; delta_y = -delta_x; }
-	if (delta_x > delta_y)distance = delta_x; //选取基本增量坐标轴 
+	if (delta_x > delta_y)distance = delta_x; //选取基本增量坐标轴
 	else distance = delta_y;
 	for (t = 0; t < distance + 1; t++)
 	{
@@ -461,13 +461,13 @@ void LCD_Draw_Circle(uint16_t x0, uint16_t y0, uint8_t r, uint16_t color)
 	a = 0; b = r;
 	while (a <= b)
 	{
-		LCD_DrawPoint(x0 - b, y0 - a, color);             //3           
-		LCD_DrawPoint(x0 + b, y0 - a, color);             //0           
-		LCD_DrawPoint(x0 - a, y0 + b, color);             //1                
-		LCD_DrawPoint(x0 - a, y0 - b, color);             //2             
-		LCD_DrawPoint(x0 + b, y0 + a, color);             //4               
+		LCD_DrawPoint(x0 - b, y0 - a, color);             //3
+		LCD_DrawPoint(x0 + b, y0 - a, color);             //0
+		LCD_DrawPoint(x0 - a, y0 + b, color);             //1
+		LCD_DrawPoint(x0 - a, y0 - b, color);             //2
+		LCD_DrawPoint(x0 + b, y0 + a, color);             //4
 		LCD_DrawPoint(x0 + a, y0 - b, color);             //5
-		LCD_DrawPoint(x0 + a, y0 + b, color);             //6 
+		LCD_DrawPoint(x0 + a, y0 + b, color);             //6
 		LCD_DrawPoint(x0 - b, y0 + a, color);             //7
 		a++;
 		if ((a * a + b * b) > (r * r))//判断要画的点是否过远
@@ -490,9 +490,9 @@ void LCD_ShowChar(uint16_t x, uint16_t y, uint8_t num, uint8_t mode, uint16_t co
 	uint8_t temp;
 	uint8_t pos, t;
 	uint16_t x0 = x;
-	if (x > LCD_W - 16 || y > LCD_H - 16)return;	    //设置窗口		   
+	if (x > LCD_W - 16 || y > LCD_H - 16)return;	    //设置窗口
 	num = num - ' ';//得到偏移后的值
-	LCD_Address_Set(x, y, x + 8 - 1, y + 16 - 1);      //设置光标位置 
+	LCD_Address_Set(x, y, x + 8 - 1, y + 16 - 1);      //设置光标位置
 	if (!mode) //非叠加方式
 	{
 		for (pos = 0; pos < 16; pos++)
@@ -516,7 +516,7 @@ void LCD_ShowChar(uint16_t x, uint16_t y, uint8_t num, uint8_t mode, uint16_t co
 			temp = asc2_1608[(uint16_t)num * 16 + pos];		 //调用1608字体
 			for (t = 0; t < 8; t++)
 			{
-				if (temp & 0x01)LCD_DrawPoint(x + t, y + pos, color);//画一个点     
+				if (temp & 0x01)LCD_DrawPoint(x + t, y + pos, color);//画一个点
 				temp >>= 1;
 			}
 		}
@@ -620,7 +620,8 @@ void LCD_PrintPicture(img_t* src)
 {
 	int scale = 1;
 	int height, width;
-	while (1)
+    uint16_t color;
+    while (1)//查询缩放比例
 	{
 		height = src->height / scale;
 		width = src->width / scale;
@@ -632,39 +633,35 @@ void LCD_PrintPicture(img_t* src)
 			++scale;
 		}
 	}
-
-	uint16_t* rgb = pvPortMalloc(height * width * 2);
-	if (src->format == PixelFormatGray)
+	//刷图片
+    LCD_Address_Set(0, 0, width - 1, height - 1);
+	if (src->format == PixelFormatGray)//灰度图像
 	{
 		uint8_t* p = src->pImg;
-        for (uint32_t i = 0; i < height; i += 1)
+        for (uint32_t i = 0; i < src->height; i += scale)
         {
-            for (uint32_t j = 0; j < width; j += 1)
+            for (uint32_t j = 0; j < src->width; j += scale)
             {
-				uint8_t x = p[i * scale * src->width + j * scale];
-				rgb[i * width + j] = RGB565(x, x, x);
+				uint8_t x = p[i  * src->width + j];
+				color = RGB565(x, x, x);
+                LCD_WR_DATA8(color>>8);
+                LCD_WR_DATA8(color);
 			}
 		}
 	}
 	else if (src->format == PixelFormatRGB565)
 	{
 		uint16_t* p = src->pImg;
-        for (uint32_t i = 0; i < height; i += 1)
+        for (uint32_t i = 0; i < src->height; i += scale)
         {
-            for (uint32_t j = 0; j < width; j += 1)
-			{
-				rgb[i * width + j] = p[i * scale* src->width + j* scale];
+            for (uint32_t j = 0; j < src->width; j += scale)
+            {
+                color = p[i  * src->width + j];
+                LCD_WR_DATA8(color>>8);
+                LCD_WR_DATA8(color);
 			}
 		}
 	}
-	LCD_Address_Set(0, 0, width - 1, height - 1);
-	uint8_t* image = (uint8_t*)rgb;
-	for (uint32_t i = 0; i < width * height; i++)
-	{
-		LCD_WR_DATA8(image[i * 2 + 1]);
-		LCD_WR_DATA8(image[i * 2]);
-	}
-	vPortFree(rgb);
 }
 
 
