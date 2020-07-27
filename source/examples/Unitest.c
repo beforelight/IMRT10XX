@@ -37,15 +37,24 @@ void LED_task(void *pvData) {
 
 UnitestItem_t item_list[] = {
 //        {U_keypad, "keypad", NULL},
-        {U_status, "status", NULL},
-        {U_keypad, "keypad", NULL},
-        {U_lcd,    "lcd",    NULL},
-        {U_oled,   "oled",   NULL},
-        {U_zzf,    "zzf&oled", "oled"},
-        {U_zzf,    "zzf&lcd",  "lcd"},
-        {U_zzf,    "zzf&sd",   "sd"},
-        {U_adc,    "adc",    NULL},
-        {NULL, NULL,         NULL},//确定结尾有多少个
+        {U_status, "status", NULL},//
+        {U_keypad, "keypad", NULL},//
+        {U_lcd, "lcd", NULL},//
+        {U_oled, "oled", NULL},//
+        {U_zzf, "zzf&oled", "oled"},
+        {U_zzf, "zzf&lcd", "lcd"},
+        {U_zzf, "zzf&sd", "sd"},
+        {U_adc, "adc", NULL},
+        {U_flash, "flash", NULL},
+        {U_flash_with_lfs, "flash_with_lfs", NULL},
+#ifdef TEST_PIT
+        {U_pit, "pit", NULL},
+#endif//TEST_PIT
+        {U_msc, "msc", NULL},
+        {U_sd, "sd", NULL},
+        {U_file_dump, "file_dump", NULL},
+        {U_pwm, "pwm", NULL},
+        {NULL, NULL, NULL},//确定结尾有多少个
 };
 
 void Unitest(void) {
@@ -140,8 +149,9 @@ void U_keypad(void *pv) {
     vTaskDelete(NULL);
 }
 
-BSS_SDRAM uint8_t b_bmp_buf[240*320*2] ALIGN(64);
-BSS_SDRAM uint8_t a_bmp_buf[120*184] ALIGN(64);
+BSS_SDRAM uint8_t b_bmp_buf[240 * 320 * 2] ALIGN(64);
+BSS_SDRAM uint8_t a_bmp_buf[120 * 184] ALIGN(64);
+
 void U_lcd(void *pv) {
     Lcd_Init();            //初始化LCD
     LCD_Clear(WHITE);
@@ -391,35 +401,48 @@ void U_enc(void *pv) {
 }
 
 void U_flash(void *pv) {
-    PRINTF("flash test\r\n");
-    assert(0 == FLASH_Init());
-    int addr_start = 3 * 1024 * 1024;
+    PRINTF("flash测试\r\n");
+    if (0 != FLASH_Init()) {
+        PRINTF("flash初始化失败\r\n");
+        vTaskDelete(NULL);
+    }
+    int addr_start = 3 * 1024 * 1024;//flash前3m存程序，后1m用来存储数据
     static uint8_t buff_r[FLASH_SECTOR_SIZE];
     static uint8_t buff_w[FLASH_SECTOR_SIZE];
-    assert(0 == FLASH_Erase(addr_start));
-    assert(0 == FLASH_Read(addr_start, buff_r, FLASH_SECTOR_SIZE));
+    FLASH_Erase(addr_start);
+    FLASH_Read(addr_start, buff_r, FLASH_SECTOR_SIZE);
     for (size_t i = 0; i < FLASH_SECTOR_SIZE; i++) {
-        assert(0xff == buff_r[i]);
+        if (0xff != buff_r[i]) {
+            PRINTF("flash擦除失败\r\n");
+            vTaskDelete(NULL);
+        }
     }
     for (size_t i = 0; i < FLASH_PAGE_SIZE; i++) {
         buff_w[i] = i;
     }
     for (size_t i = 0; i < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; i++) {
-        assert(0 == FLASH_Prog(addr_start + i * FLASH_PAGE_SIZE, buff_w));
+        //必须先擦除扇区之后才能写入
+        FLASH_Prog(addr_start + i * FLASH_PAGE_SIZE, buff_w);
     }
-    assert(0 == FLASH_Read(addr_start, buff_r, FLASH_SECTOR_SIZE));
+    FLASH_Read(addr_start, buff_r, FLASH_SECTOR_SIZE);
     for (size_t i = 0; i < FLASH_SECTOR_SIZE / FLASH_PAGE_SIZE; i++) {
         for (size_t j = 0; j < FLASH_PAGE_SIZE; j++) {
-            assert(buff_r[j] == j);
+            if (buff_r[j] != j) {
+                PRINTF("flash写失败\r\n");
+                vTaskDelete(NULL);
+            }
         }
     }
-    PRINTF("flash test success\r\n");
+    PRINTF("flash读写正常\r\n");
     vTaskDelete(NULL);
 }
 
 void U_flash_with_lfs(void *pv) {
     PRINTF("flash rw with lfs\r\n");
-    assert(0 == FLASH_Init());
+    if (0 != FLASH_Init()) {
+        PRINTF("flash初始化失败\r\n");
+        vTaskDelete(NULL);
+    }
     static lfs_t lfs;
     static struct lfs_config cfg;
     static lfs_file_t file;
@@ -433,13 +456,20 @@ void U_flash_with_lfs(void *pv) {
         lfs_mount(&lfs, &cfg);
         PRINTF("reformat!\r\n");
     }
+    //创建文件夹
+    lfs_mkdir(&lfs, "boot_count");
+
     // read current count
     uint32_t boot_count = 0;
-    lfs_file_open(&lfs, &file, "boot_count", LFS_O_RDWR | LFS_O_CREAT);
+
+    lfs_file_open(&lfs, &file, "boot_count/boot_count.bin", LFS_O_RDWR | LFS_O_CREAT);
     lfs_file_read(&lfs, &file, &boot_count, sizeof(boot_count));
 
     // update boot count
     boot_count += 1;
+    // print the boot count
+    PRINTF("%s boot_count: %d\r\n", BOARD_NAME, boot_count);
+
     lfs_file_rewind(&lfs, &file);
     lfs_file_write(&lfs, &file, &boot_count, sizeof(boot_count));
 
@@ -449,80 +479,115 @@ void U_flash_with_lfs(void *pv) {
     // release any resources we were using
     lfs_unmount(&lfs);
 
-    // print the boot count
-    PRINTF("%s boot_count: %d\r\n", BOARD_NAME, boot_count);
 
-    //    while (1){vTaskDelay(1000);TaskStatusPrint();}
+
     vTaskDelete(NULL);
 }
 
-int c0count = 0;
-int c1count = 0;
-int c2count = 0;
-int c3count = 0;
-uint32_t c0time_us = 0;
-uint32_t c1time_us = 0;
-uint32_t c2time_us = 0;
-uint32_t c3time_us = 0;
-uint32_t c0pit_us = 0;
-uint32_t c1pit_us = 0;
-uint32_t c2pit_us = 0;
-uint32_t c3pit_us = 0;
+#ifdef TEST_PIT
+volatile int pit0_stop = 0;
+volatile int pit1_stop = 0;
+volatile int pit2_stop = 0;
+volatile int pit3_stop = 0;
 
 void U_pit(void *pv) {
     PIT_Init2(kPIT_Chnl_0, 500);//500us
     PIT_Init2(kPIT_Chnl_1, 5 * 1000);//5ms
     PIT_Init2(kPIT_Chnl_2, 10 * 1000);//10ms
     PIT_Init2(kPIT_Chnl_3, 20 * 1000);//20ms
-    NVIC_SetPriority(PIT_IRQn, 6);//设置pit中断优先级为6
+    NVIC_SetPriority(PIT_IRQn, 6);//设置pit中断优先级为6，优先级为6的中断可以调用RTOS中断级API
     PIT_StartTimer(PIT, kPIT_Chnl_0);
     PIT_StartTimer(PIT, kPIT_Chnl_1);
     PIT_StartTimer(PIT, kPIT_Chnl_2);
     PIT_StartTimer(PIT, kPIT_Chnl_3);
     while (1) {
         vTaskDelay(10);
-        if (c0count >= 3 &&
-            c1count >= 3 &&
-            c2count >= 3 &&
-            c3count >= 3) {
-            PRINTF("Period us-->ch0:%d,ch1:%d,ch2:%d,ch3:%d\r\n", c0pit_us, c1pit_us, c2pit_us, c3pit_us);
+        if (pit0_stop && pit1_stop && pit2_stop && pit3_stop) {
             break;
         }
     }
     vTaskDelete(NULL);
 }
-
-pwm_t my1 = {PWM1, kPWM_Module_3, 25 * 1000, 0, 0, kPWM_HighTrue};
-pwm_t my2 = {PWM2, kPWM_Module_3, 25 * 1000, 0, 0, kPWM_HighTrue};
-pwm_t my3 = {PWM2, kPWM_Module_2, 25 * 1000, 0, 0, kPWM_HighTrue};
-pwm_t my4 = {PWM2, kPWM_Module_1, 25 * 1000, 0, 0, kPWM_HighTrue};
-gpio_t OE_B = {PWM_OE_B_GPIO, PWM_OE_B_PIN, 0};
-
-void U_pwm(void *pv) {
-    pwm_t *list[] = {
-            &my1,
-            &my2,
-            &my3,
-            &my4,
-            NULL
-    };
-    PWM_Init2(list);
-    GPIO_Init(&OE_B);
-    my1.dutyA = 10.0;
-    my1.dutyB = 20.0;
-    my2.dutyA = 30.0;
-    my2.dutyB = 40.0;
-    my3.dutyA = 50.0;
-    my3.dutyB = 60.0;
-    my4.dutyA = 70.0;
-    my4.dutyB = 80.0;
-    PWM_Change(&my1);
-    PWM_Change(&my2);
-    PWM_Change(&my3);
-    PWM_Change(&my4);
-    GPIO_Write(&OE_B, 0);//使能缓冲芯片输出
-    vTaskDelete(NULL);
+//中断服务函数（不准直接改名字可以用define改名字）
+//注意四个pit通道共用一个中断服务函数
+/*RAMFUNC_ITC*/ void PIT_IRQHandler(void) {
+    /*清除中断标志位 （要用的时候解注释，通道可换）*/
+    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_0) == kPIT_TimerFlag) {
+        PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
+        static int count = 0;
+        count++;
+        if (count >= 3) {
+            PIT_StopTimer(PIT, kPIT_Chnl_0);
+            pit0_stop = 1;
+        }
+    }
+    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_1) == kPIT_TimerFlag) {
+        PIT_ClearStatusFlags(PIT, kPIT_Chnl_1, kPIT_TimerFlag);
+        static int count = 0;
+        count++;
+        if (count >= 3) {
+            PIT_StopTimer(PIT, kPIT_Chnl_1);
+            pit1_stop = 1;
+        }
+    }
+    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_2) == kPIT_TimerFlag) {
+        PIT_ClearStatusFlags(PIT, kPIT_Chnl_2, kPIT_TimerFlag);
+        static int count = 0;
+        count++;
+        if (count >= 3) {
+            PIT_StopTimer(PIT, kPIT_Chnl_2);
+            pit2_stop = 1;
+        }
+    }
+    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_3) == kPIT_TimerFlag) {
+        PIT_ClearStatusFlags(PIT, kPIT_Chnl_3, kPIT_TimerFlag);
+        static int count = 0;
+        count++;
+        if (count >= 3) {
+            PIT_StopTimer(PIT, kPIT_Chnl_3);
+            pit3_stop = 1;
+        }
+    }
+    /*中断服务函数内容*/
+    __DSB();
+    /*DSB--数据同步屏障
+     * 作用：因为CPU时钟的主频大于IP总线时钟故会出现中断标志位还未被清掉时中断服务函数中的内容会执行完，而使得程序一遍一遍的进入中断服务函数，
+     * 而DSB则是为了预防这一情况的发生。*/
 }
+
+#endif //TEST_PIT
+//一个pwm_t能输出俩路pwm
+pwm_t my1 = {PWM1, kPWM_Module_3, 25 * 1000, 0, 0, kPWM_HighTrue};//一个pwm_t能输出俩路pwm
+pwm_t my2 = {PWM2, kPWM_Module_3, 30 * 1000, 0, 0, kPWM_HighTrue};//一个pwm_t能输出俩路pwm
+pwm_t my3 = {PWM2, kPWM_Module_2, 35 * 1000, 0, 0, kPWM_HighTrue};//一个pwm_t能输出俩路pwm
+pwm_t my4 = {PWM2, kPWM_Module_1, 40 * 1000, 0, 0, kPWM_HighTrue};//一个pwm_t能输出俩路pwm
+gpio_t OE_B = {PWM_OE_B_GPIO, PWM_OE_B_PIN, 0};//一个pwm_t能输出俩路pwm
+//一个pwm_t能输出俩路pwm
+void U_pwm(void *pv) {//一个pwm_t能输出俩路pwm
+    pwm_t *list[] = {//一个pwm_t能输出俩路pwm
+            &my1,//一个pwm_t能输出俩路pwm
+            &my2,//一个pwm_t能输出俩路pwm
+            &my3,//一个pwm_t能输出俩路pwm
+            &my4,//一个pwm_t能输出俩路pwm
+            NULL//一个pwm_t能输出俩路pwm
+    };//一个pwm_t能输出俩路pwm//一个pwm_t能输出俩路pwm
+    PWM_Init2(list);//一个pwm_t能输出俩路pwm
+    GPIO_Init(&OE_B);//一个pwm_t能输出俩路pwm
+    my1.dutyA = 10.0;//一个pwm_t能输出俩路pwm
+    my1.dutyB = 20.0;//一个pwm_t能输出俩路pwm
+    my2.dutyA = 30.0;//一个pwm_t能输出俩路pwm
+    my2.dutyB = 40.0;//一个pwm_t能输出俩路pwm
+    my3.dutyA = 50.0;//一个pwm_t能输出俩路pwm
+    my3.dutyB = 60.0;//一个pwm_t能输出俩路pwm
+    my4.dutyA = 70.0;//一个pwm_t能输出俩路pwm
+    my4.dutyB = 80.0;//一个pwm_t能输出俩路pwm
+    PWM_Change(&my1);//一个pwm_t能输出俩路pwm
+    PWM_Change(&my2);//一个pwm_t能输出俩路pwm
+    PWM_Change(&my3);//一个pwm_t能输出俩路pwm
+    PWM_Change(&my4);//一个pwm_t能输出俩路pwm
+    GPIO_Write(&OE_B, 0);//使能74LVC245输出//一个pwm_t能输出俩路pwm
+    vTaskDelete(NULL);//一个pwm_t能输出俩路pwm
+}//一个pwm_t能输出俩路pwm
 
 void U_status(void *pv) {
     TaskStatusPrint();
@@ -544,7 +609,7 @@ void U_zzf(void *pv) {
         if (kStatus_Success != SD_Mount()) {
             vTaskDelete(NULL);
         }
-        f_mkdir("0:/zzf");//在根目录下创建名为zzf的文件夹
+        f_mkdir("zzf");//在根目录下创建名为zzf的文件夹
     } else {
         vTaskDelete(NULL);
     }
@@ -575,9 +640,10 @@ void U_zzf(void *pv) {
             } else if (0 == strcmp(pv, "sd")) {
                 FIL fil;
                 char line[64];
-                snprintf(line, 64, "o:/zzf/%d.bmp", i);
+                snprintf(line, 64, "zzf/%d.bmp", i);
                 f_open(&fil, line, FA_CREATE_ALWAYS | FA_WRITE);
                 BMP_Save(&fil, &img);
+                f_close(&fil);
             }
             PRINTF("fps=%f\r\n", CAMERA_FpsGet());
             CAMERA_SubmitBuff(img.pImg);//将空缓存提交
@@ -592,49 +658,85 @@ void U_zzf(void *pv) {
     vTaskDelete(NULL);
 }
 
-//中断服务函数（不准直接改名字可以用define改名字）
-//注意四个pit通道共用一个中断服务函数
-/*RAMFUNC_ITC*/ void PIT_IRQHandler(void) {
-    /*清除中断标志位 （要用的时候解注释，通道可换）*/
-    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_0) == kPIT_TimerFlag) {
-        PIT_ClearStatusFlags(PIT, kPIT_Chnl_0, kPIT_TimerFlag);
-        c0count++;
-        c0pit_us = TimerUsGet() - c0time_us;
-        c0time_us = TimerUsGet();
-        if (c0count >= 3) {
-            PIT_StopTimer(PIT, kPIT_Chnl_0);
-        }
-    }
-    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_1) == kPIT_TimerFlag) {
-        PIT_ClearStatusFlags(PIT, kPIT_Chnl_1, kPIT_TimerFlag);
-        c1count++;
-        c1pit_us = TimerUsGet() - c1time_us;
-        c1time_us = TimerUsGet();
-        if (c1count >= 3) {
-            PIT_StopTimer(PIT, kPIT_Chnl_1);
-        }
-    }
-    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_2) == kPIT_TimerFlag) {
-        PIT_ClearStatusFlags(PIT, kPIT_Chnl_2, kPIT_TimerFlag);
-        c2count++;
-        c2pit_us = TimerUsGet() - c2time_us;
-        c2time_us = TimerUsGet();
-        if (c2count >= 3) {
-            PIT_StopTimer(PIT, kPIT_Chnl_2);
-        }
-    }
-    if (PIT_GetStatusFlags(PIT, kPIT_Chnl_3) == kPIT_TimerFlag) {
-        PIT_ClearStatusFlags(PIT, kPIT_Chnl_3, kPIT_TimerFlag);
-        c3count++;
-        c3pit_us = TimerUsGet() - c3time_us;
-        c3time_us = TimerUsGet();
-        if (c3count >= 3) {
-            PIT_StopTimer(PIT, kPIT_Chnl_3);
-        }
-    }
-    /*中断服务函数内容*/
-    __DSB();
-    /*DSB--数据同步屏障
-     * 作用：因为CPU时钟的主频大于IP总线时钟故会出现中断标志位还未被清掉时中断服务函数中的内容会执行完，而使得程序一遍一遍的进入中断服务函数，
-     * 而DSB则是为了预防这一情况的发生。*/
+void U_msc(void *pv) {
+    status_t status;
+    status = SD_MscInit();
+    if (status != kStatus_Success) { PRINTF("msc init fail\r\n"); }
+    vTaskDelete(NULL);
 }
+
+void U_sd(void *pv) {
+    status_t status;
+    status = SD_Mount();
+    if (status != kStatus_Success) { PRINTF("sd init fail\r\n"); }
+    f_mkdir("txt");//创建文件夹
+    char *str = "何夜无月？何处无竹柏？但少闲人如吾两人者耳。";
+    FIL fil;
+    f_open(&fil, "txt/记承天寺夜游.txt", FA_CREATE_ALWAYS | FA_WRITE);
+    UINT bw;
+    f_write(&fil, str, strlen(str), &bw);
+    if (bw != strlen(str)) { PRINTF("sd卡容量满了"); }
+    f_close(&fil);//只有关闭的时候才是真正
+}
+
+void U_file_dump(void *pv) {
+    status_t status;
+    //初始化fatfs
+    status = SD_Mount();
+    if (status != kStatus_Success) {
+        PRINTF("sd init fail\r\n");
+        vTaskDelete(NULL);
+    }
+    PRINTF("flash rw with lfs\r\n");
+    if (0 != FLASH_Init()) {
+        PRINTF("flash初始化失败\r\n");
+        vTaskDelete(NULL);
+    }
+
+    //初始化littlefs
+    static lfs_t lfs;
+    static struct lfs_config cfg;
+    FLASH_LfsGetDefaultConfig(&cfg);
+    int err = lfs_mount(&lfs, &cfg);
+    // reformat if we can't mount the filesystem
+    // this should only happen on the first boot
+    if (err) {
+        PRINTF("no littlefs\r\n");
+        vTaskDelete(NULL);
+    }
+
+    static lfs_file_t lfil1;//boot_count/boot_count.bin
+    static lfs_file_t lfil2;
+    static FIL fil1;
+    static FIL fil2;//txt/记承天寺夜游.txt
+    f_mkdir("boot_count");
+    int state_fil2 = f_open(&fil2, "txt/记承天寺夜游.txt", FA_READ);
+    int state_fil1 = f_open(&fil1, "boot_count/boot_count.bin", FA_CREATE_ALWAYS | FA_WRITE);
+    lfs_mkdir(&lfs, "txt");
+    int state_lfil1 = lfs_file_open(&lfs, &lfil1, "boot_count/boot_count.bin", LFS_O_RDONLY);
+    int state_lfil2 = lfs_file_open(&lfs, &lfil2, "txt/记承天寺夜游.txt", LFS_O_RDWR | LFS_O_CREAT);
+    if (0 == (state_fil2 | state_fil1 | state_lfil1 | state_lfil2)) {
+        size_t s_txt = f_size(&fil2);
+        size_t s_bin = lfs_file_size(&lfs, &lfil1);
+        void *buf_txt = pvPortMalloc(s_txt);
+        void *buf_bin = pvPortMalloc(s_bin);
+        UINT bw;
+        f_read(&fil2, buf_txt, s_txt, &bw);
+        assert(bw == s_txt);
+        lfs_file_write(&lfs, &lfil2, buf_txt, s_txt);
+
+        lfs_file_read(&lfs, &lfil1, buf_bin, s_bin);
+        f_write(&fil1, buf_bin, s_bin, &bw);
+        assert(bw == s_bin);
+        vPortFree(buf_txt);
+        vPortFree(buf_bin);
+    }
+    f_close(&fil1);
+    f_close(&fil2);
+    lfs_file_close(&lfs, &lfil1);
+    lfs_file_close(&lfs, &lfil2);
+    lfs_unmount(&lfs);
+    vTaskDelete(NULL);
+}
+
+

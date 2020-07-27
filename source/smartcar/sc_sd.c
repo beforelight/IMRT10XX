@@ -56,10 +56,11 @@ uint32_t USDHC1_ClkFreqGet(void) {
 }
 
 status_t SD_Init2(void) {
+    static int done = 0;
+    if(done!=0){return kStatus_Success;}
     status_t status;
     status = SD_CardDetect();
     if (status != kStatus_Success) { return status; }
-
     /* Save host information. */
     if (g_sd.flags) { return kStatus_Success; }
     g_sd.host.base = USDHC1;
@@ -80,18 +81,22 @@ status_t SD_Init2(void) {
         PRINTF("\r\nCard detect fail.\r\n");
         return kStatus_Fail;
     }
-    return SD_Init(&g_sd);
+    status=SD_Init(&g_sd);
+    if(status==kStatus_Success){done=1;}
+    return status;
 }
 
 static const TCHAR driverNumberBuffer[3U] = {SDDISK + '0', ':', '/'};
 
 status_t SD_Mount(void) {
+    static int done = 0;
+    if(done!=0){return kStatus_Success;}
     status_t status;
     status = SD_Init2();
     if (status != kStatus_Success) { return status; }
 
     if (f_mount(&g_fileSystem, driverNumberBuffer, 0U)) {
-        PRINTF("Mount volume failed.\r\n");
+        PRINTF("Mount volume failed.可能原因sd卡没有FAT32文件系统\r\n");
         return -1;
     }
 #if (FF_FS_RPATH >= 2U)
@@ -101,17 +106,20 @@ status_t SD_Mount(void) {
         return -1;
     }
 #endif
+    done=1;
     return kStatus_Success;
 }
 
 extern void USB_DeviceApplicationInit(void);
 
 status_t SD_MscInit(void) {
+    static int done = 0;
+    if(done!=0){return kStatus_Success;}
     PRINTF("Please insert SD card\r\n");
     status_t status;
     status = SD_Init2();
     if (status != kStatus_Success) { return status; }
-
     USB_DeviceApplicationInit();
+    done=1;
     return kStatus_Success;
 }

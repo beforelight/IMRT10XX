@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (c) 2016, Freescale Semiconductor, Inc.
  * Copyright 2016-2019 NXP
  * All rights reserved.
@@ -637,9 +637,9 @@ static inline flexspi_ahb_error_code_t FLEXSPI_GetAHBCommandErrorCode(FLEXSPI_Ty
  * @retval true Bus is idle.
  * @retval false Bus is busy.
  */
-static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base)
-{
-    return (0U != (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK));
+static inline bool FLEXSPI_GetBusIdleStatus(FLEXSPI_Type *base) {
+    return (base->STS0 & 3) == 3;
+    //return (0U != (base->STS0 & FLEXSPI_STS0_ARBIDLE_MASK)) && (0U != (base->STS0 & FLEXSPI_STS0_SEQIDLE_MASK));
 }
 /*@}*/
 

@@ -6,7 +6,7 @@
 #define IMRT10XX_UNITEST_H
 
 #include <projdefs.h>
-
+#define TEST_PIT
 typedef struct UnitestItem
 {
 	TaskFunction_t pxTaskCode;
@@ -30,10 +30,14 @@ void U_enc(void* pv);
 void U_flash(void* pv);
 void U_flash_with_lfs(void* pv);
 void U_gpio(void* pv);
+#ifdef TEST_PIT
 void U_pit(void* pv);
+#endif //TEST_PIT
 void U_pwm(void* pv);
 void U_uart(void* pv);
+void U_msc(void* pv);
 void U_sd(void* pv);
+void U_file_dump(void* pv);
 void U_status(void* pv);
 
 
