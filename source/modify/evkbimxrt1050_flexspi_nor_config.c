@@ -6,7 +6,8 @@
  */
 
 #include "evkbimxrt1050_flexspi_nor_config.h"
-
+#include "smartcar/sc_flash.h"
+#include "fsl_flexspi.h"
 /* Component ID definition, used by tools. */
 #ifndef FSL_COMPONENT_ID
 #define FSL_COMPONENT_ID "platform.drivers.xip_board"
@@ -61,6 +62,30 @@ const flexspi_nor_config_t Qspiflash_config =
                                                 //Write status
                                                 [4 * 4] = FLEXSPI_LUT_SEQ(CMD_SDR, FLEXSPI_1PAD, 0x01, WRITE_SDR,
                                                                           FLEXSPI_1PAD, 0x2),
+                                                /* Read ID */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_READID1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0xAB, kFLEXSPI_Command_DUMMY_SDR, kFLEXSPI_1PAD, 0x18),
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_READID1 + 1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0x04, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
+                                                /* Read extend parameters */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_READSTATUS1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x05, kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0x04),
+                                                /* Write Enable */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_WRITEENABLE1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x06, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
+                                                /* Erase Sector  */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_ERASESECTOR1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x20, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
+                                                /* Page Program - single mode */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x02, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE1 + 1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_WRITE_SDR, kFLEXSPI_1PAD, 0x04, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
+                                                /* Normal read mode -SDR */
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_READ_NORMAL1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_SDR, kFLEXSPI_1PAD, 0x03, kFLEXSPI_Command_RADDR_SDR, kFLEXSPI_1PAD, 0x18),
+                                                [4 * NOR_CMD_LUT_SEQ_IDX_READ_NORMAL1 + 1] =
+                                                FLEXSPI_LUT_SEQ(kFLEXSPI_Command_READ_SDR, kFLEXSPI_1PAD, 0x04, kFLEXSPI_Command_STOP, kFLEXSPI_1PAD, 0),
                                         },
                         },
                 .pageSize = 256u,

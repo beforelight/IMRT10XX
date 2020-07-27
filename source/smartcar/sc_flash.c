@@ -18,12 +18,7 @@
 #define EXAMPLE_FLEXSPI_CLOCK kCLOCK_FlexSpi
 
 
-#define NOR_CMD_LUT_SEQ_IDX_READID1             10
-#define NOR_CMD_LUT_SEQ_IDX_READSTATUS1         11
-#define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE1        12
-#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR1        13
-#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE1 14
-#define NOR_CMD_LUT_SEQ_IDX_READ_NORMAL1                15
+
 
 #define FLASH_BUSY_STATUS_POL 1
 #define FLASH_BUSY_STATUS_OFFSET 0
@@ -245,9 +240,10 @@ RAMFUNC status_t FLASH_Init(void) {
     FLASH_EnterCritical();
 
     //    /* Update LUT table. */
-    FLEXSPI_UpdateLUT(EXAMPLE_FLEXSPI,
-                      NOR_CMD_LUT_SEQ_IDX_READID1 * 4,
-                      &customLUT[NOR_CMD_LUT_SEQ_IDX_READID1 * 4], 64);
+    //LUT已经在evkbimxrt1050_flexspi_nor_config.c中更新好了
+//    FLEXSPI_UpdateLUT(EXAMPLE_FLEXSPI,
+//                      NOR_CMD_LUT_SEQ_IDX_READID1 * 4,
+//                      &customLUT[NOR_CMD_LUT_SEQ_IDX_READID1 * 4], 64);
     //    /* Get vendor ID. */
     uint8_t vendorID;
     status_t status = flexspi_nor_get_vendor_id(EXAMPLE_FLEXSPI, &vendorID);
