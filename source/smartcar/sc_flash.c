@@ -411,7 +411,9 @@ int FLASH_LfsGetDefaultConfig(struct lfs_config *lfsc) {
     lfsc->prog_size = FLASH_PAGE_SIZE;
     lfsc->block_size = FLASH_SECTOR_SIZE;
     lfsc->block_count = FLASH_RWSIZE / FLASH_SECTOR_SIZE;
-    lfsc->lookahead = 128;
+    lfsc->cache_size = FLASH_PAGE_SIZE;
+    lfsc->lookahead_size = 32;
+    lfsc->block_cycles = 500;
     return 0;
 }
 
