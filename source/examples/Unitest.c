@@ -711,9 +711,9 @@ void U_file_dump(void *pv) {
     static lfs_file_t lfil2;
     static FIL fil1;
     static FIL fil2;//txt/记承天寺夜游.txt
-    f_mkdir("boot_count");
+    f_mkdir("boot");
     int state_fil2 = f_open(&fil2, "txt/txt.txt", FA_READ);
-    int state_fil1 = f_open(&fil1, "boot_count/boot_count.bin", FA_CREATE_ALWAYS | FA_WRITE);
+    int state_fil1 = f_open(&fil1, "boot/count.bin", FA_CREATE_ALWAYS | FA_WRITE);
     lfs_mkdir(&lfs, "txt");
     int state_lfil1 = lfs_file_open(&lfs, &lfil1, "boot_count/boot_count.bin", LFS_O_RDONLY);
     int state_lfil2 = lfs_file_open(&lfs, &lfil2, "txt/txt.txt", LFS_O_RDWR | LFS_O_CREAT);
