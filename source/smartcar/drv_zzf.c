@@ -108,14 +108,14 @@ status_t ZZF_Init(zzf_frame_size_t frameSize, LPUART_Type* LPUARTx)
 	status = ZZF_ConfigGet();
 	if (status != kStatus_Success) { return status; }
 	//检查配置是否一致
-	PRINTF("camera AUTO_EXP	= %d\n", (int)GET_CFG[AUTO_EXP - 1][1]);
-	PRINTF("camera EXP_TIME	= %d\n", (int)GET_CFG[EXP_TIME - 1][1]);
-	PRINTF("camera FPS		= %d\n", (int)GET_CFG[FPS - 1][1]);
-	PRINTF("camera SET_COL	= %d\n", (int)GET_CFG[SET_COL - 1][1]);
-	PRINTF("camera SET_ROW	= %d\n", (int)GET_CFG[SET_ROW - 1][1]);
-	PRINTF("camera LR_OFFSET	= %d\n", (int)GET_CFG[LR_OFFSET - 1][1]);
-	PRINTF("camera UD_OFFSET	= %d\n", (int)GET_CFG[UD_OFFSET - 1][1]);
-	PRINTF("camera GAIN		= %d\n", (int)GET_CFG[GAIN - 1][1]);
+	PRINTF("camera AUTO_EXP	= %d\r\n", (int)GET_CFG[AUTO_EXP - 1][1]);
+	PRINTF("camera EXP_TIME	= %d\r\n", (int)GET_CFG[EXP_TIME - 1][1]);
+	PRINTF("camera FPS		= %d\r\n", (int)GET_CFG[FPS - 1][1]);
+	PRINTF("camera SET_COL	= %d\r\n", (int)GET_CFG[SET_COL - 1][1]);
+	PRINTF("camera SET_ROW	= %d\r\n", (int)GET_CFG[SET_ROW - 1][1]);
+	PRINTF("camera LR_OFFSET	= %d\r\n", (int)GET_CFG[LR_OFFSET - 1][1]);
+	PRINTF("camera UD_OFFSET	= %d\r\n", (int)GET_CFG[UD_OFFSET - 1][1]);
+	PRINTF("camera GAIN		= %d\r\n", (int)GET_CFG[GAIN - 1][1]);
 	if ((MT9V032_CFG[SET_COL - 1][1] != GET_CFG[SET_COL - 1][1])
 		|| (MT9V032_CFG[SET_ROW - 1][1] != GET_CFG[SET_ROW - 1][1]))
 	{

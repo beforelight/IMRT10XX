@@ -250,7 +250,7 @@ RAMFUNC status_t FLASH_Init(void) {
     FLASH_ExitCritical();
     if (status != kStatus_Success) {
         PRINTF("Get Vendor ID Failure!");
-        assert(0);//return status;
+        return status;
     }
     PRINTF("Vendor ID: 0x%x\r\n", vendorID);
     return status;

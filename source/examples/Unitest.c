@@ -644,6 +644,7 @@ void U_zzf(void *pv) {
                 f_open(&fil, line, FA_CREATE_ALWAYS | FA_WRITE);
                 BMP_Save(&fil, &img);
                 f_close(&fil);
+                i+=10;
             }
             PRINTF("fps=%f\r\n", CAMERA_FpsGet());
             CAMERA_SubmitBuff(img.pImg);//将空缓存提交
@@ -672,11 +673,12 @@ void U_sd(void *pv) {
     f_mkdir("txt");//创建文件夹
     char *str = "何夜无月？何处无竹柏？但少闲人如吾两人者耳。";
     FIL fil;
-    f_open(&fil, "txt/记承天寺夜游.txt", FA_CREATE_ALWAYS | FA_WRITE);
+    f_open(&fil, "txt/txt.txt", FA_CREATE_ALWAYS | FA_WRITE);
     UINT bw;
     f_write(&fil, str, strlen(str), &bw);
-    if (bw != strlen(str)) { PRINTF("sd卡容量满了"); }
+    if (bw != strlen(str)) { PRINTF("sd卡容量满了or文件名不能是中文"); }
     f_close(&fil);//只有关闭的时候才是真正
+    vTaskDelete(NULL);
 }
 
 void U_file_dump(void *pv) {
@@ -710,11 +712,11 @@ void U_file_dump(void *pv) {
     static FIL fil1;
     static FIL fil2;//txt/记承天寺夜游.txt
     f_mkdir("boot_count");
-    int state_fil2 = f_open(&fil2, "txt/记承天寺夜游.txt", FA_READ);
+    int state_fil2 = f_open(&fil2, "txt/txt.txt", FA_READ);
     int state_fil1 = f_open(&fil1, "boot_count/boot_count.bin", FA_CREATE_ALWAYS | FA_WRITE);
     lfs_mkdir(&lfs, "txt");
     int state_lfil1 = lfs_file_open(&lfs, &lfil1, "boot_count/boot_count.bin", LFS_O_RDONLY);
-    int state_lfil2 = lfs_file_open(&lfs, &lfil2, "txt/记承天寺夜游.txt", LFS_O_RDWR | LFS_O_CREAT);
+    int state_lfil2 = lfs_file_open(&lfs, &lfil2, "txt/txt.txt", LFS_O_RDWR | LFS_O_CREAT);
     if (0 == (state_fil2 | state_fil1 | state_lfil1 | state_lfil2)) {
         size_t s_txt = f_size(&fil2);
         size_t s_bin = lfs_file_size(&lfs, &lfil1);
