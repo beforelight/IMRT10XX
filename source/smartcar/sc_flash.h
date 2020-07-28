@@ -20,15 +20,6 @@
 #define FLASH_DEBUG_PRINTF(fmt, ...)
 #endif
 
-
-#define NOR_CMD_LUT_SEQ_IDX_READID1             10
-#define NOR_CMD_LUT_SEQ_IDX_READSTATUS1         11
-#define NOR_CMD_LUT_SEQ_IDX_WRITEENABLE1        12
-#define NOR_CMD_LUT_SEQ_IDX_ERASESECTOR1        13
-#define NOR_CMD_LUT_SEQ_IDX_PAGEPROGRAM_SINGLE1 14
-#define NOR_CMD_LUT_SEQ_IDX_READ_NORMAL1        15
-
-
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
