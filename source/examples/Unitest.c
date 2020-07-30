@@ -35,29 +35,28 @@ void LED_task(void *pvData) {
     }
 }
 
-UnitestItem_t item_list[] = {
-//        {U_keypad, "keypad", NULL},
+UnitestItem_t default_item_list[] = {
         {U_status, "status", NULL},//
         {U_keypad, "keypad", NULL},//
         {U_lcd, "lcd", NULL},//
         {U_oled, "oled", NULL},//
-        {U_zzf, "zzf&oled", "oled"},
-        {U_zzf, "zzf&lcd", "lcd"},
-        {U_zzf, "zzf&sd", "sd"},
-        {U_adc, "adc", NULL},
-        {U_flash, "flash", NULL},
-        {U_flash_with_lfs, "flash_with_lfs", NULL},
+        {U_zzf, "zzf&oled", "oled"},//
+        {U_zzf, "zzf&lcd", "lcd"},//
+        {U_zzf, "zzf&sd", "sd"},//
+        {U_adc, "adc", NULL},//
+        {U_flash, "flash", NULL},//
+        {U_flash_with_lfs, "flash_with_lfs", NULL},//
 #ifdef TEST_PIT
-        {U_pit, "pit", NULL},
+        {U_pit, "pit", NULL},//
 #endif//TEST_PIT
-        {U_msc, "msc", NULL},
-        {U_sd, "sd", NULL},
-        {U_file_dump, "file_dump", NULL},
-        {U_pwm, "pwm", NULL},
-        {NULL, NULL, NULL},//确定结尾有多少个
+        {U_msc, "msc", NULL},//
+        {U_sd, "sd", NULL},//
+        {U_file_dump, "file_dump", NULL},//
+        {U_pwm, "pwm", NULL},//
+        {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 
-void Unitest(void) {
+void Unitest(UnitestItem_t item_list[]) {
     int num = 0;
     TaskHandle_t task_handle;
     TaskStatus_t xTaskDetails;
@@ -597,7 +596,9 @@ void U_status(void *pv) {
 }
 
 BSS_SDRAM_NOCACHE uint8_t zzf_buf1[752 * 480] ALIGN(64);//最大可以使用4缓存
-BSS_SDRAM_NOCACHE uint8_t zzf_buf2[752 * 480] ALIGN(64);//这里只用了双缓存，缓存需64字节对齐
+BSS_SDRAM_NOCACHE uint8_t zzf_buf2[752 * 480] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint8_t zzf_buf3[752 * 480] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint8_t zzf_buf4[752 * 480] ALIGN(64);//
 void U_zzf(void *pv) {
     PRINTF("总钻风摄像头测试\r\n");
     //先准备其他资源
@@ -625,6 +626,8 @@ void U_zzf(void *pv) {
     img.height = 480;
     CAMERA_SubmitBuff(zzf_buf1);
     CAMERA_SubmitBuff(zzf_buf2);
+    CAMERA_SubmitBuff(zzf_buf3);
+    CAMERA_SubmitBuff(zzf_buf4);
     if (kStatus_Success != CAMERA_ReceiverStart())//开始接收摄像头传来的图像
     {
         PRINTF("zzf init fail!\r\n");

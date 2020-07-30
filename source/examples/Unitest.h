@@ -16,8 +16,8 @@ typedef struct UnitestItem
 
 
 
-extern UnitestItem_t item_list[];
-void Unitest(void);
+extern UnitestItem_t default_item_list[];
+void Unitest(UnitestItem_t item_list[]);
 
 void U_keypad(void* pv);
 
