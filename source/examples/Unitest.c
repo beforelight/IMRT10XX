@@ -53,6 +53,7 @@ UnitestItem_t default_item_list[] = {
         {U_sd, "sd", NULL},//
         {U_file_dump, "file_dump", NULL},//
         {U_pwm, "pwm", NULL},//
+        {U_enc, "enc", NULL},//
         {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 
@@ -370,32 +371,26 @@ void U_adc(void *pv) {
 }
 
 void U_enc(void *pv) {
-    ENC_Init_t(ENC1);
-    ENC_Init_t(ENC2);
-    ENC_Init_t(ENC3);
-    ENC_Init_t(ENC4);
-    char ch;
+    ENC_InitDecoder(ENC1);
+    ENC_InitDecoder(ENC2);
+    ENC_InitDecoder(ENC3);
+    ENC_InitDecoder(ENC4);
+    PRINTF("Enter 'q' to quit and others to continue\r\n");
     while (1) {
-        PRINTF("\r\np->print status of enc and e->exit\r\n");
-        ch = GETCHAR();
-        if (ch == 'p' || ch == 'P') {
-            PRINTF("ENC\tDate\tPosition\tRevolution\r\n");
-            PRINTF("1\t%d\t%d\t%d\r\n", (int) ENC_Dateget(ENC1), (int) ENC_Positionget(ENC1),
-                   (int) ENC_Revolutionget(ENC1));
-            PRINTF("2\t%d\t%d\t%d\r\n", (int) ENC_Dateget(ENC2), (int) ENC_Positionget(ENC2),
-                   (int) ENC_Revolutionget(ENC2));
-            PRINTF("3\t%d\t%d\t%d\r\n", (int) ENC_Dateget(ENC3), (int) ENC_Positionget(ENC3),
-                   (int) ENC_Revolutionget(ENC3));
-            PRINTF("4\t%d\t%d\t%d\r\n", (int) ENC_Dateget(ENC4), (int) ENC_Positionget(ENC4),
-                   (int) ENC_Revolutionget(ENC4));
-        } else if (ch == 'e' || ch == 'E') {
-            break;
-        }
+		PRINTF("ENC\tPosition\tDate\tRevolution\r\n");
+		PRINTF("1\t%d\t%d\t%d\r\n", (int)ENC_PositionGet(ENC1), (int)ENC_Dateget(ENC1), (int)ENC_Revolutionget(ENC1));
+        PRINTF("2\t%d\t%d\t%d\r\n", (int)ENC_PositionGet(ENC2), (int)ENC_Dateget(ENC2), (int)ENC_Revolutionget(ENC2));
+        PRINTF("3\t%d\t%d\t%d\r\n", (int)ENC_PositionGet(ENC3), (int)ENC_Dateget(ENC3), (int)ENC_Revolutionget(ENC3));
+        PRINTF("4\t%d\t%d\t%d\r\n", (int)ENC_PositionGet(ENC4), (int)ENC_Dateget(ENC4), (int)ENC_Revolutionget(ENC4));
+		char quit;
+		quit = GETCHAR();
+		if (quit == 'q' || quit == 'Q') { break; }
     }
-    ENC_Dateclear(ENC1);
-    ENC_Dateclear(ENC2);
-    ENC_Dateclear(ENC3);
-    ENC_Dateclear(ENC4);
+    ENC_Deinit(ENC1);
+    ENC_Deinit(ENC2);
+    ENC_Deinit(ENC3);
+    ENC_Deinit(ENC4);
+    PRINTF("\r\n");
     vTaskDelete(NULL);
 }
 
