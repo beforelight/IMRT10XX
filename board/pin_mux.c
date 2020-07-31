@@ -42,8 +42,8 @@ pin_labels:
 - {pin_num: B8, pin_signal: GPIO_B0_05, label: BT_CFG1/PD, identifier: D5}
 - {pin_num: A8, pin_signal: GPIO_B0_06, label: BT_CFG2/PD, identifier: D6}
 - {pin_num: A9, pin_signal: GPIO_B0_07, label: BT_CFG3/PD, identifier: D7}
-- {pin_num: B11, pin_signal: GPIO_B1_01, label: 总钻风}
-- {pin_num: A11, pin_signal: GPIO_B1_00, label: 总钻风}
+- {pin_num: B11, pin_signal: GPIO_B1_01, label: 总钻风, identifier: SDA;SCL}
+- {pin_num: A11, pin_signal: GPIO_B1_00, label: 总钻风, identifier: SCL;SDA}
 - {pin_num: C10, pin_signal: GPIO_B0_12, label: BT_CFG8/PD, identifier: WR}
 - {pin_num: D10, pin_signal: GPIO_B0_13, label: BT_CFG9/PD, identifier: DC}
 - {pin_num: B9, pin_signal: GPIO_B0_08, label: BT_CFG4/PD}
@@ -1088,7 +1088,7 @@ UART:
   - {pin_num: B11, peripheral: LPUART4, signal: RX, pin_signal: GPIO_B1_01}
   - {pin_num: A11, peripheral: LPUART4, signal: TX, pin_signal: GPIO_B1_00}
   - {pin_num: G11, peripheral: LPUART6, signal: RX, pin_signal: GPIO_AD_B0_03}
-  - {pin_num: M11, peripheral: LPUART6, signal: TX, pin_signal: GPIO_AD_B0_02}
+  - {pin_num: M11, peripheral: LPUART6, signal: TX, pin_signal: GPIO_AD_B0_02, identifier: ''}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 

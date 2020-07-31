@@ -593,7 +593,7 @@ void U_status(void *pv) {
     PRINTF("%dms\r\n", TimerMsGet());
     vTaskDelete(NULL);
 }
-//TODO先把i2c测好再去整ov
+
 void U_i2c_soft(void* pv)
 {
     int addr = 0x68;
@@ -625,12 +625,14 @@ void U_i2c_soft(void* pv)
 void U_sccb_soft(void* pv)
 {
     int addr = 0x21;
-	int idH = 0X1c;
-	int idL = 0X1d;
+	int MIDH = 0X1c;
+	int MIDL = 0X1d;
+    int PIDH = 0X0a;
+    int PIDL = 0X0b;
 	int pwr = 0x12;
 	uint16_t val;
 	I2CS_Type iics;
-	iics.delay = 1000;
+	iics.delay = 200;
 	iics.SDA.base = IIC_SDA_GPIO;
 	iics.SDA.pin =  IIC_SDA_PIN;
 	iics.SCL.base = IIC_SCL_GPIO;
@@ -638,14 +640,18 @@ void U_sccb_soft(void* pv)
 	I2CS_Init(&iics);
 	val = 0x80;
 	I2CS_WriteSCCB(&iics, addr, pwr, (uint8_t*)&val, 1);//复位
-	vTaskDelay(10);
+	vTaskDelay(100);
 	val = 0;
-	I2CS_ReadSCCB(&iics, addr, idH, (uint8_t*)&val, 1);
+	I2CS_ReadSCCB(&iics, addr, MIDH, (uint8_t*)&val, 1);
 	val <<= 8;
-	I2CS_ReadSCCB(&iics, addr, idL, (uint8_t*)&val, 1);
-
+	I2CS_ReadSCCB(&iics, addr, MIDL, (uint8_t*)&val, 1);
 	PRINTF("ov7725MID(0X7FA2): 0x%x\r\n", (int)val);
 
+    val = 0;
+    I2CS_ReadSCCB(&iics, addr, PIDH, (uint8_t*)&val, 1);
+    val <<= 8;
+    I2CS_ReadSCCB(&iics, addr, PIDL, (uint8_t*)&val, 1);
+    PRINTF("ov7725PID(0X7721): 0x%x\r\n", (int)val);
     vTaskDelete(NULL);
 }
 

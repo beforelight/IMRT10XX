@@ -215,10 +215,6 @@ void SWD(void);
  */
 void ENC(void);
 
-/* GPIO_AD_B0_02 (coord M11), 外接k66 */
-#define UART_LED1_PERIPHERAL                                             LPUART6   /*!< Device name: LPUART6 */
-#define UART_LED1_SIGNAL                                                      TX   /*!< LPUART6 signal: TX */
-
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.

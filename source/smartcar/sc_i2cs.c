@@ -74,13 +74,13 @@ status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, u
 {
 	IIC_Start(base);
 	IIC_Send_Byte(base, (SlaveAddress7BIT << 1) | 0);//发送器件地址+写命令	
-	IIC_Delay(base);
+	IIC_Wait_Ack(base);
 	IIC_Send_Byte(base, reg);	//写寄存器地址
-	IIC_Delay(base);
+	IIC_Wait_Ack(base);
 	IIC_Stop(base);
-	IIC_Delay(base);
 	IIC_Start(base);
 	IIC_Send_Byte(base, (SlaveAddress7BIT << 1) | 1);//发送器件地址+读命令	
+	IIC_Wait_Ack(base);
 	while (size)
 	{
 		if (size == 1)*data = IIC_Read_Byte(base, 0);//读数据,发送nACK 
@@ -97,13 +97,13 @@ status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, 
 	uint8_t i;
 	IIC_Start(base);
 	IIC_Send_Byte(base, (SlaveAddress7BIT << 1) | 0);//发送器件地址+写命令	
-	IIC_Delay(base);
+	IIC_Wait_Ack(base);
 	IIC_Send_Byte(base, reg);	//写寄存器地址
-	IIC_Delay(base);
+	IIC_Wait_Ack(base);
 	for (i = 0; i < size; i++)
 	{
 		IIC_Send_Byte(base, data[i]);	//发送数据
-		IIC_Delay(base);
+		IIC_Wait_Ack(base);
 	}
 	IIC_Stop(base);
 	return kStatus_Success;
@@ -121,31 +121,27 @@ void IIC_Delay(I2CS_Type* base)
 
 void IIC_Start(I2CS_Type* base)
 {
-	SDA_out(base);
 	SDA_H(base);
 	SCL_H(base);
 	IIC_Delay(base);
 	SDA_L(base);//START:when CLK is high,DATA change form high to low 
 	IIC_Delay(base);
 	SCL_L(base); //钳住I2C总线，准备发送或接收数据
-	//IIC_Delay(base);
+	IIC_Delay(base);
 }
 
 void IIC_Stop(I2CS_Type* base)
 {
-	SDA_out(base);
-	SCL_L(base);
 	SDA_L(base);//STOP:when CLK is high DATA change form low to high
 	IIC_Delay(base);
 	SCL_H(base);
-	SDA_H(base);//发送I2C总线结束信号
 	IIC_Delay(base);
+	SDA_H(base);//发送I2C总线结束信号
 }
 
 void IIC_Send_Byte(I2CS_Type* base, uint8_t txd)
 {
 	uint8_t t;
-	SCL_L(base);// 拉低时钟开始数据传输
 	for (t = 0; t < 8; t++)
 	{
 		if (txd & 0x80) {
@@ -169,11 +165,11 @@ uint8_t IIC_Read_Byte(I2CS_Type* base, uint8_t ack)
 	SDA_in(base);
 	for (i = 0; i < 8; i++)
 	{
-		SCL_L(base);
-		IIC_Delay(base);
 		SCL_H(base);
 		receive <<= 1;
-		if (SDA_val(base))receive++;
+		if (SDA_val(base)) { receive++; }
+		IIC_Delay(base);
+		SCL_L(base);
 		IIC_Delay(base);
 	}
 	if (!ack){
@@ -190,41 +186,44 @@ uint8_t IIC_Read_Byte(I2CS_Type* base, uint8_t ack)
 //        0，接收应答成功
 uint8_t IIC_Wait_Ack(I2CS_Type* base)
 {
-	uint8_t ucErrTime = 0;
-	SDA_H(base); IIC_Delay(base);
-	SDA_in(base);
-	SCL_H(base); IIC_Delay(base);
-	while (SDA_val(base))
-	{
-		IIC_Delay(base);
-		ucErrTime++;
-		if (ucErrTime > 10)//5个周期之后超时
-		{
-			return 1;
-		}
+	//uint8_t ucErrTime = 0;
+	SDA_H(base); 
+	SDA_in(base);//切换成输入
+
+	SCL_H(base); 
+	IIC_Delay(base);
+	//读取SDA上的电平确定ack
+	//if (SCL_val(base)) { IIC_Delay(base); }//检查从机是否准备好数据
+	if (SDA_val(base)) {//高电平判断没有ack
+		SCL_L(base);//时钟输出0 //每个阶段都要拉低SCL
+		IIC_Delay(base);//并且延时一段时间
+		return 1;
 	}
-	SCL_L(base);//时钟输出0 	   
-	return 0;
+	else
+	{
+		SCL_L(base);//时钟输出0 
+		IIC_Delay(base);
+		return 0;
+	}
 }
 
 //产生ACK应答
 void IIC_Ack(I2CS_Type* base)
 {
-	SCL_L(base);
 	SDA_L(base);
-	IIC_Delay(base);
 	SCL_H(base);
 	IIC_Delay(base);
 	SCL_L(base);
+	SDA_H(base);//释放SDA线
+	IIC_Delay(base);
 }
 
 //不产生ACK应答		
 void IIC_NAck(I2CS_Type* base)
 {
-	SCL_L(base);
 	SDA_H(base);
-	IIC_Delay(base);
 	SCL_H(base);
 	IIC_Delay(base);
 	SCL_L(base);
+	IIC_Delay(base);
 }
