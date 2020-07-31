@@ -1,11 +1,10 @@
 ﻿//
 // Created by 17616 on 2020/3/23.
 //
-
+#include "fsl_lpi2c.h"
 #ifndef IMXRT_SC_I2C_H
 #define IMXRT_SC_I2C_H
 
-#include "fsl_lpi2c.h"
 
 #if defined(__cplusplus)
 extern "C" {

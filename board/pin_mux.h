@@ -234,12 +234,14 @@ void UART(void);
 void SPI(void);
 
 /* GPIO_SD_B1_04 (coord P2), SCL */
-#define IIC_SCL_PERIPHERAL                                                LPI2C1   /*!< Device name: LPI2C1 */
-#define IIC_SCL_SIGNAL                                                       SCL   /*!< LPI2C1 signal: SCL */
+#define IIC_SCL_GPIO                                                       GPIO3   /*!< GPIO device name: GPIO3 */
+#define IIC_SCL_PORT                                                       GPIO3   /*!< PORT device name: GPIO3 */
+#define IIC_SCL_PIN                                                           4U   /*!< GPIO3 pin index: 4 */
 
 /* GPIO_SD_B1_05 (coord N3), SDA */
-#define IIC_SDA_PERIPHERAL                                                LPI2C1   /*!< Device name: LPI2C1 */
-#define IIC_SDA_SIGNAL                                                       SDA   /*!< LPI2C1 signal: SDA */
+#define IIC_SDA_GPIO                                                       GPIO3   /*!< GPIO device name: GPIO3 */
+#define IIC_SDA_PORT                                                       GPIO3   /*!< PORT device name: GPIO3 */
+#define IIC_SDA_PIN                                                           5U   /*!< GPIO3 pin index: 5 */
 
 
 /*!

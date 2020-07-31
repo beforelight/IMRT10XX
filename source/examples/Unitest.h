@@ -39,6 +39,8 @@ void U_msc(void* pv);
 void U_sd(void* pv);
 void U_file_dump(void* pv);
 void U_status(void* pv);
+void U_i2c_soft(void* pv);
+void U_sccb_soft(void* pv);
 
 
 

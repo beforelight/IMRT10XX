@@ -764,11 +764,6 @@
                   <enableClock>true</enableClock>
                </options>
                <dependencies>
-                  <dependency resourceType="Peripheral" resourceId="LPI2C1" description="Peripheral LPI2C1 is not initialized" problem_level="1" source="Pins:IIC">
-                     <feature name="initialized" evaluation="equal">
-                        <data>true</data>
-                     </feature>
-                  </dependency>
                   <dependency resourceType="SWComponent" resourceId="platform.drivers.common" description="Pins initialization requires the COMMON Driver in the project." problem_level="2" source="Pins:IIC">
                      <feature name="enabled" evaluation="equal" configuration="core0">
                         <data>true</data>
@@ -781,18 +776,22 @@
                   </dependency>
                </dependencies>
                <pins>
-                  <pin peripheral="LPI2C1" signal="SCL" pin_num="P2" pin_signal="GPIO_SD_B1_04">
+                  <pin peripheral="GPIO3" signal="gpio_io, 04" pin_num="P2" pin_signal="GPIO_SD_B1_04">
                      <pin_features>
                         <pin_feature name="pull_up_down_config" value="Pull_Up_22K_Ohm"/>
                         <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="open_drain" value="Enable"/>
+                        <pin_feature name="drive_strength" value="R0_7"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
-                  <pin peripheral="LPI2C1" signal="SDA" pin_num="N3" pin_signal="GPIO_SD_B1_05">
+                  <pin peripheral="GPIO3" signal="gpio_io, 05" pin_num="N3" pin_signal="GPIO_SD_B1_05">
                      <pin_features>
                         <pin_feature name="pull_up_down_config" value="Pull_Up_22K_Ohm"/>
                         <pin_feature name="pull_keeper_select" value="Pull"/>
                         <pin_feature name="open_drain" value="Enable"/>
+                        <pin_feature name="drive_strength" value="R0_7"/>
+                        <pin_feature name="slew_rate" value="Fast"/>
                      </pin_features>
                   </pin>
                </pins>
@@ -1098,7 +1097,7 @@
             <component name="system" uuid="aaff4d3f-7874-4344-9e1a-8772bc692a39" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="20905e4c-04f2-4aea-9bab-87e23235739c" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="68a77462-d09c-4f3f-8640-6223ce17f808" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>

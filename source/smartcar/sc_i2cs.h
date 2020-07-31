@@ -2,8 +2,8 @@
 // Created by 17616 on 2020/3/23.
 //
 
-#ifndef IMXRT_SC_I2C_H
-#define IMXRT_SC_I2C_H
+#ifndef IMXRT_SC_I2CS_H
+#define IMXRT_SC_I2CS_H
 
 #include "sc_gpio.h"
 
@@ -12,7 +12,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 	typedef struct struct_I2CS {
-		uint32_t delay;//用于延时控制软件i2c波特率，越大波特率越小
+		uint32_t delay;//用于延时控制软件i2c波特率，越大波特率越小。100时约为400khz-800khz
 		gpio_t SDA;
 		gpio_t SCL;
 	}I2CS_Type;
@@ -55,7 +55,7 @@ status_t I2CS_Write(I2CS_Type*base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8
  * @param  {uint32_t} size            : 
  * @return {status_t}                 : 
  */
-status_t I2CS_ReadSCCB(LPI2C_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
 /**
  * @brief   给SCCB从机发送
@@ -66,12 +66,11 @@ status_t I2CS_ReadSCCB(LPI2C_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, 
  * @param  {uint32_t} size            : 
  * @return {status_t}                 : 
  */
-status_t I2CS_WriteSCCB(LPI2C_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
 
 //软件IIC所有操作函数
 void IIC_Delay(I2CS_Type* base);				//IIC延时函数
-void IIC_Delay2(I2CS_Type* base);				//IIC延时函数
 void IIC_Start(I2CS_Type* base);				//发送IIC开始信号
 void IIC_Stop(I2CS_Type* base);	  			//发送IIC停止信号
 void IIC_Send_Byte(I2CS_Type* base, uint8_t txd);			//IIC发送一个字节
@@ -82,4 +81,4 @@ void IIC_NAck(I2CS_Type* base);				//IIC不发送ACK信号
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */
-#endif //IMXRT_SC_I2C_H
+#endif //IMXRT_SC_I2CS_H

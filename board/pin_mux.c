@@ -1167,8 +1167,10 @@ void SPI(void) {
 IIC:
 - options: {callFromInitBoot: 'true', coreID: core0, enableClock: 'true'}
 - pin_list:
-  - {pin_num: P2, peripheral: LPI2C1, signal: SCL, pin_signal: GPIO_SD_B1_04, pull_up_down_config: Pull_Up_22K_Ohm, pull_keeper_select: Pull, open_drain: Enable}
-  - {pin_num: N3, peripheral: LPI2C1, signal: SDA, pin_signal: GPIO_SD_B1_05, pull_up_down_config: Pull_Up_22K_Ohm, pull_keeper_select: Pull, open_drain: Enable}
+  - {pin_num: P2, peripheral: GPIO3, signal: 'gpio_io, 04', pin_signal: GPIO_SD_B1_04, pull_up_down_config: Pull_Up_22K_Ohm, pull_keeper_select: Pull, open_drain: Enable,
+    drive_strength: R0_7, slew_rate: Fast}
+  - {pin_num: N3, peripheral: GPIO3, signal: 'gpio_io, 05', pin_signal: GPIO_SD_B1_05, pull_up_down_config: Pull_Up_22K_Ohm, pull_keeper_select: Pull, open_drain: Enable,
+    drive_strength: R0_7, slew_rate: Fast}
  * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS ***********
  */
 
@@ -1182,15 +1184,15 @@ void IIC(void) {
   CLOCK_EnableClock(kCLOCK_Iomuxc);           /* iomuxc clock (iomuxc_clk_enable): 0x03U */
 
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_04_LPI2C1_SCL,        /* GPIO_SD_B1_04 is configured as LPI2C1_SCL */
+      IOMUXC_GPIO_SD_B1_04_GPIO3_IO04,        /* GPIO_SD_B1_04 is configured as GPIO3_IO04 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinMux(
-      IOMUXC_GPIO_SD_B1_05_LPI2C1_SDA,        /* GPIO_SD_B1_05 is configured as LPI2C1_SDA */
+      IOMUXC_GPIO_SD_B1_05_GPIO3_IO05,        /* GPIO_SD_B1_05 is configured as GPIO3_IO05 */
       0U);                                    /* Software Input On Field: Input Path is determined by functionality */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_SD_B1_04_LPI2C1_SCL,        /* GPIO_SD_B1_04 PAD functional properties : */
-      0xF8B0U);                               /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0/6
+      IOMUXC_GPIO_SD_B1_04_GPIO3_IO04,        /* GPIO_SD_B1_04 PAD functional properties : */
+      0xF8B9U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/7
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Enabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled
@@ -1198,9 +1200,9 @@ void IIC(void) {
                                                  Pull Up / Down Config. Field: 22K Ohm Pull Up
                                                  Hyst. Enable Field: Hysteresis Disabled */
   IOMUXC_SetPinConfig(
-      IOMUXC_GPIO_SD_B1_05_LPI2C1_SDA,        /* GPIO_SD_B1_05 PAD functional properties : */
-      0xF8B0U);                               /* Slew Rate Field: Slow Slew Rate
-                                                 Drive Strength Field: R0/6
+      IOMUXC_GPIO_SD_B1_05_GPIO3_IO05,        /* GPIO_SD_B1_05 PAD functional properties : */
+      0xF8B9U);                               /* Slew Rate Field: Fast Slew Rate
+                                                 Drive Strength Field: R0/7
                                                  Speed Field: medium(100MHz)
                                                  Open Drain Enable Field: Open Drain Enabled
                                                  Pull / Keep Enable Field: Pull/Keeper Enabled

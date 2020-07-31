@@ -18,6 +18,8 @@
 #include <sc_adc.h>
 #include <sc_enc.h>
 #include <sc_flash.h>
+#include <sc_i2c.h>
+#include <sc_i2cs.h>
 #include <sc_pit.h>
 #include <sc_pwm.h>
 #include <status.h>
@@ -54,6 +56,8 @@ UnitestItem_t default_item_list[] = {
         {U_file_dump, "file_dump", NULL},//
         {U_pwm, "pwm", NULL},//
         {U_enc, "enc", NULL},//
+        {U_i2c_soft, "iic_soft", NULL},//
+        {U_sccb_soft, "sccb_soft", NULL},//
         {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 
@@ -587,6 +591,61 @@ void U_status(void *pv) {
     TaskStatusPrint();
     APP_PrintRunFrequency(0);
     PRINTF("%dms\r\n", TimerMsGet());
+    vTaskDelete(NULL);
+}
+//TODO先把i2c测好再去整ov
+void U_i2c_soft(void* pv)
+{
+    int addr = 0x68;
+    int whoami = 0x75;
+    int pwr = 0x6b;
+    uint8_t val=0;
+    status_t status;
+	I2CS_Type iics;
+	iics.delay = 100;
+	iics.SDA.base = IIC_SDA_GPIO;
+	iics.SDA.pin = IIC_SDA_PIN;
+	iics.SCL.base = IIC_SCL_GPIO;
+	iics.SCL.pin = IIC_SCL_PIN;
+	I2CS_Init(&iics);
+	status = I2CS_Read(&iics, addr, whoami, &val, 1);
+	if (status != kStatus_Success) { PRINTF("kStatus_LPI2C_Nak\r\n"); }
+	else {
+		PRINTF("Addr0x%x,a Read from R0x%x; Returned Value 0x%x\r\n", addr, whoami, (int)val);
+	}
+	val = 0x80;
+	status = I2CS_Write(&iics, addr, pwr, &val, 1);
+	if (status != kStatus_Success) { PRINTF("kStatus_LPI2C_Nak\r\n"); }
+	else {
+		PRINTF("Addr0x%x, a Write to R0x%x with the Value 0x%x\r\n", addr, pwr, (int)val);
+	}
+    vTaskDelete(NULL);
+}
+
+void U_sccb_soft(void* pv)
+{
+    int addr = 0x21;
+	int idH = 0X1c;
+	int idL = 0X1d;
+	int pwr = 0x12;
+	uint16_t val;
+	I2CS_Type iics;
+	iics.delay = 1000;
+	iics.SDA.base = IIC_SDA_GPIO;
+	iics.SDA.pin =  IIC_SDA_PIN;
+	iics.SCL.base = IIC_SCL_GPIO;
+	iics.SCL.pin =  IIC_SCL_PIN;
+	I2CS_Init(&iics);
+	val = 0x80;
+	I2CS_WriteSCCB(&iics, addr, pwr, (uint8_t*)&val, 1);//复位
+	vTaskDelay(10);
+	val = 0;
+	I2CS_ReadSCCB(&iics, addr, idH, (uint8_t*)&val, 1);
+	val <<= 8;
+	I2CS_ReadSCCB(&iics, addr, idL, (uint8_t*)&val, 1);
+
+	PRINTF("ov7725MID(0X7FA2): 0x%x\r\n", (int)val);
+
     vTaskDelete(NULL);
 }
 
