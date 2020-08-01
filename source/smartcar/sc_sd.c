@@ -1,4 +1,4 @@
-//
+﻿//
 // Created by 17616 on 2020/3/17.
 //
 #include "fsl_debug_console.h"
@@ -9,6 +9,9 @@
 #error 在board.h中定义“ #define BOARD_SD_SUPPORT_180V 0U#define BOARD_SD_SUPPORT_180V 0U”飞凌核心板不支持1.8v模式
 #endif
 static FATFS g_fileSystem; /* File system object */
+volatile int _SD_ICacheIsDisable = 0;
+volatile int _SD_DCacheIsDisable = 0;
+volatile int _SD_CriticalNesting = 0;
 status_t SD_CardDetect(void) {
     BOARD_USDHC_CD_GPIO_INIT();
     if (0 == BOARD_USDHC_CD_STATUS()) {

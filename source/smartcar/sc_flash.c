@@ -1,4 +1,4 @@
-/*
+﻿/*
  * sc_flash.c
  *
  *  Created on: 2020年1月16日
@@ -33,7 +33,10 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-
+volatile int _FLASH_ICacheIsDisable = 0;
+volatile int _FLASH_DCacheIsDisable = 0;
+volatile int _FLASH_CriticalNesting = 0;
+volatile uint32_t _FLASH_regPrimask = 0;
 
 flexspi_device_config_t deviceconfig = {
         .flexspiRootClk = 1000 * (1000 * 2160 / 17),
@@ -319,54 +322,10 @@ RAMFUNC status_t FLASH_Sync(void) {
     return status;
 }
 
-volatile int ICacheIsDisable = 0;
-volatile int DCacheIsDisable = 0;
-volatile int CriticalNesting = 0;
-volatile uint32_t regPrimask;
 
-/**
- * @brief  进入flash读写保护临界区
- * @param  {void} undefined :
- */
-RAMFUNC void FLASH_EnterCritical(void) {
-    if (CriticalNesting <= 0) { regPrimask = DisableGlobalIRQ();}
-    //if (CriticalNesting == 0) { PRINTF("FLASH_EnterCritical\r\n"); }
-    if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR)) {
-        SCB_InvalidateICache();
-        SCB_DisableICache();
-        ICacheIsDisable = 1;
-    }
-    if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR)) {
-        SCB_InvalidateDCache();
-        SCB_DisableDCache();
-        DCacheIsDisable = 1;
-    }
-    ARM_MPU_Disable();
-    CriticalNesting++;
-//    FLASH_DEBUG_PRINTF("enter %d\r\n",CriticalNesting);
-}
 
-/**
- * @brief  退出flash读写保护临界区
- * @param  {void} undefined :
- */
-RAMFUNC void FLASH_ExitCritical(void) {
-    CriticalNesting--;
-//    FLASH_DEBUG_PRINTF("exit %d\r\n",CriticalNesting);
-    if (CriticalNesting <= 0) {
-        //PRINTF("FLASH_ExitCritical\r\n");
-        EnableGlobalIRQ(regPrimask);
-        ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
-        if (ICacheIsDisable == 1) {
-            ICacheIsDisable = 0;
-            SCB_EnableICache();
-        }
-        if (DCacheIsDisable == 1) {
-            DCacheIsDisable = 0;
-            SCB_EnableDCache();
-        }
-    }
-}
+
+
 
 RAMFUNC int FLASH_LfsRead(const struct lfs_config *c, lfs_block_t block, lfs_off_t off, void *buffer, lfs_size_t size) {
     FLASH_EnterCritical();

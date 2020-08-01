@@ -32,12 +32,12 @@
 <stringAttribute key="internal.prelaunch.command" value=""/>
 <stringAttribute key="internal.reset.script" value=""/>
 <stringAttribute key="internal.resethandling" value=""/>
-<stringAttribute key="internal.semihost" value="On"/>
+<stringAttribute key="internal.semihost" value="Auto"/>
 <stringAttribute key="internal.wirespeed" value="10000000"/>
 <stringAttribute key="internal.wiretype" value="SWD"/>
 <stringAttribute key="launch.config.handler" value="com.crt.ctrlcenter.launch.CRTLaunchConfigHandler"/>
 <booleanAttribute key="mem.access" value="false"/>
-<stringAttribute key="misc.options" value="--no-packed"/>
+<stringAttribute key="misc.options" value="--no-packed --cachelib libm7_cache.so"/>
 <stringAttribute key="ondisconnect" value="cont"/>
 <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.delay" value="3"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doHalt" value="false"/>

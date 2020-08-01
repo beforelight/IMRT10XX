@@ -480,8 +480,6 @@ void U_flash_with_lfs(void *pv) {
     // release any resources we were using
     lfs_unmount(&lfs);
 
-
-
     vTaskDelete(NULL);
 }
 
@@ -800,6 +798,7 @@ void U_msc(void *pv) {
 }
 
 void U_sd(void *pv) {
+    SD_EnterCritical();
     status_t status;
     status = SD_Mount();
     if (status != kStatus_Success) { PRINTF("sd init fail\r\n"); }
@@ -809,8 +808,9 @@ void U_sd(void *pv) {
     f_open(&fil, "txt/txt.txt", FA_CREATE_ALWAYS | FA_WRITE);
     UINT bw;
     f_write(&fil, str, strlen(str), &bw);
-    if (bw != strlen(str)) { PRINTF("sd卡容量满了or文件名不能是中文"); }
+    if (bw != strlen(str)) { PRINTF("sd卡容量满了or文件名太长or没有fat32系统"); }
     f_close(&fil);//只有关闭的时候才是真正
+    SD_ExitCritical();
     vTaskDelete(NULL);
 }
 
