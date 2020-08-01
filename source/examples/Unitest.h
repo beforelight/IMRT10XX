@@ -41,6 +41,9 @@ void U_file_dump(void* pv);
 void U_status(void* pv);
 void U_i2c_soft(void* pv);
 void U_sccb_soft(void* pv);
+void U_i2c_mt9v034(void* pv);
+void U_cam_mt9v(void* pv);
+
 
 
 

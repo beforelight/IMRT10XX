@@ -1,12 +1,19 @@
-#include"sc_camera.h"
+﻿#include"sc_camera.h"
 #include"fsl_debug_console.h"
 #include"status.h"
 #include"task.h"
+#include"fsl_clock.h"
 
 volatile uint32_t frame_period_us;
 uint32_t frame_now_us;
 csi_handle_t csi_handel;
 
+
+status_t CAMERA_EnableClock(void)
+{
+    CLOCK_EnableClock(kCLOCK_Csi);
+    return kStatus_Success;
+}
 
 status_t CAMERA_MclkSet(uint32_t clk) {
     if (clk == 24 * 1000 * 1000) {

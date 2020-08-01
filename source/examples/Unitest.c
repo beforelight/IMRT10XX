@@ -25,6 +25,7 @@
 #include <status.h>
 #include <source/smartcar/svbmp.h>
 #include <stdio.h>
+#include"drv_cam_mt9v03x.h"
 
 TaskHandle_t LED_task_handle;
 
@@ -58,6 +59,8 @@ UnitestItem_t default_item_list[] = {
         {U_enc, "enc", NULL},//
         {U_i2c_soft, "iic_soft", NULL},//
         {U_sccb_soft, "sccb_soft", NULL},//
+        {U_i2c_mt9v034, "i2c_mt9v034", NULL},//
+        {U_cam_mt9v, "cam_mt9v034", NULL},//
         {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 
@@ -653,6 +656,73 @@ void U_sccb_soft(void* pv)
     I2CS_ReadSCCB(&iics, addr, PIDL, (uint8_t*)&val, 1);
     PRINTF("ov7725PID(0X7721): 0x%x\r\n", (int)val);
     vTaskDelete(NULL);
+}
+
+void U_i2c_mt9v034(void* pv)
+{
+    int addr = 0x90>>1;
+    uint16_t val = 0;
+    status_t status;
+    I2CS_Type iics;
+    CLOCK_EnableClock(kCLOCK_Csi);
+    iics.delay = 100;
+    iics.SDA.base = IIC_SDA_GPIO;
+    iics.SDA.pin = IIC_SDA_PIN;
+    iics.SCL.base = IIC_SCL_GPIO;
+    iics.SCL.pin = IIC_SCL_PIN;
+    I2CS_Init(&iics);
+    status = I2CS_Read(&iics, addr, 0x00, (uint8_t*)&val, 2);
+    if (status != kStatus_Success) { PRINTF("kStatus_LPI2C_Nak\r\n"); }
+    else {
+        PRINTF("MT9V034_REG_ChipVersion: 0x%x\r\n", addr, (int)val);
+    }
+    vTaskDelete(NULL);
+}
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf1[184 * 120] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf2[184 * 120] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf3[184 * 120] ALIGN(64);//
+void U_cam_mt9v(void* pv)
+{
+    Lcd_Init();
+    img_t img;
+    I2CS_Type iics;
+    iics.delay = 100;
+    iics.SDA.base = IIC_SDA_GPIO;
+    iics.SDA.pin = IIC_SDA_PIN;
+    iics.SCL.base = IIC_SCL_GPIO;
+    iics.SCL.pin = IIC_SCL_PIN;
+    I2CS_Init(&iics);
+    
+    if (kStatus_Success != MT9V034_DataInit(&iics)) {
+        PRINTF("MT9V034 init fail!\r\n");
+        vTaskDelete(NULL);
+    }
+    img.format = PixelFormatGray;
+    img.width = 184;
+    img.height = 120;
+    CAMERA_SubmitBuff(mt9v_buf1);
+    CAMERA_SubmitBuff(mt9v_buf2);
+    CAMERA_SubmitBuff(mt9v_buf3);
+    if (kStatus_Success != CAMERA_ReceiverStart())//开始接收摄像头传来的图像
+    {
+        PRINTF("MT9V034 init fail!\r\n");
+        vTaskDelete(NULL);
+    }
+    PRINTF("start transfer\r\n");
+    while (1)
+    {
+        if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
+            LCD_PrintPicture(&img);
+            PRINTF("fps=%f\r\n", CAMERA_FpsGet());
+            CAMERA_SubmitBuff(img.pImg);//将空缓存提交
+        }
+        else {
+            vTaskDelay(1);
+        }
+    }
+	CAMERA_ReceiverStop();//停止传输
+	CAMERA_ReceiverDeinit();//De-initialize
+	vTaskDelete(NULL);
 }
 
 BSS_SDRAM_NOCACHE uint8_t zzf_buf1[752 * 480] ALIGN(64);//最大可以使用4缓存

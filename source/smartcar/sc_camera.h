@@ -35,6 +35,10 @@ typedef struct __img {
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
+	
+	
+	status_t CAMERA_EnableClock(void);
+	
 	/**
 	 * @brief	设置输出像素时钟，默认24m
 	 * @param  {uint32_t} clk : 时钟
