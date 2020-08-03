@@ -316,6 +316,7 @@ status_t OV7725_Init(ov7725_frame_size_t size, I2CS_Type* base)
 	{
 		OV7725_Window_Set(width, height, 1);
 	}
+	return kStatus_Success;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -390,7 +391,8 @@ void OV7725_Color_Saturation(int8_t sat)
 //bright：-4~+4
 void OV7725_Brightness(int8_t bright)
 {
-	uint8_t bright_value, sign;
+	uint8_t bright_value = 0x08;
+	uint8_t sign = 0x06;
 	switch (bright)
 	{
 	case 4:

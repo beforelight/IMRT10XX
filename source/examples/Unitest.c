@@ -61,7 +61,10 @@ UnitestItem_t default_item_list[] = {
         {U_i2c_soft, "iic_soft", NULL},//
         {U_sccb_soft, "sccb_soft", NULL},//
         {U_i2c_mt9v034, "i2c_mt9v034", NULL},//
-        {U_cam_mt9v, "cam_mt9v034", NULL},//
+        {U_cam_mt9v03x, "cam_mt9v034", NULL},//
+        {U_ov7725, "7725_oled", "oled"},//
+        {U_ov7725, "7725_lcd", "lcd"},//
+        {U_ov7725, "7725_sd", "sd"},//
         {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 
@@ -278,11 +281,10 @@ void U_oled(void *pv) {
     OLED_Fill(0xff);
     vTaskDelete(NULL);
 }
-ov7725_frame_size_t ov_frame = OV7725_FrameSizeVGA480x640;
-BSS_SDRAM_NOCACHE uint16_t ov_buf1[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//最大可以使用4缓存
-BSS_SDRAM_NOCACHE uint16_t ov_buf2[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
-BSS_SDRAM_NOCACHE uint16_t ov_buf3[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//
-BSS_SDRAM_NOCACHE uint16_t ov_buf4[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint16_t ov_buf1[480*640] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint16_t ov_buf2[480*640] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint16_t ov_buf3[480*640] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint16_t ov_buf4[480*640] ALIGN(64);//
 void U_ov7725(void *pv) {
     PRINTF("ov7725摄像头测试\r\n");
     //先准备其他资源
@@ -312,13 +314,13 @@ void U_ov7725(void *pv) {
     iics.SCL.base = IIC_SCL_GPIO;
     iics.SCL.pin = IIC_SCL_PIN;
     I2CS_Init(&iics);
-    if (kStatus_Success != OV7725_Init(ov_frame, &iics)) {
+    if (kStatus_Success != OV7725_Init(OV7725_FrameSizeVGA480x640, &iics)) {
         PRINTF("OV7725 init fail!\r\n");
         //vTaskDelete(NULL);
     }
     img.format = PixelFormatRGB565;
-    img.width = CAMERA_FRAME_WIDTH(ov_frame);
-    img.height = CAMERA_FRAME_HEIGHT(ov_frame);
+    img.width = CAMERA_FRAME_WIDTH(OV7725_FrameSizeVGA480x640);
+    img.height = CAMERA_FRAME_HEIGHT(OV7725_FrameSizeVGA480x640);
     CAMERA_SubmitBuff(ov_buf1);
     CAMERA_SubmitBuff(ov_buf2);
     CAMERA_SubmitBuff(ov_buf3);
@@ -724,11 +726,11 @@ void U_cam_mt9v03x(void* pv)
 	vTaskDelete(NULL);
 }
 
-zzf_frame_size_t zzf_frame = ZZF_FrameSize480x752;
-BSS_SDRAM_NOCACHE uint8_t zzf_buf1[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//最大可以使用4缓存
-BSS_SDRAM_NOCACHE uint8_t zzf_buf2[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
-BSS_SDRAM_NOCACHE uint8_t zzf_buf3[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//
-BSS_SDRAM_NOCACHE uint8_t zzf_buf4[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//
+
+BSS_SDRAM_NOCACHE uint8_t zzf_buf1[480*752] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint8_t zzf_buf2[480*752] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint8_t zzf_buf3[480*752] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint8_t zzf_buf4[480*752] ALIGN(64);//
 void U_zzf(void *pv) {
     PRINTF("总钻风摄像头测试\r\n");
     //先准备其他资源
@@ -749,13 +751,13 @@ void U_zzf(void *pv) {
     img_t img;
     //初始化摄像头
     UART_Init(LPUART4, 9600, DCD_HSRUN_UART_CLK_ROOT);
-    if (kStatus_Success != ZZF_Init(zzf_frame, LPUART4)) {
+    if (kStatus_Success != ZZF_Init(ZZF_FrameSize480x752, LPUART4)) {
         PRINTF("zzf init fail!\r\n");
         vTaskDelete(NULL);
     }
     img.format = PixelFormatGray;
-    img.width = CAMERA_FRAME_WIDTH(zzf_frame);
-    img.height = CAMERA_FRAME_HEIGHT(zzf_frame);
+    img.width = CAMERA_FRAME_WIDTH(ZZF_FrameSize480x752);
+    img.height = CAMERA_FRAME_HEIGHT(ZZF_FrameSize480x752);
     CAMERA_SubmitBuff(zzf_buf1);
     CAMERA_SubmitBuff(zzf_buf2);
     CAMERA_SubmitBuff(zzf_buf3);
