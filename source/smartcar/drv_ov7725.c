@@ -266,38 +266,29 @@ csi_config_t ov7725_csi_config = {
 };
 
 
-
-uint8_t OV7725_SCCB_WR_Reg(uint8_t reg, uint8_t data)
-{
-	return 0;
-}
-
-uint8_t OV7725_SCCB_RD_Reg(uint8_t reg)
-{
-	return 0;
-}
-
-void OV7725_SCCB_Init(void)
-{
-	return;
-}
-
 void OV7725_Window_Set(uint16_t width, uint16_t height, uint8_t mode);
 
 //初始化OV7725
 //返回0:成功
 //返回其他值:错误代码
-status_t OV7725_Init(ov7725_frame_size_t size)
+status_t OV7725_Init(ov7725_frame_size_t size, I2CS_Type* base)
 {
+	status_t status;
+	int height = CAMERA_FRAME_HEIGHT(size);
+	int width = CAMERA_FRAME_WIDTH(size);
+	ov7725_csi_config.height = height;
+	ov7725_csi_config.width = width;
+	ov7725_csi_config.bytesPerPixel = width * ov7725_csi_config.bytesPerPixel;
+	status = CAMERA_ReceiverInit(&ov7725_csi_config);
+	if (status != kStatus_Success) { return status; }
+	_ov7725_i2cs = base;
 	uint16_t i = 0;
 	uint16_t reg = 0;
-	//设置IO
-	OV7725_SCCB_Init();        		//初始化SCCB 的IO口	   	  
 	if (OV7725_SCCB_WR_Reg(0x12, 0x80))return kStatus_Fail;	//复位SCCB	  
-	vTaskDelay(50);//等待上电复位完成
+	vTaskDelay(50);						//等待上电复位完成
 	reg = OV7725_SCCB_RD_Reg(0X1c);		//读取厂家ID 高八位
 	reg <<= 8;
-	reg |= OV7725_SCCB_RD_Reg(0X1d);		//读取厂家ID 低八位
+	reg |= OV7725_SCCB_RD_Reg(0X1d);	//读取厂家ID 低八位
 	if (reg != OV7725_MID)
 	{
 		PRINTF("MID:%d\r\n", reg);
@@ -311,14 +302,12 @@ status_t OV7725_Init(ov7725_frame_size_t size)
 		PRINTF("HID:%d\r\n", reg);
 		return kStatus_Fail;
 	}
-	//初始化 OV7725,采用QVGA分辨率(320*240)  
+	//初始化 OV7725,采用QVGA分辨率(320*240)，先按默认配置初始化再设置图像大小  
 	for (i = 0; i < sizeof(ov7725_init_reg_tb1) / sizeof(ov7725_init_reg_tb1[0]); i++)
 	{
 		OV7725_SCCB_WR_Reg(ov7725_init_reg_tb1[i][0], ov7725_init_reg_tb1[i][1]);
 	}
 
-	int height = CAMERA_FRAME_HEIGHT(size);
-	int width = CAMERA_FRAME_WIDTH(size);
 	if (height <= 240 && width <= 320)
 	{
 		OV7725_Window_Set(width, height, 0);
@@ -327,11 +316,8 @@ status_t OV7725_Init(ov7725_frame_size_t size)
 	{
 		OV7725_Window_Set(width, height, 1);
 	}
-	ov7725_csi_config.height = height;
-	ov7725_csi_config.width = width;
-	ov7725_csi_config.bytesPerPixel = width * ov7725_csi_config.bytesPerPixel;
-	return CAMERA_ReceiverInit(&ov7725_csi_config);
 }
+
 ////////////////////////////////////////////////////////////////////////////
 //OV7725功能设置
 //白平衡设置

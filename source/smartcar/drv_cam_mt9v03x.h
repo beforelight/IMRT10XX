@@ -8,8 +8,8 @@
 
 typedef enum _mt9v03x_frame_size {
 	MT9V03X_FrameSize120x184 = CAMERA_FRAME_SZIE(120, 184),
-	//MT9V03X_FrameSize240x376 = CAMERA_FRAME_SZIE(240, 376),
-	//MT9V03X_FrameSize480x752 = CAMERA_FRAME_SZIE(480, 752),
+	MT9V03X_FrameSize240x376 = CAMERA_FRAME_SZIE(240, 376),
+	MT9V03X_FrameSize480x752 = CAMERA_FRAME_SZIE(480, 752),
 } mt9v03x_frame_size_t;
 
 static I2CS_Type* _mt9v03x_i2cs;
