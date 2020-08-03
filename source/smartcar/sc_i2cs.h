@@ -69,6 +69,11 @@ status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, u
 status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
 
+status_t I2CS_ReadSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+status_t I2CS_WriteSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+
+
+
 //软件IIC所有操作函数
 void IIC_Delay(I2CS_Type* base);				//IIC延时函数
 void IIC_Start(I2CS_Type* base);				//发送IIC开始信号
@@ -78,6 +83,19 @@ uint8_t IIC_Read_Byte(I2CS_Type* base, uint8_t ack);//IIC读取一个字节
 uint8_t IIC_Wait_Ack(I2CS_Type* base); 				//IIC等待ACK信号
 void IIC_Ack(I2CS_Type* base);					//IIC发送ACK信号
 void IIC_NAck(I2CS_Type* base);				//IIC不发送ACK信号
+
+//SCCB for ov7725的操作函数
+uint8_t SCCB_RegWrite(I2CS_Type* base, uint8_t Device, uint8_t Address, uint8_t Data);
+uint8_t SCCB_SendByte(I2CS_Type* base, uint8_t Data);
+void SCCB_Wait(I2CS_Type* base);
+
+void SCCB_Star(I2CS_Type* base);
+void SCCB_Stop(I2CS_Type* base);
+void SCCB_NAck(I2CS_Type* base );
+uint8_t SCCB_RegRead(I2CS_Type* base, uint8_t Device, uint8_t Address, uint8_t* Data);
+
+uint8_t SCCB_ReadByte(I2CS_Type* base);
+
 #if defined(__cplusplus)
 }
 #endif /* __cplusplus */

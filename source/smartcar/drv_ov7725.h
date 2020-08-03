@@ -15,15 +15,15 @@ static I2CS_Type* _ov7725_i2cs;
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-
+#define OV7725_SCCB_ADDR 0x21U
     static inline uint8_t OV7725_SCCB_WR_Reg(uint8_t reg, uint8_t data) {
 
-        return I2CS_WriteSCCB(_ov7725_i2cs, 0x21, reg, &data, 1);
+        return I2CS_WriteSCCBforOV7725(_ov7725_i2cs, OV7725_SCCB_ADDR, reg, &data, 1);
     }
 
     static inline uint8_t OV7725_SCCB_RD_Reg(uint8_t reg) {
         uint8_t data = 0;
-        I2CS_ReadSCCB(_ov7725_i2cs, 0x21, reg, &data, 1);
+        I2CS_ReadSCCBforOV7725(_ov7725_i2cs, OV7725_SCCB_ADDR, reg, &data, 1);
         return data;
     }
 status_t OV7725_Init(ov7725_frame_size_t size, I2CS_Type* base);

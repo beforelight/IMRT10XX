@@ -169,7 +169,7 @@ const uint8_t ov7725_init_reg_tb1[][2] =
 {
 	/*输出窗口设置*/
 	{CLKRC,     0x00}, //clock config
-	{COM7,      0x46}, //QVGA RGB565
+	{COM7,      0x06}, //VGA RGB565
 	{HSTART,    0x3f}, //水平起始位置
 	{HSIZE,     0x50}, //水平尺寸
 	{VSTRT,     0x03}, //垂直起始位置
@@ -500,7 +500,6 @@ void OV7725_Window_Set(uint16_t width, uint16_t height, uint8_t mode)
 {
 	uint8_t raw, temp;
 	uint16_t sx, sy;
-
 	if (mode)
 	{
 		sx = (640 - width) / 2;

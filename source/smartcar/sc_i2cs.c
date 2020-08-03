@@ -109,6 +109,16 @@ status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, 
 	return kStatus_Success;
 }
 
+status_t I2CS_ReadSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size)
+{
+	return SCCB_RegRead(base, SlaveAddress7BIT, reg, data);
+}
+
+status_t I2CS_WriteSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size)
+{
+	return SCCB_RegWrite(base, SlaveAddress7BIT, reg, *data);
+}
+
 //以下是i2c操作函数
 void IIC_Delay(I2CS_Type* base)
 {
@@ -227,3 +237,141 @@ void IIC_NAck(I2CS_Type* base)
 	SCL_L(base);
 	IIC_Delay(base);
 }
+
+
+uint8_t SCCB_RegWrite(I2CS_Type* base,uint8_t Device, uint8_t Address, uint8_t Data)
+{
+	uint8_t Ack = 0;
+
+	SCCB_Star(base);
+	Ack = SCCB_SendByte(base,Device << 1);
+
+	Ack = SCCB_SendByte(base,Address);
+
+	Ack = SCCB_SendByte(base,Data);
+
+	SCCB_Stop(base);
+	return Ack;
+}
+uint8_t SCCB_SendByte(I2CS_Type* base,uint8_t Data)
+{
+	uint8_t i;
+	uint8_t Ack;
+	SDA_out(base);
+	for (i = 0; i < 8; i++)
+	{
+		if (Data & 0x80) SDA_H(base);
+		else            SDA_L(base);
+		Data <<= 1;
+		SCCB_Wait(base);
+		SCL_H(base);
+		SCCB_Wait(base);
+		SCL_L(base);
+		SCCB_Wait(base);
+	}
+	SDA_in(base);
+	SCCB_Wait(base);
+
+	SCL_H(base);
+	SCCB_Wait(base);
+	Ack = SDA_val(base);
+	SCL_L(base);
+	SCCB_Wait(base);
+	SDA_out(base);
+
+	return Ack;
+}
+void SCCB_Wait(I2CS_Type* base)
+{
+	uint16_t i = 0;
+	for (i = 0; i < base->delay; i++)
+	{
+		__NOP();
+	}
+}
+
+
+void SCCB_Star(I2CS_Type* base)
+{
+	SCL_out(base);
+	SDA_out(base);
+	SCCB_Wait(base);
+	SDA_H(base);
+	SCL_H(base);
+	SCCB_Wait(base);
+	SDA_L(base);
+	SCCB_Wait(base);
+	SCL_L(base);
+	SCCB_Wait(base);
+}
+void SCCB_Stop(I2CS_Type* base)
+{
+	SCL_out(base);
+	SDA_out(base);
+	SCCB_Wait(base);
+	SDA_L(base);
+	SCCB_Wait(base);
+	SCL_H(base);
+	SCCB_Wait(base);
+	SDA_H(base);
+	SCCB_Wait(base);
+}
+void SCCB_NAck(I2CS_Type* base)
+{
+	SCL_out(base);
+	SDA_out(base);
+	SCL_L(base);
+	SCCB_Wait(base);
+	SDA_H(base);
+	SCCB_Wait(base);
+	SCL_H(base);
+	SCCB_Wait(base);
+	SCL_L(base);
+	SCCB_Wait(base);
+}
+uint8_t SCCB_RegRead(I2CS_Type* base,uint8_t Device, uint8_t Address, uint8_t* Data)
+{
+	uint8_t Ack = 0;
+	Device = Device << 1;
+	SCCB_Star(base);
+	Ack += SCCB_SendByte(base,Device);
+	SCCB_Wait(base);
+	Ack += SCCB_SendByte(base,Address);
+	SCCB_Wait(base);
+	SCCB_Stop(base);
+	SCCB_Wait(base);
+
+	SCCB_Star(base);
+	Ack += SCCB_SendByte(base,Device | 0x01);
+
+	*Data = SCCB_ReadByte(base);
+
+	SCCB_NAck(base);
+
+	SCCB_Stop(base);
+
+	return Ack;
+}
+uint8_t SCCB_ReadByte(I2CS_Type* base)
+{
+	uint8_t i;
+	uint8_t byte = 0;
+	SCL_out(base);
+	SDA_in(base); //使能输入
+	for (i = 0; i < 8; i++)
+	{
+		SCCB_Wait(base);
+		SCL_H(base);
+		SCCB_Wait(base);
+		byte = byte << 1;
+		if (SDA_val(base))
+			byte++;
+		SCCB_Wait(base);
+		SCL_L(base);
+	}
+	SDA_out(base);
+	SCCB_Wait(base);
+	return byte;
+}
+
+
