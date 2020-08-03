@@ -68,7 +68,7 @@ outputs:
 - {id: LCDIF_CLK_ROOT.outFreq, value: 67.5 MHz}
 - {id: LPI2C_CLK_ROOT.outFreq, value: 12 MHz}
 - {id: LPSPI_CLK_ROOT.outFreq, value: 105.6 MHz}
-- {id: LVDS1_CLK.outFreq, value: 1.2 GHz}
+- {id: LVDS1_CLK.outFreq, value: 24 MHz}
 - {id: MQS_MCLK.outFreq, value: 1080/17 MHz}
 - {id: PERCLK_CLK_ROOT.outFreq, value: 50 MHz}
 - {id: PLL7_MAIN_CLK.outFreq, value: 24 MHz}
@@ -103,6 +103,7 @@ settings:
 - {id: CCM.SEMC_PODF.scale, value: '2', locked: true}
 - {id: CCM.USDHC1_PODF.scale, value: '2', locked: true}
 - {id: CCM.USDHC2_PODF.scale, value: '2', locked: true}
+- {id: CCM_ANALOG.LVDS1_CLK_SEL.sel, value: XTALOSC24M.OSC_CLK}
 - {id: CCM_ANALOG.PLL1_BYPASS.sel, value: CCM_ANALOG.PLL1}
 - {id: CCM_ANALOG.PLL1_PREDIV.scale, value: '1', locked: true}
 - {id: CCM_ANALOG.PLL1_VDIV.scale, value: '50', locked: true}
@@ -426,7 +427,7 @@ void DCD_HSRUN(void)
     /* Set per clock source. */
     CLOCK_SetMux(kCLOCK_PerclkMux, 0);
     /* Set lvds1 clock source. */
-    CCM_ANALOG->MISC1 = (CCM_ANALOG->MISC1 & (~CCM_ANALOG_MISC1_LVDS1_CLK_SEL_MASK)) | CCM_ANALOG_MISC1_LVDS1_CLK_SEL(0);
+    CCM_ANALOG->MISC1 = (CCM_ANALOG->MISC1 & (~CCM_ANALOG_MISC1_LVDS1_CLK_SEL_MASK)) | CCM_ANALOG_MISC1_LVDS1_CLK_SEL(18);
     /* Set clock out1 divider. */
     CCM->CCOSR = (CCM->CCOSR & (~CCM_CCOSR_CLKO1_DIV_MASK)) | CCM_CCOSR_CLKO1_DIV(0);
     /* Set clock out1 source. */

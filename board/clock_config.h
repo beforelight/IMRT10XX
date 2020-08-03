@@ -56,7 +56,7 @@ void BOARD_InitBootClocks(void);
 #define DCD_HSRUN_LCDIF_CLK_ROOT                      67500000UL
 #define DCD_HSRUN_LPI2C_CLK_ROOT                      12000000UL
 #define DCD_HSRUN_LPSPI_CLK_ROOT                      105600000UL
-#define DCD_HSRUN_LVDS1_CLK                           1200000000UL
+#define DCD_HSRUN_LVDS1_CLK                           24000000UL
 #define DCD_HSRUN_MQS_MCLK                            63529411UL
 #define DCD_HSRUN_PERCLK_CLK_ROOT                     50000000UL
 #define DCD_HSRUN_PLL7_MAIN_CLK                       24000000UL

@@ -1008,7 +1008,7 @@
                   <clock_output id="LCDIF_CLK_ROOT.outFreq" value="67.5 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPI2C_CLK_ROOT.outFreq" value="12 MHz" locked="false" accuracy=""/>
                   <clock_output id="LPSPI_CLK_ROOT.outFreq" value="105.6 MHz" locked="false" accuracy=""/>
-                  <clock_output id="LVDS1_CLK.outFreq" value="1.2 GHz" locked="false" accuracy=""/>
+                  <clock_output id="LVDS1_CLK.outFreq" value="24 MHz" locked="false" accuracy=""/>
                   <clock_output id="MQS_MCLK.outFreq" value="1080/17 MHz" locked="false" accuracy=""/>
                   <clock_output id="PERCLK_CLK_ROOT.outFreq" value="50 MHz" locked="false" accuracy=""/>
                   <clock_output id="PLL7_MAIN_CLK.outFreq" value="24 MHz" locked="false" accuracy=""/>
@@ -1044,6 +1044,7 @@
                   <setting id="CCM.SEMC_PODF.scale" value="2" locked="true"/>
                   <setting id="CCM.USDHC1_PODF.scale" value="2" locked="true"/>
                   <setting id="CCM.USDHC2_PODF.scale" value="2" locked="true"/>
+                  <setting id="CCM_ANALOG.LVDS1_CLK_SEL.sel" value="XTALOSC24M.OSC_CLK" locked="false"/>
                   <setting id="CCM_ANALOG.PLL1_BYPASS.sel" value="CCM_ANALOG.PLL1" locked="false"/>
                   <setting id="CCM_ANALOG.PLL1_PREDIV.scale" value="1" locked="true"/>
                   <setting id="CCM_ANALOG.PLL1_VDIV.scale" value="50" locked="true"/>
@@ -1101,7 +1102,7 @@
             <component name="system" uuid="aaff4d3f-7874-4344-9e1a-8772bc692a39" type_id="system_54b53072540eeeb8f8e9343e71f28176">
                <config_set_global name="global_system_definitions"/>
             </component>
-            <component name="msg" uuid="68a77462-d09c-4f3f-8640-6223ce17f808" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
+            <component name="msg" uuid="57591a4a-d943-409e-9f16-3cf426d2628a" type_id="msg_6e2baaf3b97dbeef01c0043275f9a0e7">
                <config_set_global name="global_messages"/>
             </component>
          </components>
