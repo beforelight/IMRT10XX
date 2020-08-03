@@ -450,6 +450,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="video"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -900,6 +901,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="source"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="usb"/>
 						<entry flags="LOCAL|VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="utilities"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="video"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -908,21 +910,6 @@
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
 		<project id="IMRT10XX.null.1399627029" name="IMRT10XX" projectType="com.crt.advproject.projecttype.exe"/>
-	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426;com.crt.advproject.config.exe.debug.2087238426.;com.crt.advproject.gcc.exe.debug.211565960;com.crt.advproject.compiler.input.1241531990">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1450206607;com.crt.advproject.config.exe.release.1450206607.;com.crt.advproject.gcc.exe.release.1886454937;com.crt.advproject.compiler.input.1954172634">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1450206607;com.crt.advproject.config.exe.release.1450206607.;com.crt.advproject.gas.exe.release.395362153;com.crt.advproject.assembler.input.661044149">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426;com.crt.advproject.config.exe.debug.2087238426.;com.crt.advproject.gas.exe.debug.1381217250;com.crt.advproject.assembler.input.2065922278">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="com.nxp.mcuxpresso.core.datamodels">
@@ -971,4 +958,25 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426;com.crt.advproject.config.exe.debug.2087238426.;com.crt.advproject.gcc.exe.debug.211565960;com.crt.advproject.compiler.input.1241531990">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426.2071595054;com.crt.advproject.config.exe.debug.2087238426.2071595054.;com.crt.advproject.gcc.exe.debug.604139525;com.crt.advproject.compiler.input.1896710309">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426.2071595054;com.crt.advproject.config.exe.debug.2087238426.2071595054.;com.crt.advproject.gas.exe.debug.1181332426;com.crt.advproject.assembler.input.267099778">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1450206607;com.crt.advproject.config.exe.release.1450206607.;com.crt.advproject.gcc.exe.release.1886454937;com.crt.advproject.compiler.input.1954172634">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1450206607;com.crt.advproject.config.exe.release.1450206607.;com.crt.advproject.gas.exe.release.395362153;com.crt.advproject.assembler.input.661044149">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.2087238426;com.crt.advproject.config.exe.debug.2087238426.;com.crt.advproject.gas.exe.debug.1381217250;com.crt.advproject.assembler.input.2065922278">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>

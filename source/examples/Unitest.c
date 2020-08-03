@@ -314,13 +314,13 @@ void U_ov7725(void *pv) {
     iics.SCL.base = IIC_SCL_GPIO;
     iics.SCL.pin = IIC_SCL_PIN;
     I2CS_Init(&iics);
-    if (kStatus_Success != OV7725_Init(OV7725_FrameSizeVGA480x640, &iics)) {
+    if (kStatus_Success != OV7725_Init2(OV7725_FrameSizeQVGA240x320, &iics)) {
         PRINTF("OV7725 init fail!\r\n");
-        //vTaskDelete(NULL);
+        vTaskDelete(NULL);
     }
     img.format = PixelFormatRGB565;
-    img.width = CAMERA_FRAME_WIDTH(OV7725_FrameSizeVGA480x640);
-    img.height = CAMERA_FRAME_HEIGHT(OV7725_FrameSizeVGA480x640);
+    img.width = CAMERA_FRAME_WIDTH(OV7725_FrameSizeQVGA240x320);
+    img.height = CAMERA_FRAME_HEIGHT(OV7725_FrameSizeQVGA240x320);
     CAMERA_SubmitBuff(ov_buf1);
     CAMERA_SubmitBuff(ov_buf2);
     CAMERA_SubmitBuff(ov_buf3);
