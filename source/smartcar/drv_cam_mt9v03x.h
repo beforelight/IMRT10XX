@@ -23,7 +23,7 @@ static inline status_t CAM_MT9V03X_I2C_TxWord(uint8_t _addr, uint16_t* _data)
 	return I2CS_Write(_mt9v03x_i2cs, CAM_MT9V034_I2CADDR, _addr, (uint8_t*)_data, 2);
 }
 
-status_t MT9V034_DataInit(I2CS_Type* base);
+status_t MT9V034_DataInit(mt9v03x_frame_size_t size,I2CS_Type* base);
 
 
 

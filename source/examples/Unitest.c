@@ -26,6 +26,7 @@
 #include <source/smartcar/svbmp.h>
 #include <stdio.h>
 #include"drv_cam_mt9v03x.h"
+#include "clock_config.h"
 
 TaskHandle_t LED_task_handle;
 
@@ -277,86 +278,86 @@ void U_oled(void *pv) {
     OLED_Fill(0xff);
     vTaskDelete(NULL);
 }
-
-BSS_SDRAM_NOCACHE uint8_t buff1[1024 * 1024] ALIGN(64);//最多4缓存，这里声明为1mb的缓存
-BSS_SDRAM_NOCACHE uint8_t buff2[1024 * 1024] ALIGN(64);//是因为这俩摄像头都用这个缓存
-BSS_SDRAM_NOCACHE uint8_t buff3[1024 * 1024] ALIGN(64);//实际图片多大，缓存就多大
-BSS_SDRAM_NOCACHE uint8_t buff4[1024 * 1024] ALIGN(64);//
+ov7725_frame_size_t ov_frame = OV7725_FrameSizeVGA480x640;
+BSS_SDRAM_NOCACHE uint16_t ov_buf1[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint16_t ov_buf2[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint16_t ov_buf3[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint16_t ov_buf4[CAMERA_FRAME_WIDTH(ov_frame) * CAMERA_FRAME_HEIGHT(ov_frame)] ALIGN(64);//
 void U_ov7725(void *pv) {
-    FIL png;
-    int error;
-    char str[100];
-    img_t img;
-    if (SD_Mount() == kStatus_Success) {
-        char ch;
-        Lcd_Init();
-        while (1) {
-            PRINTF("which one?o->ov7725 z->zzf\r\n");
-            ch = GETCHAR();
-            if (ch == 'o' || ch == 'O' || ch == 'z' || ch == 'Z') { break; }
-        }
-        if (ch == 'o' || ch == 'O') //初始化ov7725摄像头
-        {
-            PRINTF("select ov7725\r\n");
-            CAMERA_MclkSet(24 * 1000 * 1000);
-            OV7725_Init(OV7725_FrameSizeVGA480x640);
-            OV7725_Light_Mode(0);
-            OV7725_Color_Saturation(0);
-            OV7725_Brightness(0);
-            OV7725_Contrast(0);
-            OV7725_Special_Effects(0);
-            img.format = PixelFormatRGB565;
-            img.width = 640;
-            img.height = 480;
-        } else if (ch == 'z' || ch == 'Z')//初始化总钻风摄像头
-        {
-            PRINTF("select zzf\r\n");
-            UART_Init(LPUART4, 9600, 80 * 1000 * 1000);
-            ZZF_Init(ZZF_FrameSize480x752, LPUART4);
-            img.format = PixelFormatGray;
-            img.width = 752;
-            img.height = 480;
-        }
-        //摄像头初始化完毕，开始接收图像
-        CAMERA_SubmitBuff(buff1);
-        CAMERA_SubmitBuff(buff2);
-        CAMERA_SubmitBuff(buff3);
-        CAMERA_SubmitBuff(buff4);
-        assert(kStatus_Success == CAMERA_ReceiverStart());
-        for (int i = 0; i < 100; i++) {
-            if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
-                snprintf(str, 100, "/picture/%d.png", i);
-                error = f_open(&png, str, (FA_WRITE | FA_CREATE_ALWAYS));
-                if (error) {
-                    if (error == FR_EXIST) {
-                        PRINTF("%s exists.\r\n", str);
-                    } else {
-                        PRINTF("Open %s failed.\r\n", str);
-                        vTaskDelete(NULL);
-                        return;
-                    }
-                }
-                //CAMERA_Save2BmpFile(&img, &png);//保存到sd卡中
-                LCD_PrintPicture(&img);//在屏幕上显示
-                if (FR_OK == f_close(&png)) {
-                    PRINTF("Save %s success.\r\n", str);
-                } else {
-                    PRINTF("close %s failed.\r\n", str);
-                    vTaskDelete(NULL);
-                    return;
-                }
-                CAMERA_SubmitBuff(img.pImg);//将空缓存提交
-            } else {
-                i--;
-                vTaskDelay(1);
-            }
-        }
-        //100张图片采集达成，统计一下fps
-        PRINTF("fps=%d\r\n", (int) CAMERA_FpsGet());
-        CAMERA_ReceiverStop();//停止传输
-    } else {
-        PRINTF("Please insert SD card\r\n");
+    PRINTF("ov7725摄像头测试\r\n");
+    //先准备其他资源
+    if (0 == strcmp(pv, "oled")) {
+        OLED_Init();
     }
+    else if (0 == strcmp(pv, "lcd")) {
+        Lcd_Init();
+    }
+    else if (0 == strcmp(pv, "sd")) {
+        SD_EnterCritical();
+        if (kStatus_Success != SD_Mount()) {
+            vTaskDelete(NULL);
+        }
+        f_mkdir("ov");//在根目录下创建名为zzf的文件夹
+        SD_ExitCritical();
+    }
+    else {
+        vTaskDelete(NULL);
+    }
+    img_t img;
+    //初始化摄像头
+    I2CS_Type iics;
+    iics.delay = 100;
+    iics.SDA.base = IIC_SDA_GPIO;
+    iics.SDA.pin = IIC_SDA_PIN;
+    iics.SCL.base = IIC_SCL_GPIO;
+    iics.SCL.pin = IIC_SCL_PIN;
+    I2CS_Init(&iics);
+    if (kStatus_Success != OV7725_Init(ov_frame, &iics)) {
+        PRINTF("OV7725 init fail!\r\n");
+        //vTaskDelete(NULL);
+    }
+    img.format = PixelFormatRGB565;
+    img.width = CAMERA_FRAME_WIDTH(ov_frame);
+    img.height = CAMERA_FRAME_HEIGHT(ov_frame);
+    CAMERA_SubmitBuff(ov_buf1);
+    CAMERA_SubmitBuff(ov_buf2);
+    CAMERA_SubmitBuff(ov_buf3);
+    CAMERA_SubmitBuff(ov_buf4);
+    if (kStatus_Success != CAMERA_ReceiverStart())//开始接收摄像头传来的图像
+    {
+        PRINTF("OV7725 init fail!\r\n");
+        vTaskDelete(NULL);
+    }
+    for (int i = 0; i < 100; ) {
+        if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
+            //如果成功接收一帧图像，则按情况输出到Oled,lcd，Sd卡
+            if (0 == strcmp(pv, "oled")) {
+                OLED_PrintPicture(&img, 100);
+            }
+            else if (0 == strcmp(pv, "lcd")) {
+                LCD_PrintPicture(&img);
+            }
+            else if (0 == strcmp(pv, "sd")) {
+                SD_EnterCritical();
+                FIL fil;
+                char line[64];
+                snprintf(line, 64, "ov/%d.bmp", i);
+                f_open(&fil, line, FA_CREATE_ALWAYS | FA_WRITE);
+                BMP_Save(&fil, &img);
+                f_close(&fil);
+                SD_ExitCritical();
+                i += 10;
+            }
+            PRINTF("fps=%f\r\n", CAMERA_FpsGet());
+            CAMERA_SubmitBuff(img.pImg);//将空缓存提交
+            i++;
+        }
+        else {
+            vTaskDelay(1);
+        }
+    }
+    CAMERA_ReceiverStop();//停止传输
+    CAMERA_ReceiverDeinit();//De-initialize
     vTaskDelete(NULL);
 }
 
@@ -679,7 +680,7 @@ void U_i2c_mt9v034(void* pv)
 BSS_SDRAM_NOCACHE uint8_t mt9v_buf1[184 * 120] ALIGN(64);//最大可以使用4缓存
 BSS_SDRAM_NOCACHE uint8_t mt9v_buf2[184 * 120] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
 BSS_SDRAM_NOCACHE uint8_t mt9v_buf3[184 * 120] ALIGN(64);//
-void U_cam_mt9v(void* pv)
+void U_cam_mt9v03x(void* pv)
 {
     Lcd_Init();
     img_t img;
@@ -690,8 +691,7 @@ void U_cam_mt9v(void* pv)
     iics.SCL.base = IIC_SCL_GPIO;
     iics.SCL.pin = IIC_SCL_PIN;
     I2CS_Init(&iics);
-    
-    if (kStatus_Success != MT9V034_DataInit(&iics)) {
+    if (kStatus_Success != MT9V034_DataInit(MT9V03X_FrameSize120x184 ,&iics)) {
         PRINTF("MT9V034 init fail!\r\n");
         vTaskDelete(NULL);
     }
@@ -707,12 +707,13 @@ void U_cam_mt9v(void* pv)
         vTaskDelete(NULL);
     }
     PRINTF("start transfer\r\n");
-    while (1)
+    for(int i =0;i<200;)
     {
         if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
             LCD_PrintPicture(&img);
             PRINTF("fps=%f\r\n", CAMERA_FpsGet());
             CAMERA_SubmitBuff(img.pImg);//将空缓存提交
+            i++;
         }
         else {
             vTaskDelay(1);
@@ -723,10 +724,11 @@ void U_cam_mt9v(void* pv)
 	vTaskDelete(NULL);
 }
 
-BSS_SDRAM_NOCACHE uint8_t zzf_buf1[752 * 480] ALIGN(64);//最大可以使用4缓存
-BSS_SDRAM_NOCACHE uint8_t zzf_buf2[752 * 480] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
-BSS_SDRAM_NOCACHE uint8_t zzf_buf3[752 * 480] ALIGN(64);//
-BSS_SDRAM_NOCACHE uint8_t zzf_buf4[752 * 480] ALIGN(64);//
+zzf_frame_size_t zzf_frame = ZZF_FrameSize480x752;
+BSS_SDRAM_NOCACHE uint8_t zzf_buf1[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint8_t zzf_buf2[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint8_t zzf_buf3[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint8_t zzf_buf4[CAMERA_FRAME_WIDTH(zzf_frame) * CAMERA_FRAME_HEIGHT(zzf_frame)] ALIGN(64);//
 void U_zzf(void *pv) {
     PRINTF("总钻风摄像头测试\r\n");
     //先准备其他资源
@@ -735,23 +737,25 @@ void U_zzf(void *pv) {
     } else if (0 == strcmp(pv, "lcd")) {
         Lcd_Init();
     } else if (0 == strcmp(pv, "sd")) {
+        SD_EnterCritical();
         if (kStatus_Success != SD_Mount()) {
             vTaskDelete(NULL);
         }
         f_mkdir("zzf");//在根目录下创建名为zzf的文件夹
+        SD_ExitCritical();
     } else {
         vTaskDelete(NULL);
     }
     img_t img;
     //初始化摄像头
-    UART_Init(LPUART4, 9600, 80 * 1000 * 1000);
-    if (kStatus_Success != ZZF_Init(ZZF_FrameSize480x752, LPUART4)) {
+    UART_Init(LPUART4, 9600, DCD_HSRUN_UART_CLK_ROOT);
+    if (kStatus_Success != ZZF_Init(zzf_frame, LPUART4)) {
         PRINTF("zzf init fail!\r\n");
         vTaskDelete(NULL);
     }
     img.format = PixelFormatGray;
-    img.width = 752;
-    img.height = 480;
+    img.width = CAMERA_FRAME_WIDTH(zzf_frame);
+    img.height = CAMERA_FRAME_HEIGHT(zzf_frame);
     CAMERA_SubmitBuff(zzf_buf1);
     CAMERA_SubmitBuff(zzf_buf2);
     CAMERA_SubmitBuff(zzf_buf3);
@@ -761,7 +765,7 @@ void U_zzf(void *pv) {
         PRINTF("zzf init fail!\r\n");
         vTaskDelete(NULL);
     }
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 100; ) {
         if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
             //如果成功接收一帧图像，则按情况输出到Oled,lcd，Sd卡
             if (0 == strcmp(pv, "oled")) {
@@ -769,19 +773,20 @@ void U_zzf(void *pv) {
             } else if (0 == strcmp(pv, "lcd")) {
                 LCD_PrintPicture(&img);
             } else if (0 == strcmp(pv, "sd")) {
+                SD_EnterCritical();
                 FIL fil;
                 char line[64];
                 snprintf(line, 64, "zzf/%d.bmp", i);
                 f_open(&fil, line, FA_CREATE_ALWAYS | FA_WRITE);
                 BMP_Save(&fil, &img);
                 f_close(&fil);
+                SD_ExitCritical();
                 i+=10;
             }
             PRINTF("fps=%f\r\n", CAMERA_FpsGet());
             CAMERA_SubmitBuff(img.pImg);//将空缓存提交
-
+            i++;
         } else {
-            i--;
             vTaskDelay(1);
         }
     }

@@ -65,8 +65,9 @@ csi_config_t mt9v034_csi_config = {
 };
 //image size = 188*120
 
-status_t MT9V034_DataInit(I2CS_Type* base)
+status_t MT9V034_DataInit(mt9v03x_frame_size_t size,I2CS_Type* base)
 {
+	if (size != MT9V03X_FrameSize120x184) { return kStatus_OutOfRange; }
 	mt9v034_csi_config.width = 184;
 	mt9v034_csi_config.height = 120;
 	mt9v034_csi_config.linePitch_Bytes = mt9v034_csi_config.width * mt9v034_csi_config.bytesPerPixel;
