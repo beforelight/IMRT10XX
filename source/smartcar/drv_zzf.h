@@ -1,15 +1,11 @@
 ﻿//
 // Created by 17616 on 2020/3/17.
-//
+// 更新于2020/8/3
 
 #ifndef IMXRT_CAMERA_ZZF_H
 #define IMXRT_CAMERA_ZZF_H
-
 #include"sc_camera.h"
 #include"sc_uart.h"
-
-
-
 typedef enum _zzf_frame_size {
     //ZZF_FrameSize120x188 = ZZF_FRAME_SZIE(120,188),//1052不支持这个分辨率，因为WIDTH要整除8
     ZZF_FrameSize120x184 = CAMERA_FRAME_SZIE(120, 184),

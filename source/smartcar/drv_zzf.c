@@ -2,9 +2,6 @@
 #include"FreeRTOS.h"
 #include"task.h"
 #include"status.h"
-
-
-
 //摄像头命令枚举
 typedef enum
 {
@@ -63,19 +60,25 @@ csi_config_t zzf_csi_config = {
 	.polarityFlags = kCSI_HsyncActiveHigh | kCSI_DataLatchOnRisingEdge | kCSI_VsyncActiveHigh,
 	.bytesPerPixel = 1,
 	.linePitch_Bytes = 0,
-	.workMode = kCSI_GatedClockMode,
+	.workMode = kCSI_GatedClockMode,//接行线
+	//.workMode = kCSI_NonGatedClockMode,//不接行线
 	.dataBus = kCSI_DataBus8Bit,
 	.useExtVsync = true,
 };
 
 status_t ZZF_Init(zzf_frame_size_t frameSize, LPUART_Type* LPUARTx)
 {
+	//先配置CAMERA_Receiver
+	zzf_csi_config.width = CAMERA_FRAME_WIDTH(frameSize);
+	zzf_csi_config.height = CAMERA_FRAME_HEIGHT(frameSize);
+	zzf_csi_config.linePitch_Bytes = zzf_csi_config.width * zzf_csi_config.bytesPerPixel;
+	status_t status = CAMERA_ReceiverInit(&zzf_csi_config);
+	if (status != kStatus_Success) { return status; }
 	uartx = LPUARTx;
 	MT9V032_CFG[SET_COL - 1][1] = CAMERA_FRAME_WIDTH(frameSize);
 	MT9V032_CFG[SET_ROW - 1][1] = CAMERA_FRAME_HEIGHT(frameSize);
-	vTaskDelay(50);//等待上电初始化完成
+	vTaskDelay(50);//等待zzf上电初始化完成
 	int16_t temp = 0;
-
 	uint8_t RXtemp = 0;
 	uint8_t  send_buffer[4];
 	for (int i = 0; i < CONFIG_FINISH; i++)//开始配置摄像头并重新初始化
@@ -104,29 +107,24 @@ status_t ZZF_Init(zzf_frame_size_t frameSize, LPUART_Type* LPUARTx)
 
 	//利用set_exposure_time函数单独配置的曝光数据不存储在eeprom中
 	//获取配置便于查看配置是否正确
-	status_t status;
 	status = ZZF_ConfigGet();
 	if (status != kStatus_Success) { return status; }
 	//检查配置是否一致
-	PRINTF("camera AUTO_EXP	= %d\r\n", (int)GET_CFG[AUTO_EXP - 1][1]);
-	PRINTF("camera EXP_TIME	= %d\r\n", (int)GET_CFG[EXP_TIME - 1][1]);
-	PRINTF("camera FPS		= %d\r\n", (int)GET_CFG[FPS - 1][1]);
-	PRINTF("camera SET_COL	= %d\r\n", (int)GET_CFG[SET_COL - 1][1]);
-	PRINTF("camera SET_ROW	= %d\r\n", (int)GET_CFG[SET_ROW - 1][1]);
-	PRINTF("camera LR_OFFSET	= %d\r\n", (int)GET_CFG[LR_OFFSET - 1][1]);
-	PRINTF("camera UD_OFFSET	= %d\r\n", (int)GET_CFG[UD_OFFSET - 1][1]);
-	PRINTF("camera GAIN		= %d\r\n", (int)GET_CFG[GAIN - 1][1]);
+	PRINTF("camera AUTO_EXP	 = %d\r\n", (int)GET_CFG[AUTO_EXP - 1][1]);
+	PRINTF("camera EXP_TIME	 = %d\r\n", (int)GET_CFG[EXP_TIME - 1][1]);
+	PRINTF("camera FPS		 = %d\r\n", (int)GET_CFG[FPS - 1][1]);
+	PRINTF("camera SET_COL	 = %d\r\n", (int)GET_CFG[SET_COL - 1][1]);
+	PRINTF("camera SET_ROW	 = %d\r\n", (int)GET_CFG[SET_ROW - 1][1]);
+	PRINTF("camera LR_OFFSET = %d\r\n", (int)GET_CFG[LR_OFFSET - 1][1]);
+	PRINTF("camera UD_OFFSET = %d\r\n", (int)GET_CFG[UD_OFFSET - 1][1]);
+	PRINTF("camera GAIN		 = %d\r\n", (int)GET_CFG[GAIN - 1][1]);
 	if ((MT9V032_CFG[SET_COL - 1][1] != GET_CFG[SET_COL - 1][1])
 		|| (MT9V032_CFG[SET_ROW - 1][1] != GET_CFG[SET_ROW - 1][1]))
 	{
 		PRINTF("camera cfg error\r\n!");
 		return kStatus_Fail;
 	}
-	//摄像头上面的配置初始化完了，开始初始化摄像头接收的东西
-	zzf_csi_config.width = CAMERA_FRAME_WIDTH(frameSize);
-	zzf_csi_config.height = CAMERA_FRAME_HEIGHT(frameSize);
-	zzf_csi_config.linePitch_Bytes = zzf_csi_config.width * zzf_csi_config.bytesPerPixel;
-	return CAMERA_ReceiverInit(&zzf_csi_config);
+	return kStatus_Success;
 }
 
 status_t ZZF_ConfigGet(void)
