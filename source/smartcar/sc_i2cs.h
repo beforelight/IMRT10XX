@@ -55,7 +55,7 @@ status_t I2CS_Write(I2CS_Type*base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8
  * @param  {uint32_t} size            : 
  * @return {status_t}                 : 
  */
-status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+status_t I2CS_ReadSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
 /**
  * @brief   给SCCB从机发送
@@ -66,12 +66,12 @@ status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, u
  * @param  {uint32_t} size            : 
  * @return {status_t}                 : 
  */
-status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
-
-
-status_t I2CS_ReadSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 status_t I2CS_WriteSCCBforOV7725(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
+
+
+status_t I2CS_ReadSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
+status_t I2CS_WriteSCCB(I2CS_Type* base, uint8_t SlaveAddress7BIT, uint8_t reg, uint8_t* data, uint32_t size);
 
 
 //软件IIC所有操作函数

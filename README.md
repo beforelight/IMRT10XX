@@ -16,21 +16,20 @@ MCUXpresso SDK 2.7.0
 
 ## 贡献流程
 
-Fork -> Patch -> Push -> Pull Request、
+Fork -> Patch -> Push -> Pull Request
 
 ## 鸣谢
 
 [CmBacktrace](https://github.com/armink/CmBacktrace): ARM Cortex-M 系列 MCU 错误追踪库
 
-
-
 ## change log
 
-
+- 2020/8/4 完成所有功能的测试
 
 ## todo list
 
-
+1. MT9V034彩色版、逐飞凌瞳
+2. ov7725图像一半有错位的问题
 
 ## License
 

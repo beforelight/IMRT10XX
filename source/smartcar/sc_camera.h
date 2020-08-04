@@ -35,8 +35,11 @@ typedef struct __img {
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-	
-	
+	/**
+	 * @brief	使能csi模块输出时钟
+	 * @param  {void} undefined : 
+	 * @return {status_t}       : 
+	 */
 	status_t CAMERA_EnableClock(void);
 	
 	/**
@@ -72,7 +75,7 @@ extern "C" {
 
 	/**
 	 * @brief	获取采集好图像的缓存指针
-	 * @param  {void*} buff : 有图像的缓存指针
+	 * @param  {void*} buff : 缓存指针的指针
 	 * @return {status_t}   : kStatus_Success为成功获取一帧图像缓存
 	 */
 	status_t CAMERA_FullBufferGet(void* buff);
@@ -97,7 +100,6 @@ extern "C" {
 	 * @return {float}          :fps
 	 */
 	float CAMERA_FpsGet(void);
-
 
 	/**
 	 * @brief	传输完成回调函数

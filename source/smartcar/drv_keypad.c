@@ -1,4 +1,4 @@
-#include "drv_keypad.h"
+﻿#include "drv_keypad.h"
 #include "FreeRTOSConfig.h"
 #include "FreeRTOS.h"
 #include "task.h"
@@ -10,12 +10,6 @@
  */
 keypad_t g_keypad;
 
-/**
- * @brief  初始化矩阵键盘
- * @param  {keypad_t*} s        :
- * @param  {gpio_class_t*} Cols : 列线的gpio对象数组，最后一个必须为0以确定有几根列线
- * @param  {gpio_class_t*} Rows : 行线的gpio对象数组，最后一个必须为0以确定有几根行线
- */
 void KEYPAD_Init(keypad_t *s, gpio_t *Rows, gpio_t *Cols) {
     //查找有多少行多少列
     gpio_t *buf = Cols;
@@ -53,13 +47,7 @@ void KEYPAD_Init(keypad_t *s, gpio_t *Rows, gpio_t *Cols) {
     }
 }
 
-/**
- * @brief  返回按键输入，无滤波
- * @param  {keypad_t*} s :
- * @param  {int} row     : 按键、拨码位置
- * @param  {int} col     : 按键、拨码位置
- * @return {uint32_t}    : 1为按下，0为没有按下。
- */
+
 uint32_t KEYPAD_Scan(keypad_t *s, int row, int col) {
     uint32_t val;
     GPIO_Write(&s->rows[row], 0);
@@ -72,13 +60,6 @@ uint32_t KEYPAD_Scan(keypad_t *s, int row, int col) {
     return val;
 }
 
-/**
- * @brief  返回按键输入，有滤波
- * @param  {keypad_t*} s :
- * @param  {int} row     : 按键、拨码位置
- * @param  {int} col     : 按键、拨码位置
- * @return {uint32_t}    : 1为按下，0为没有按下。
- */
 uint32_t KEYPAD_Get(keypad_t *s, int row, int col) {
     int times = 50;
     while (times--) {

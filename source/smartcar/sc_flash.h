@@ -14,8 +14,8 @@
 
 #define FLASH_PAGE_SIZE (256)
 #define FLASH_SECTOR_SIZE (4*1024)
-#define FLASH_RWADDR_START (3*1024*1024)
-#define FLASH_RWSIZE (1*1024*1024)
+#define FLASH_RWADDR_START (3*1024*1024)//littlefs使用的flash起始地址
+#define FLASH_RWSIZE (1*1024*1024)//littlefs使用的flash大小
 //#define FLASH_DEBUG_PRINTF PRINTF
 #ifndef FLASH_DEBUG_PRINTF
 #define FLASH_DEBUG_PRINTF(fmt, ...)
