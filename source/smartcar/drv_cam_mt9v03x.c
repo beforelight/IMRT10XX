@@ -63,13 +63,12 @@ csi_config_t mt9v034_csi_config = {
 	.dataBus = kCSI_DataBus8Bit,
 	.useExtVsync = true,
 };
-//image size = 188*120
 
 status_t MT9V034_DataInit(mt9v03x_frame_size_t size,I2CS_Type* base)
 {
-	if (size != MT9V03X_FrameSize120x184) { return kStatus_OutOfRange; }
-	mt9v034_csi_config.width = 184;
-	mt9v034_csi_config.height = 120;
+	if (size != MT9V03X_FrameSize480x752) { return kStatus_Success; }
+	mt9v034_csi_config.width = CAMERA_FRAME_WIDTH(size);
+	mt9v034_csi_config.height = CAMERA_FRAME_HEIGHT(size);
 	mt9v034_csi_config.linePitch_Bytes = mt9v034_csi_config.width * mt9v034_csi_config.bytesPerPixel;
 	CAMERA_ReceiverInit(&mt9v034_csi_config);
 
@@ -82,33 +81,34 @@ status_t MT9V034_DataInit(mt9v03x_frame_size_t size,I2CS_Type* base)
 	if (data == 0U)
 		return kStatus_Fail;
 
-	{
-		data = 8U; ///< set window start on 0 column on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_ColumnStartContextA, &data);
-		data = 0U; ///< set window start on 0 row on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_RowStartContextA, &data);
-		data = 4U * 120U; ///< set 480 pixel window height on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_WindowHeightContextA, &data);
-		data = 4U * 184U; ///< set 752 pixel window width on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_WindowWidthC0ntextA, &data);
-		data = 8U; ///< set 8 pixel clock HorizontalBlanking on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_HorizontalBlankingContextA, &data);
-		data = 8U; ///< set 8 hsync clock VerticlaBlanking on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_VerticalBlankingContextA, &data);
+	//{
+	//	data = 8U; ///< set window start on 0 column on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_ColumnStartContextA, &data);
+	//	data = 0U; ///< set window start on 0 row on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_RowStartContextA, &data);
+	//	data = 4U * 120U; ///< set 480 pixel window height on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_WindowHeightContextA, &data);
+	//	data = 4U * 184U; ///< set 752 pixel window width on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_WindowWidthC0ntextA, &data);
+	//	data = 8U; ///< set 8 pixel clock HorizontalBlanking on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_HorizontalBlankingContextA, &data);
+	//	data = 8U; ///< set 8 hsync clock VerticlaBlanking on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_VerticalBlankingContextA, &data);
 
-		data = 0b1111U; ///< set 4x4 row & column binning on ContextA
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_ReadModeContextA, &data);
-		data = 0x0001U; ///< enable HDR mode on ContextA
+	//	data = 0b1111U; ///< set 4x4 row & column binning on ContextA
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_ReadModeContextA, &data);
+		//data = 0x0001U; ///< enable HDR mode on ContextA
+		data = ((1<<8)|1); ///< enable HDR mode on ContextA&ContextB
 		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_SensorTypeHdrEn, &data);
-		data = 16U; ///< Analog Gain Setting on ContextA. G = 0.0625 * REG, range 0~63.
-		status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_AnalogGainControllContextA, &data);
+	//	data = 16U; ///< Analog Gain Setting on ContextA. G = 0.0625 * REG, range 0~63.
+	//	status = CAM_MT9V03X_I2C_TxWord(MT9V034_REG_AnalogGainControllContextA, &data);
 
-	}
-	if (status != kStatus_Success)
-		return status;
+	//}
+	//if (status != kStatus_Success)
+	//	return status;
 
-	//Official Optimizations
-	{
+	////Official Optimizations
+	//{
 		data = 0x03C7U;
 		status = CAM_MT9V03X_I2C_TxWord(0x20U, &data);
 		data = 0x001BU;
@@ -117,7 +117,21 @@ status_t MT9V034_DataInit(mt9v03x_frame_size_t size,I2CS_Type* base)
 		status = CAM_MT9V03X_I2C_TxWord(0x2BU, &data);
 		data = 0x0003U;
 		status = CAM_MT9V03X_I2C_TxWord(0x2FU, &data);
-	}
+	//}
 
 	return status;
+}
+
+void MT9V034_BayerToRGB565(uint8_t src[480][752], uint16_t dst[240][376])
+{
+	for (int i = 0; i < 240; i++)
+	{
+		for (int j = 0; j < 376; j++)
+		{
+			int b = src[2 * i][2 * j];
+			int g = (src[2 * i+1][2 * j]+ src[2 * i][2 * j+1])>>1;
+			int r = src[2 * i+1][2 * j+1];
+			dst[i][j] = RGB565(b, g, r);
+		}
+	}
 }

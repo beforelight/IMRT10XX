@@ -62,6 +62,7 @@ UnitestItem_t default_item_list[] = {
         {U_sccb_soft, "sccb_soft", NULL},//
         {U_i2c_mt9v034, "i2c_mt9v034", NULL},//
         {U_cam_mt9v03x, "cam_mt9v034", NULL},//
+        {U_cam_mt9v03x, "cam_mt9v034_rgb", "rgb"},//
         {U_ov7725, "7725_oled", "oled"},//
         {U_ov7725, "7725_lcd", "lcd"},//
         {U_ov7725, "7725_sd", "sd"},//
@@ -679,13 +680,19 @@ void U_i2c_mt9v034(void* pv)
     }
     vTaskDelete(NULL);
 }
-BSS_SDRAM_NOCACHE uint8_t mt9v_buf1[184 * 120] ALIGN(64);//最大可以使用4缓存
-BSS_SDRAM_NOCACHE uint8_t mt9v_buf2[184 * 120] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
-BSS_SDRAM_NOCACHE uint8_t mt9v_buf3[184 * 120] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf1[480*752] ALIGN(64);//最大可以使用4缓存
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf2[480*752] ALIGN(64);//缓存需64字节对齐，并且放在noccche区域
+BSS_SDRAM_NOCACHE uint8_t mt9v_buf3[480*752] ALIGN(64);//
+BSS_SDRAM_NOCACHE uint16_t mt9v_rgbbuf[240*376] ALIGN(64);//
 void U_cam_mt9v03x(void* pv)
 {
     Lcd_Init();
     img_t img;
+    img_t img_rgb;
+    img_rgb.format = PixelFormatRGB565;
+    img_rgb.width = 752/2;
+    img_rgb.height = 480/2;
+    img_rgb.pImg = mt9v_rgbbuf;
     I2CS_Type iics;
     iics.delay = 100;
     iics.SDA.base = IIC_SDA_GPIO;
@@ -693,13 +700,13 @@ void U_cam_mt9v03x(void* pv)
     iics.SCL.base = IIC_SCL_GPIO;
     iics.SCL.pin = IIC_SCL_PIN;
     I2CS_Init(&iics);
-    if (kStatus_Success != MT9V034_DataInit(MT9V03X_FrameSize120x184 ,&iics)) {
+    if (kStatus_Success != MT9V034_DataInit(MT9V03X_FrameSize480x752,&iics)) {
         PRINTF("MT9V034 init fail!\r\n");
         vTaskDelete(NULL);
     }
     img.format = PixelFormatGray;
-    img.width = 184;
-    img.height = 120;
+    img.width = 752;
+    img.height = 480;
     CAMERA_SubmitBuff(mt9v_buf1);
     CAMERA_SubmitBuff(mt9v_buf2);
     CAMERA_SubmitBuff(mt9v_buf3);
@@ -712,8 +719,16 @@ void U_cam_mt9v03x(void* pv)
     for(int i =0;i<200;)
     {
         if (kStatus_Success == CAMERA_FullBufferGet(&img.pImg)) {
-            LCD_PrintPicture(&img);
+            if (pv == NULL) {
+                LCD_PrintPicture(&img);
+            }
+            else
+            {
+                MT9V034_BayerToRGB565(img.pImg, img_rgb.pImg);
+                LCD_PrintPicture(&img_rgb);
+            }
             PRINTF("fps=%f\r\n", CAMERA_FpsGet());
+            
             CAMERA_SubmitBuff(img.pImg);//将空缓存提交
             i++;
         }
