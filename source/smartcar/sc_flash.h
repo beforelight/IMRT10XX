@@ -24,8 +24,8 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-extern volatile int _FLASH_ICacheIsDisable;
-extern volatile int _FLASH_DCacheIsDisable;
+extern volatile int _FLASH_IsDisable_ICache;
+extern volatile int _FLASH_IsDisable_DCache;
 extern volatile int _FLASH_CriticalNesting;
 extern volatile uint32_t _FLASH_regPrimask;
 /**
@@ -35,15 +35,15 @@ extern volatile uint32_t _FLASH_regPrimask;
 __STATIC_FORCEINLINE void FLASH_EnterCritical(void) {
     if (_FLASH_CriticalNesting <= 0) {
         //PRINTF("FLASH_EnterCritical\r\n");
-        if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR)) {
-            SCB_DisableICache();
-            _FLASH_ICacheIsDisable = 1;
-        }
+        //if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR)) {
+        //    SCB_DisableICache();
+        //    _FLASH_IsDisable_ICache = 1;
+        //}
         if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR)) {
             SCB_DisableDCache();
-            _FLASH_DCacheIsDisable = 1;
+            _FLASH_IsDisable_DCache = 1;
         }
-        ARM_MPU_Disable();
+        //ARM_MPU_Disable();
         _FLASH_regPrimask = DisableGlobalIRQ();
     }
     _FLASH_CriticalNesting++;
@@ -57,15 +57,16 @@ __STATIC_FORCEINLINE void FLASH_ExitCritical(void) {
     _FLASH_CriticalNesting--;
     if (_FLASH_CriticalNesting <= 0) {
         //PRINTF("FLASH_ExitCritical\r\n");
+        _FLASH_CriticalNesting = 0;//允许多次调用exit
         EnableGlobalIRQ(_FLASH_regPrimask);
-        ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
-        if (_FLASH_ICacheIsDisable) {
-            SCB_EnableDCache();
-            _FLASH_ICacheIsDisable = 0;
-        }
-		if (_FLASH_DCacheIsDisable) {
-			SCB_EnableICache();
-			_FLASH_DCacheIsDisable = 0;
+        //ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
+        //if (_FLASH_IsDisable_ICache) {
+        //    SCB_EnableICache();
+        //    _FLASH_IsDisable_ICache = 0;
+        //}
+		if (_FLASH_IsDisable_DCache) {
+			SCB_EnableDCache();
+			_FLASH_IsDisable_DCache = 0;
 		}
 	}
 }

@@ -11,21 +11,21 @@
 #if defined(__cplusplus)
 extern "C" {
 #endif /* __cplusplus */
-    extern volatile int _SD_ICacheIsDisable;
-    extern volatile int _SD_DCacheIsDisable;
+    extern volatile int _SD_IsDisable_ICache;
+    extern volatile int _SD_IsDisable_DCache;
     extern volatile int _SD_CriticalNesting;
     __STATIC_FORCEINLINE void SD_EnterCritical(void) {
         if (_SD_CriticalNesting <= 0) {
             //PRINTF("SD_EnterCritical\r\n");
-            if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR)) {
-                SCB_DisableICache();
-                _SD_ICacheIsDisable = 1;
-            }
+            //if (SCB_CCR_IC_Msk == (SCB_CCR_IC_Msk & SCB->CCR)) {
+            //    SCB_DisableICache();
+            //    _SD_IsDisable_ICache = 1;
+            //}
             if (SCB_CCR_DC_Msk == (SCB_CCR_DC_Msk & SCB->CCR)) {
                 SCB_DisableDCache();
-                _SD_DCacheIsDisable = 1;
+                _SD_IsDisable_DCache = 1;
             }
-            ARM_MPU_Disable();
+            //ARM_MPU_Disable();
         }
         _SD_CriticalNesting++;
     }
@@ -33,15 +33,16 @@ extern "C" {
         _SD_CriticalNesting--;
         if (_SD_CriticalNesting <= 0) {
             //PRINTF("SD_ExitCritical\r\n");
-            ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
-            if (_SD_ICacheIsDisable) {
+            //ARM_MPU_Enable(MPU_CTRL_PRIVDEFENA_Msk);
+            _SD_CriticalNesting = 0;//允许多次调用Exit
+            if (_SD_IsDisable_DCache) {
                 SCB_EnableDCache();
-                _SD_ICacheIsDisable = 0;
+                _SD_IsDisable_DCache = 0;
             }
-            if (_SD_DCacheIsDisable) {
-                SCB_EnableICache();
-                _SD_DCacheIsDisable = 0;
-            }
+            //if (_SD_IsDisable_ICache) {
+            //    SCB_EnableICache();
+            //    _SD_IsDisable_ICache = 0;
+            //}
         }
     }
 

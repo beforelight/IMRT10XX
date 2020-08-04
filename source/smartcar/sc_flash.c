@@ -33,8 +33,8 @@
 /*******************************************************************************
  * Variables
  ******************************************************************************/
-volatile int _FLASH_ICacheIsDisable = 0;
-volatile int _FLASH_DCacheIsDisable = 0;
+volatile int _FLASH_IsDisable_ICache = 0;
+volatile int _FLASH_IsDisable_DCache = 0;
 volatile int _FLASH_CriticalNesting = 0;
 volatile uint32_t _FLASH_regPrimask = 0;
 

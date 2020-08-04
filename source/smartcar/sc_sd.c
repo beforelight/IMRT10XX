@@ -9,8 +9,8 @@
 #error 在board.h中定义“ #define BOARD_SD_SUPPORT_180V 0U#define BOARD_SD_SUPPORT_180V 0U”飞凌核心板不支持1.8v模式
 #endif
 static FATFS g_fileSystem; /* File system object */
-volatile int _SD_ICacheIsDisable = 0;
-volatile int _SD_DCacheIsDisable = 0;
+volatile int _SD_IsDisable_ICache = 0;
+volatile int _SD_IsDisable_DCache = 0;
 volatile int _SD_CriticalNesting = 0;
 status_t SD_CardDetect(void) {
     BOARD_USDHC_CD_GPIO_INIT();

@@ -814,8 +814,17 @@ void U_zzf(void *pv) {
 
 void U_msc(void *pv) {
     status_t status;
+    SD_EnterCritical();
     status = SD_MscInit();
     if (status != kStatus_Success) { PRINTF("msc init fail\r\n"); }
+    else {
+        PRINTF("Enter 'q' to quit and others to continue\r\n");
+        while (1) {
+            char quit = GETCHAR();
+            if (quit == 'q' || quit == 'Q') { break; }
+        }
+    }
+    SD_ExitCritical();
     vTaskDelete(NULL);
 }
 
@@ -824,29 +833,32 @@ void U_sd(void *pv) {
     status_t status;
     status = SD_Mount();
     if (status != kStatus_Success) { PRINTF("sd init fail\r\n"); }
-    f_mkdir("txt");//创建文件夹
+    f_mkdir("txt"); //创建文件夹
     char *str = "何夜无月？何处无竹柏？但少闲人如吾两人者耳。";
     FIL fil;
     f_open(&fil, "txt/txt.txt", FA_CREATE_ALWAYS | FA_WRITE);
     UINT bw;
     f_write(&fil, str, strlen(str), &bw);
-    if (bw != strlen(str)) { PRINTF("sd卡容量满了or文件名太长or没有fat32系统"); }
-    f_close(&fil);//只有关闭的时候才是真正
+    if (bw != strlen(str)) { PRINTF("写文件失败"); }
+    f_close(&fil);//只有关闭的时候才是真正写进去了
     SD_ExitCritical();
     vTaskDelete(NULL);
 }
 
 void U_file_dump(void *pv) {
+    SD_EnterCritical();
     status_t status;
     //初始化fatfs
     status = SD_Mount();
     if (status != kStatus_Success) {
         PRINTF("sd init fail\r\n");
+        SD_ExitCritical();
         vTaskDelete(NULL);
     }
     PRINTF("flash rw with lfs\r\n");
     if (0 != FLASH_Init()) {
         PRINTF("flash初始化失败\r\n");
+        SD_ExitCritical();
         vTaskDelete(NULL);
     }
 
@@ -859,6 +871,7 @@ void U_file_dump(void *pv) {
     // this should only happen on the first boot
     if (err) {
         PRINTF("no littlefs\r\n");
+        SD_ExitCritical();
         vTaskDelete(NULL);
     }
 
@@ -893,6 +906,7 @@ void U_file_dump(void *pv) {
     lfs_file_close(&lfs, &lfil1);
     lfs_file_close(&lfs, &lfil2);
     lfs_unmount(&lfs);
+    SD_ExitCritical();
     vTaskDelete(NULL);
 }
 
