@@ -48,14 +48,14 @@ UnitestItem_t default_item_list[] = {
         {U_zzf, "zzf&lcd", "lcd"},//
         {U_zzf, "zzf&sd", "sd"},//
         {U_adc, "adc", NULL},//
-        {U_flash, "flash", NULL},//
-        {U_flash_with_lfs, "flash_with_lfs", NULL},//
+        {U_flash, "flash", NULL},//测试 2020/8/4 Release -O3不推荐使用扇区方式读写flash
+        {U_flash_with_lfs, "flash_with_lfs", NULL},//测试 2020/8/4 Release -O3
 #ifdef TEST_PIT
         {U_pit, "pit", NULL},//
 #endif//TEST_PIT
-        {U_msc, "msc", NULL},//
-        {U_sd, "sd", NULL},//
-        {U_file_dump, "file_dump", NULL},//
+        {U_msc, "msc", NULL},//测试 2020/8/4 Release -O3
+        {U_sd, "sd", NULL},// 测试 2020/8/4 Release -O3
+        {U_file_dump, "file_dump", NULL},//测试 2020/8/4 Release -O3
         {U_pwm, "pwm", NULL},//
         {U_enc, "enc", NULL},//
         {U_i2c_soft, "iic_soft", NULL},//
