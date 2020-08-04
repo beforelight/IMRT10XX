@@ -61,11 +61,11 @@ UnitestItem_t default_item_list[] = {
         {U_i2c_soft, "iic_soft", NULL},//
         {U_sccb_soft, "sccb_soft", NULL},//
         {U_i2c_mt9v034, "i2c_mt9v034", NULL},//
-        {U_cam_mt9v03x, "cam_mt9v034", NULL},//
-        {U_cam_mt9v03x, "cam_mt9v034_rgb", "rgb"},//
-        {U_ov7725, "7725_oled", "oled"},//
-        {U_ov7725, "7725_lcd", "lcd"},//
-        {U_ov7725, "7725_sd", "sd"},//
+        {U_cam_mt9v03x, "cam_mt9v034", NULL},//测试 2020/8/4 Release -O3
+        {U_cam_mt9v03x, "cam_mt9v034_rgb", "rgb"},//暂时没有Bayer版mt9v034
+        {U_ov7725, "7725_oled", "oled"},//  测试 2020/8/4 Release -O3 图像下半部分错位
+        {U_ov7725, "7725_lcd", "lcd"},//    测试 2020/8/4 Release -O3 图像下半部分错位
+        {U_ov7725, "7725_sd", "sd"},//      测试 2020/8/4 Release -O3 图像下半部分错位
         {NULL, NULL, NULL},//结尾为NULL以确定有多少项
 };
 

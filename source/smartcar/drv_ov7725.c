@@ -15,7 +15,7 @@ camera_config_t cameraConfig = {
     .bytesPerPixel = 2,
     .resolution = 0,       //分辨率//待填
     .frameBufferLinePitch_Bytes =0,                 //行间隔//待填
-    .interface = kCAMERA_InterfaceGatedClock,                 //摄像机接口类型
+    .interface = kCAMERA_InterfaceCCIR656,                 //摄像机接口类型
     .controlFlags = (kCAMERA_VsyncActiveLow | kCAMERA_HrefActiveHigh | kCAMERA_DataLatchOnRisingEdge),
     .framePerSec = 75,                              //修改fps 帧率太大需要提高像素时钟到48000000
 };
@@ -32,7 +32,7 @@ csi_config_t ov7725_csi_config = {//底层接口
     .polarityFlags = kCSI_HsyncActiveHigh | kCSI_DataLatchOnRisingEdge | kCSI_VsyncActiveLow,
     .bytesPerPixel = 2,
     .linePitch_Bytes = 0,//待填
-    .workMode = kCSI_GatedClockMode,
+    .workMode = kCSI_CCIR656ProgressiveMode,
     .dataBus = kCSI_DataBus8Bit,
     .useExtVsync = true,
 };
