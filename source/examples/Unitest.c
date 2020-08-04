@@ -41,17 +41,17 @@ void LED_task(void *pvData) {
 
 UnitestItem_t default_item_list[] = {
         {U_status, "status", NULL},//
-        {U_keypad, "keypad", NULL},//
-        {U_lcd, "lcd", NULL},//
-        {U_oled, "oled", NULL},//
-        {U_zzf, "zzf&oled", "oled"},//
-        {U_zzf, "zzf&lcd", "lcd"},//
-        {U_zzf, "zzf&sd", "sd"},//
+        {U_keypad, "keypad", NULL},//测试 2020/8/4 Release -O3
+        {U_lcd, "lcd", NULL},//测试 2020/8/4 Release -O3
+        {U_oled, "oled", NULL},//测试 2020/8/4 Release -O3
+        {U_zzf, "zzf&oled", "oled"},//测试 2020/8/4 Release -O3
+        {U_zzf, "zzf&lcd", "lcd"},//测试 2020/8/4 Release -O3
+        {U_zzf, "zzf&sd", "sd"},//测试 2020/8/4 Release -O3   SD卡存图有点慢
         {U_adc, "adc", NULL},//
         {U_flash, "flash", NULL},//测试 2020/8/4 Release -O3不推荐使用扇区方式读写flash
         {U_flash_with_lfs, "flash_with_lfs", NULL},//测试 2020/8/4 Release -O3
 #ifdef TEST_PIT
-        {U_pit, "pit", NULL},//
+        {U_pit, "pit", NULL},//测试 2020/8/4 Release -O3
 #endif//TEST_PIT
         {U_msc, "msc", NULL},//测试 2020/8/4 Release -O3
         {U_sd, "sd", NULL},// 测试 2020/8/4 Release -O3
@@ -59,8 +59,8 @@ UnitestItem_t default_item_list[] = {
         {U_pwm, "pwm", NULL},//
         {U_enc, "enc", NULL},//
         {U_i2c_soft, "iic_soft", NULL},//
-        {U_sccb_soft, "sccb_soft", NULL},//
-        {U_i2c_mt9v034, "i2c_mt9v034", NULL},//
+        {U_sccb_soft, "sccb_soft", NULL},// 测试 2020/8/4 Release -O3
+        {U_i2c_mt9v034, "i2c_mt9v034", NULL},//测试 2020/8/4 Release -O3 结果为0x48
         {U_cam_mt9v03x, "cam_mt9v034", NULL},//测试 2020/8/4 Release -O3
         {U_cam_mt9v03x, "cam_mt9v034_rgb", "rgb"},//暂时没有Bayer版mt9v034
         {U_ov7725, "7725_oled", "oled"},//  测试 2020/8/4 Release -O3 图像下半部分错位
@@ -635,6 +635,7 @@ void U_sccb_soft(void* pv)
     int PIDH = 0X0a;
     int PIDL = 0X0b;
 	int pwr = 0x12;
+    CLOCK_EnableClock(kCLOCK_Csi);
 	uint16_t val;
 	I2CS_Type iics;
 	iics.delay = 200;
@@ -644,18 +645,18 @@ void U_sccb_soft(void* pv)
 	iics.SCL.pin =  IIC_SCL_PIN;
 	I2CS_Init(&iics);
 	val = 0x80;
-	I2CS_WriteSCCB(&iics, addr, pwr, (uint8_t*)&val, 1);//复位
+	I2CS_WriteSCCBforOV7725(&iics, addr, pwr, (uint8_t*)&val, 1);//复位
 	vTaskDelay(100);
 	val = 0;
-	I2CS_ReadSCCB(&iics, addr, MIDH, (uint8_t*)&val, 1);
+	I2CS_ReadSCCBforOV7725(&iics, addr, MIDH, (uint8_t*)&val, 1);
 	val <<= 8;
-	I2CS_ReadSCCB(&iics, addr, MIDL, (uint8_t*)&val, 1);
+	I2CS_ReadSCCBforOV7725(&iics, addr, MIDL, (uint8_t*)&val, 1);
 	PRINTF("ov7725MID(0X7FA2): 0x%x\r\n", (int)val);
 
     val = 0;
-    I2CS_ReadSCCB(&iics, addr, PIDH, (uint8_t*)&val, 1);
+    I2CS_ReadSCCBforOV7725(&iics, addr, PIDH, (uint8_t*)&val, 1);
     val <<= 8;
-    I2CS_ReadSCCB(&iics, addr, PIDL, (uint8_t*)&val, 1);
+    I2CS_ReadSCCBforOV7725(&iics, addr, PIDL, (uint8_t*)&val, 1);
     PRINTF("ov7725PID(0X7721): 0x%x\r\n", (int)val);
     vTaskDelete(NULL);
 }
