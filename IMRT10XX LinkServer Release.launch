@@ -37,14 +37,14 @@
 <stringAttribute key="internal.wiretype" value="SWD"/>
 <stringAttribute key="launch.config.handler" value="com.crt.ctrlcenter.launch.CRTLaunchConfigHandler"/>
 <booleanAttribute key="mem.access" value="false"/>
-<stringAttribute key="misc.options" value="--no-packed"/>
+<stringAttribute key="misc.options" value="--no-packed --cachelib libm7_cache.so"/>
 <stringAttribute key="ondisconnect" value="cont"/>
 <intAttribute key="org.eclipse.cdt.debug.gdbjtag.core.delay" value="3"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doHalt" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doReset" value="false"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value=""/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value=""/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="set non-stop on&#10;set pagination off&#10;set mi-async&#10;set remotetimeout 60000&#10;##target_extended_remote##&#10;set mem inaccessible-by-default ${mem.access}&#10;mon ondisconnect ${ondisconnect}&#10;set arm force-mode thumb&#10;${load}"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="set non-stop on&#13;&#10;set pagination off&#13;&#10;set mi-async&#13;&#10;set remotetimeout 60000&#13;&#10;##target_extended_remote##&#13;&#10;set mem inaccessible-by-default ${mem.access}&#13;&#10;mon ondisconnect ${ondisconnect}&#13;&#10;set arm force-mode thumb&#13;&#10;${load}"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="true"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadSymbols" value="true"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.pcRegister" value=""/>
